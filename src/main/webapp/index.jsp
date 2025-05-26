@@ -143,5 +143,6 @@ nav.navbar {
     <jsp:include page="mainform/title.jsp" />
     <jsp:include page="mainform/photo.jsp" />
     <jsp:include page="mainform/main.jsp" />
+    <jsp:include page="mainform/footer.jsp" />
 </body>
 </html>

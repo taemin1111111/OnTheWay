@@ -14,48 +14,43 @@
 				<!-- 휴게소 소개 -->
 				<li class="nav-item dropdown me-3 dropdown-hover"><a
 					class="nav-link dropdown-toggle" href="#" role="button"
-					data-bs-toggle="dropdown" aria-expanded="false"> 휴게소 소개 </a>
-					<ul class="dropdown-menu">
-						<li><a class="dropdown-item" href="#">개요</a></li>
-						<li><a class="dropdown-item" href="#">설립 목적</a></li>
-						<li><a class="dropdown-item" href="#">위치 안내</a></li>
-						<li><a class="dropdown-item" href="#">운영 시간</a></li>
-					</ul></li>
+					data-bs-toggle="dropdown" aria-expanded="false"> 교통정보 </a>
+					
 
 				<!-- 나머지 메뉴들도 동일하게 dropdown-hover 클래스 추가 -->
 				<li class="nav-item dropdown me-3 dropdown-hover"><a
 					class="nav-link dropdown-toggle" href="#" role="button"
-					data-bs-toggle="dropdown" aria-expanded="false">편의시설</a>
+					data-bs-toggle="dropdown" aria-expanded="false">휴게소 소개</a>
 					<ul class="dropdown-menu">
-						<li><a class="dropdown-item" href="#">주차장</a></li>
-						<li><a class="dropdown-item" href="#">화장실</a></li>
-						<li><a class="dropdown-item" href="#">흡연실</a></li>
-						<li><a class="dropdown-item" href="#">ATM</a></li>
+						<li><a class="dropdown-item" href="#"></a></li>
+						<li><a class="dropdown-item" href="#"></a></li>
+						<li><a class="dropdown-item" href="#"></a></li>
+						<li><a class="dropdown-item" href="#"></a></li>
 					</ul></li>
 				<li class="nav-item dropdown me-3 dropdown-hover"><a
 					class="nav-link dropdown-toggle" href="#" role="button"
-					data-bs-toggle="dropdown" aria-expanded="false">먹거리</a>
+					data-bs-toggle="dropdown" aria-expanded="false">휴게소 찾기</a>
 					<ul class="dropdown-menu">
-						<li><a class="dropdown-item" href="#">한식</a></li>
-						<li><a class="dropdown-item" href="#">분식</a></li>
-						<li><a class="dropdown-item" href="#">카페</a></li>
-						<li><a class="dropdown-item" href="#">간식코너</a></li>
+						<li><a class="dropdown-item" href="#">휴게소 찾기</a></li>
+						<li><a class="dropdown-item" href="#">휴게소 목록</a></li>
+						<li><a class="dropdown-item" href="#">교통정보</a></li>
+						<li><a class="dropdown-item" href="#"></a></li>
 					</ul></li>
 				<li class="nav-item dropdown me-3 dropdown-hover"><a
 					class="nav-link dropdown-toggle" href="#" role="button"
-					data-bs-toggle="dropdown" aria-expanded="false">오시는길</a>
+					data-bs-toggle="dropdown" aria-expanded="false">푸드코드 정보</a>
 					<ul class="dropdown-menu">
-						<li><a class="dropdown-item" href="#">자가용</a></li>
-						<li><a class="dropdown-item" href="#">버스</a></li>
-						<li><a class="dropdown-item" href="#">기차</a></li>
-						<li><a class="dropdown-item" href="#">네비게이션</a></li>
+						<li><a class="dropdown-item" href="#">푸드코드 메뉴</a></li>
+						<li><a class="dropdown-item" href="#"></a></li>
+						<li><a class="dropdown-item" href="#"></a></li>
+						<li><a class="dropdown-item" href="#"></a></li>
 					</ul></li>
 				<li class="nav-item dropdown me-3 dropdown-hover"><a
 					class="nav-link dropdown-toggle" href="#" role="button"
 					data-bs-toggle="dropdown" aria-expanded="false">고객센터</a>
 					<ul class="dropdown-menu">
-						<li><a class="dropdown-item" href="#">공지사항</a></li>
-						<li><a class="dropdown-item" href="#">문의사항</a></li>
+						<li><a class="dropdown-item" href="#">고객후기</a></li>
+						<li><a class="dropdown-item" href="#">고객리뷰</a></li>
 						<li><a class="dropdown-item" href="#">불편접수</a></li>
 						<li><a class="dropdown-item" href="#">칭찬게시판</a></li>
 					</ul></li>
