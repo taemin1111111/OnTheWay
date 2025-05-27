@@ -31,7 +31,7 @@ static final String MySqlDriver="com.mysql.cj.jdbc.Driver";
 		Connection conn=null;
 		
 		try {
-			conn=DriverManager.getConnection(URL, "test", "1234");
+			conn=DriverManager.getConnection(URL, "root", "a1234");
 			
 			System.out.println("Mysql 연결 성공!!!");
 		} catch (SQLException e) {
