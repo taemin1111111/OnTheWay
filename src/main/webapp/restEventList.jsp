@@ -180,24 +180,32 @@ label {
             });
     }
 
+    // 휴게소 선택 시
     select.addEventListener('change', () => {
         const code = select.value;
         if (!code) {
             restInput.value = "";
             container.innerHTML = "";
+            history.replaceState(null, '', 'restEventList.jsp');
             return;
         }
         const name = Object.keys(restAreaMap).find(k => restAreaMap[k] === code);
         if (name) restInput.value = name;
+
         loadEvent(code);
+        history.pushState(null, '', 'restEventList.jsp?stdRestCd=' + encodeURIComponent(code));
     });
 
+    // 자동완성 검색
     restInput.addEventListener('input', () => {
         const keyword = restInput.value.trim();
         listDiv.innerHTML = '';
+        listDiv.style.display = 'none';
         if (keyword.length < 1) return;
 
         const matches = Object.keys(restAreaMap).filter(name => name.includes(keyword));
+        if (matches.length === 0) return;
+
         matches.forEach(name => {
             const item = document.createElement('div');
             item.className = 'list-group-item list-group-item-action';
@@ -205,20 +213,54 @@ label {
             item.addEventListener('click', () => {
                 restInput.value = name;
                 listDiv.style.display = 'none';
+
                 const code = restAreaMap[name];
                 if (code) {
                     select.value = code;
                     loadEvent(code);
+                    history.pushState(null, '', 'restEventList.jsp?stdRestCd=' + encodeURIComponent(code));
                 }
             });
             listDiv.appendChild(item);
         });
+
         listDiv.style.display = 'block';
     });
 
+    // 외부 클릭 시 자동완성 닫기
     document.addEventListener('click', (e) => {
         if (!restInput.contains(e.target) && !listDiv.contains(e.target)) {
             listDiv.style.display = 'none';
+        }
+    });
+
+    // 페이지 최초 로드시 stdRestCd 파라미터 처리
+    window.addEventListener('DOMContentLoaded', () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('stdRestCd');
+
+        if (code) {
+            select.value = code;
+            const name = Object.keys(restAreaMap).find(k => restAreaMap[k] === code);
+            if (name) restInput.value = name;
+            loadEvent(code);
+        }
+    });
+
+    // 뒤로가기/앞으로가기 대응
+    window.addEventListener('popstate', () => {
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('stdRestCd');
+
+        if (code) {
+            select.value = code;
+            const name = Object.keys(restAreaMap).find(k => restAreaMap[k] === code);
+            if (name) restInput.value = name;
+            loadEvent(code);
+        } else {
+            select.value = "";
+            restInput.value = "";
+            container.innerHTML = "";
         }
     });
 </script>

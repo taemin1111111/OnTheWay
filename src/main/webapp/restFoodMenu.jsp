@@ -109,17 +109,14 @@
     const restInput = document.getElementById('restSearch');
     const listDiv = document.getElementById('autocompleteList');
 
-    // Java에서 넘긴 휴게소명:코드 맵
     const restAreaMap = {
         <% for (Map.Entry<String, String> entry : restMap.entrySet()) { %>
             "<%= entry.getValue() %>": "<%= entry.getKey() %>",
         <% } %>
     };
 
-    // 메뉴 로딩 공통 함수
     function loadMenu(code) {
         container.innerHTML = '';
-
         if (!code) return;
 
         fetch('restFoodMenuJson.jsp?stdRestCd=' + encodeURIComponent(code))
@@ -128,47 +125,44 @@
                 return res.json();
             })
             .then(data => {
-			    if (!data || data.length === 0) {
-			        container.innerHTML = '<p class="no-data">메뉴 정보가 없습니다.</p>';
-			        return;
-			    }
-			
-			    const best = data.filter(i => i.bestfoodyn === 'Y');
-			    const normal = data.filter(i => i.bestfoodyn !== 'Y');
-			    const sorted = [...best, ...normal];
-			
-			    sorted.forEach(i => {
-			        const div = document.createElement('div');
-			        div.className = 'menu-item';
-			
-			     	// 메뉴명
-			        const h5 = document.createElement('h5');
-			        if (i.bestfoodyn === 'Y') {
-			            const starSpan = document.createElement('span');
-			            starSpan.className = 'best';
-			            starSpan.textContent = '★ Best ';
-			            h5.appendChild(starSpan);
-			        }
-			        h5.appendChild(document.createTextNode(i.foodNm));
-			        div.appendChild(h5);
-			
-			        // 가격
-			        const priceP = document.createElement('p');
-			        const priceFormatted = Number(i.foodCost).toLocaleString();
-			        priceP.textContent = '가격: ' + priceFormatted + '원';
-			        priceP.style.marginBottom = '10px';
-			        div.appendChild(priceP);
-			
-			        // 설명
-			        if (i.etc) {
-			            const descP = document.createElement('p');
-			            descP.textContent = i.etc;
-			            div.appendChild(descP);
-			        }
-			
-			        container.appendChild(div);
-			    });
-			})
+                if (!data || data.length === 0) {
+                    container.innerHTML = '<p class="no-data">메뉴 정보가 없습니다.</p>';
+                    return;
+                }
+
+                const best = data.filter(i => i.bestfoodyn === 'Y');
+                const normal = data.filter(i => i.bestfoodyn !== 'Y');
+                const sorted = [...best, ...normal];
+
+                sorted.forEach(i => {
+                    const div = document.createElement('div');
+                    div.className = 'menu-item';
+
+                    const h5 = document.createElement('h5');
+                    if (i.bestfoodyn === 'Y') {
+                        const starSpan = document.createElement('span');
+                        starSpan.className = 'best';
+                        starSpan.textContent = '★ Best ';
+                        h5.appendChild(starSpan);
+                    }
+                    h5.appendChild(document.createTextNode(i.foodNm));
+                    div.appendChild(h5);
+
+                    const priceP = document.createElement('p');
+                    const priceFormatted = Number(i.foodCost).toLocaleString();
+                    priceP.textContent = '가격: ' + priceFormatted + '원';
+                    priceP.style.marginBottom = '10px';
+                    div.appendChild(priceP);
+
+                    if (i.etc) {
+                        const descP = document.createElement('p');
+                        descP.textContent = i.etc;
+                        div.appendChild(descP);
+                    }
+
+                    container.appendChild(div);
+                });
+            })
             .catch(err => {
                 container.innerHTML = '<p class="no-data">메뉴 정보를 가져오는 중 오류가 발생했습니다.</p>';
                 console.error(err);
@@ -178,19 +172,18 @@
     // 셀렉트박스 변경 시
     select.addEventListener('change', () => {
         const code = select.value;
-
-        // 검색창 연동
-        if (code === "") {
+        if (!code) {
             restInput.value = "";
             container.innerHTML = "";
+            history.replaceState(null, "", "restFoodMenu.jsp");
             return;
         }
 
-        // 코드에 해당하는 휴게소명 찾기
         const name = Object.keys(restAreaMap).find(key => restAreaMap[key] === code);
         if (name) restInput.value = name;
 
         loadMenu(code);
+        history.pushState(null, "", "restFoodMenu.jsp?stdRestCd=" + encodeURIComponent(code));
     });
 
     // 자동완성 검색 기능
@@ -201,10 +194,7 @@
 
         if (keyword.length < 1) return;
 
-        const matches = Object.keys(restAreaMap).filter(name =>
-            name.includes(keyword)
-        );
-
+        const matches = Object.keys(restAreaMap).filter(name => name.includes(keyword));
         if (matches.length === 0) return;
 
         matches.forEach(name => {
@@ -217,8 +207,9 @@
 
                 const code = restAreaMap[name];
                 if (code) {
-                    select.value = code; // 셀렉트박스 동기화
+                    select.value = code;
                     loadMenu(code);
+                    history.pushState(null, "", "restFoodMenu.jsp?stdRestCd=" + encodeURIComponent(code));
                 }
             });
             listDiv.appendChild(item);
@@ -227,13 +218,43 @@
         listDiv.style.display = 'block';
     });
 
-    // 외부 클릭 시 자동완성 닫기
     document.addEventListener('click', function(e) {
         if (!restInput.contains(e.target) && !listDiv.contains(e.target)) {
             listDiv.style.display = 'none';
         }
     });
-</script>
 
+    // ✅ 페이지 로드시 URL 파라미터 처리
+    window.addEventListener('DOMContentLoaded', () => {
+        const params = new URLSearchParams(location.search);
+        const code = params.get('stdRestCd');
+        if (code) {
+            const name = Object.keys(restAreaMap).find(k => restAreaMap[k] === code);
+            if (name) {
+                restInput.value = name;
+                select.value = code;
+                loadMenu(code);
+            }
+        }
+    });
+
+    // ✅ 브라우저 뒤로/앞으로 이동 대응
+    window.addEventListener('popstate', () => {
+        const params = new URLSearchParams(location.search);
+        const code = params.get('stdRestCd');
+        if (code) {
+            const name = Object.keys(restAreaMap).find(k => restAreaMap[k] === code);
+            if (name) {
+                restInput.value = name;
+                select.value = code;
+                loadMenu(code);
+            }
+        } else {
+            select.value = '';
+            restInput.value = '';
+            container.innerHTML = '';
+        }
+    });
+</script>
 </body>
 </html>

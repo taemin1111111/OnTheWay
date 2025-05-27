@@ -103,7 +103,6 @@
 
     function loadBrand(code) {
         container.innerHTML = '';
-
         if (!code) return;
 
         fetch('restVentureListJson.jsp?stdRestCd=' + encodeURIComponent(code))
@@ -118,29 +117,28 @@
                     const div = document.createElement('div');
                     div.className = 'menu-item';
 
-                    // 🔽 청년창업 로고 이미지
+                    // 이미지
                     const img = document.createElement('img');
                     img.src = 'VentureImage/청년창업.png';
                     img.style.maxWidth = '100%';
                     img.style.height = '150px';
                     img.style.objectFit = 'contain';
                     img.style.display = 'block';
-                    img.style.margin = '0 auto 20px';  // 가운데 정렬 + 하단 여백
-                    
+                    img.style.margin = '0 auto 20px';
                     div.appendChild(img);
 
-                    // 🔽 매장명
+                    // 매장명
                     const h5 = document.createElement('h5');
                     h5.textContent = i.bzNm || '매장명 없음';
                     h5.style.textAlign = 'center';
                     div.appendChild(h5);
 
-                    // 🔽 운영 시간
+                    // 운영시간
                     if (i.stime && i.etime) {
                         const timeP = document.createElement('p');
                         timeP.textContent = '운영시간: ' + i.stime + ' ~ ' + i.etime;
                         timeP.style.textAlign = 'center';
-                        timeP.style.marginBottom = '10px'; // 설명과 간 여백
+                        timeP.style.marginBottom = '10px';
                         div.appendChild(timeP);
                     }
 
@@ -149,33 +147,31 @@
             });
     }
 
+    // 선택 시 주소 반영
     select.addEventListener('change', () => {
         const code = select.value;
         if (!code) {
-            restInput.value = "";
-            container.innerHTML = "";
+            restInput.value = '';
+            container.innerHTML = '';
+            history.replaceState(null, '', 'restVentureList.jsp');
             return;
         }
 
-        const name = Object.keys(restAreaMap).find(key => restAreaMap[key] === code);
+        const name = Object.keys(restAreaMap).find(k => restAreaMap[k] === code);
         if (name) restInput.value = name;
 
         loadBrand(code);
+        history.pushState(null, '', 'restVentureList.jsp?stdRestCd=' + encodeURIComponent(code));
     });
 
+    // 자동완성
     restInput.addEventListener('input', () => {
         const keyword = restInput.value.trim();
         listDiv.innerHTML = '';
         listDiv.style.display = 'none';
-
         if (keyword.length < 1) return;
 
-        const matches = Object.keys(restAreaMap).filter(name =>
-            name.includes(keyword)
-        );
-
-        if (matches.length === 0) return;
-
+        const matches = Object.keys(restAreaMap).filter(name => name.includes(keyword));
         matches.forEach(name => {
             const item = document.createElement('div');
             item.className = 'list-group-item list-group-item-action';
@@ -183,22 +179,53 @@
             item.addEventListener('click', () => {
                 restInput.value = name;
                 listDiv.style.display = 'none';
-
                 const code = restAreaMap[name];
                 if (code) {
                     select.value = code;
                     loadBrand(code);
+                    history.pushState(null, '', 'restVentureList.jsp?stdRestCd=' + encodeURIComponent(code));
                 }
             });
             listDiv.appendChild(item);
         });
-
         listDiv.style.display = 'block';
     });
 
-    document.addEventListener('click', function(e) {
+    document.addEventListener('click', e => {
         if (!restInput.contains(e.target) && !listDiv.contains(e.target)) {
             listDiv.style.display = 'none';
+        }
+    });
+
+    // ✅ 페이지 로드시 파라미터 처리
+    window.addEventListener('DOMContentLoaded', () => {
+        const params = new URLSearchParams(location.search);
+        const code = params.get('stdRestCd');
+        if (code) {
+            const name = Object.keys(restAreaMap).find(k => restAreaMap[k] === code);
+            if (name) {
+                restInput.value = name;
+                select.value = code;
+                loadBrand(code);
+            }
+        }
+    });
+
+    // ✅ 뒤로/앞으로 이동 대응
+    window.addEventListener('popstate', () => {
+        const params = new URLSearchParams(location.search);
+        const code = params.get('stdRestCd');
+        if (code) {
+            const name = Object.keys(restAreaMap).find(k => restAreaMap[k] === code);
+            if (name) {
+                restInput.value = name;
+                select.value = code;
+                loadBrand(code);
+            }
+        } else {
+            select.value = '';
+            restInput.value = '';
+            container.innerHTML = '';
         }
     });
 </script>

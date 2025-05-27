@@ -103,7 +103,6 @@
 
     function loadBrand(code) {
         container.innerHTML = '';
-
         if (!code) return;
 
         fetch('restBrandListJson.jsp?stdRestCd=' + encodeURIComponent(code))
@@ -118,7 +117,7 @@
                     const div = document.createElement('div');
                     div.className = 'menu-item';
 
-                    // 🔽 브랜드 로고 이미지
+                    // 브랜드 로고
                     if (i.brdName) {
                         const img = document.createElement('img');
                         img.src = 'BrandLogoImage/' + i.brdName + '.png';
@@ -127,33 +126,27 @@
                         img.style.height = '150px';
                         img.style.objectFit = 'contain';
                         img.style.display = 'block';
-                        img.style.margin = '0 auto 20px';  // 가운데 정렬 + 하단 여백
-                        
-                     	// 🔽 이미지 로딩 실패 시 '기타.png'로 대체
+                        img.style.margin = '0 auto 20px';
                         img.onerror = function () {
-                            this.onerror = null; // 무한루프 방지
+                            this.onerror = null;
                             this.src = 'BrandLogoImage/기타.png';
                         };
-                        
                         div.appendChild(img);
                     }
 
-                    // 🔽 브랜드명
                     const h5 = document.createElement('h5');
                     h5.textContent = i.brdName || '브랜드 없음';
                     h5.style.textAlign = 'center';
                     div.appendChild(h5);
 
-                    // 🔽 운영 시간
                     if (i.stime && i.etime) {
                         const timeP = document.createElement('p');
                         timeP.textContent = '운영시간: ' + i.stime + ' ~ ' + i.etime;
                         timeP.style.textAlign = 'center';
-                        timeP.style.marginBottom = '10px'; // 설명과 간 여백
+                        timeP.style.marginBottom = '10px';
                         div.appendChild(timeP);
                     }
 
-                    // 🔽 설명
                     if (i.brdDesc) {
                         const descP = document.createElement('p');
                         descP.textContent = i.brdDesc;
@@ -166,11 +159,13 @@
             });
     }
 
+    // 셀렉트 박스 변경
     select.addEventListener('change', () => {
         const code = select.value;
         if (!code) {
             restInput.value = "";
             container.innerHTML = "";
+            history.replaceState(null, '', 'restBrandList.jsp');
             return;
         }
 
@@ -178,19 +173,17 @@
         if (name) restInput.value = name;
 
         loadBrand(code);
+        history.pushState(null, '', 'restBrandList.jsp?stdRestCd=' + encodeURIComponent(code));
     });
 
+    // 자동완성 입력 처리
     restInput.addEventListener('input', () => {
         const keyword = restInput.value.trim();
         listDiv.innerHTML = '';
         listDiv.style.display = 'none';
-
         if (keyword.length < 1) return;
 
-        const matches = Object.keys(restAreaMap).filter(name =>
-            name.includes(keyword)
-        );
-
+        const matches = Object.keys(restAreaMap).filter(name => name.includes(keyword));
         if (matches.length === 0) return;
 
         matches.forEach(name => {
@@ -205,6 +198,7 @@
                 if (code) {
                     select.value = code;
                     loadBrand(code);
+                    history.pushState(null, '', 'restBrandList.jsp?stdRestCd=' + encodeURIComponent(code));
                 }
             });
             listDiv.appendChild(item);
@@ -216,6 +210,34 @@
     document.addEventListener('click', function(e) {
         if (!restInput.contains(e.target) && !listDiv.contains(e.target)) {
             listDiv.style.display = 'none';
+        }
+    });
+
+    // ✅ 페이지 로드시 URL 파라미터 처리
+    window.addEventListener('DOMContentLoaded', () => {
+        const params = new URLSearchParams(location.search);
+        const code = params.get('stdRestCd');
+        if (code) {
+            select.value = code;
+            const name = Object.keys(restAreaMap).find(k => restAreaMap[k] === code);
+            if (name) restInput.value = name;
+            loadBrand(code);
+        }
+    });
+
+    // ✅ 뒤로가기/앞으로가기 대응
+    window.addEventListener('popstate', () => {
+        const params = new URLSearchParams(location.search);
+        const code = params.get('stdRestCd');
+        if (code) {
+            select.value = code;
+            const name = Object.keys(restAreaMap).find(k => restAreaMap[k] === code);
+            if (name) restInput.value = name;
+            loadBrand(code);
+        } else {
+            select.value = "";
+            restInput.value = "";
+            container.innerHTML = "";
         }
     });
 </script>
