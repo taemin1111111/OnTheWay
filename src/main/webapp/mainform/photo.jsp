@@ -1,63 +1,107 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
     String root = request.getContextPath();
 %>
-<!-- 슬라이더 이미지 -->
-<div id="mainCarousel" class="carousel slide" data-bs-ride="carousel">
-  <!-- 점점점 인디케이터 -->
-  <div class="carousel-indicators custom-indicator">
-    <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="0" class="active"></button>
-    <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="1"></button>
-    <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="2"></button>
-    <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="3"></button>
-    <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="4"></button>
-    <button type="button" data-bs-target="#mainCarousel" data-bs-slide-to="5"></button>
+<div class="swiper mySwiper">
+  <div class="swiper-wrapper">
+    <div class="swiper-slide">
+      <img src="<%=root%>/image2/pt1.jpg" alt="slide1">
+    </div>
+    <div class="swiper-slide">
+      <img src="<%=root%>/image2/pt2.jpg" alt="slide2">
+    </div>
+    <div class="swiper-slide">
+      <img src="<%=root%>/image2/pt3.jpg" alt="slide3">
+    </div>
+    <div class="swiper-slide">
+      <img src="<%=root%>/image2/pt4.jpg" alt="slide4">
+    </div>
   </div>
-  <div class="carousel-inner">
-    <div class="carousel-item active"><img src="<%=root%>/image2/pt1.jpg" class="d-block w-100" alt="..."></div>
-    <div class="carousel-item"><img src="<%=root%>/image2/pt2.jpg" class="d-block w-100" alt="..."></div>
-    <div class="carousel-item"><img src="<%=root%>/image2/pt3.jpg" class="d-block w-100" alt="..."></div>
-    <div class="carousel-item"><img src="<%=root%>/image2/pt4.jpg" class="d-block w-100" alt="..."></div>
-    <div class="carousel-item"><img src="<%=root%>/image2/pt5.jpg" class="d-block w-100" alt="..."></div>
-    <div class="carousel-item"><img src="<%=root%>/image2/pt6.jpg" class="d-block w-100" alt="..."></div>
-  </div>
-</div>
 
-<!-- 좌우 클릭 영역 -->
-<div class="position-relative" style="margin-top: -400px; height: 400px;">
-  <div id="leftArea" style="position: absolute; top: 0; left: 0; width: 50%; height: 100%; z-index: 10;"></div>
-  <div id="rightArea" style="position: absolute; top: 0; right: 0; width: 50%; height: 100%; z-index: 10;"></div>
+  <!-- 슬라이드 번호 표시 -->
+  <div class="swiper-pagination"></div>
+
+  <!-- 좌우 화살표 -->
+  <div class="swiper-button-prev"></div>
+  <div class="swiper-button-next"></div>
+
+  <!-- 멈춤/재생 버튼 -->
+  <div class="swiper-control">
+    <button id="togglePlay" onclick="toggleAutoplay()">
+      <i id="playIcon" class="bi bi-pause-fill"></i>
+    </button>
+  </div>
 </div>
 
 <style>
-/* 점점점(인디케이터) 디자인 커스텀 */
-.carousel-indicators.custom-indicator button {
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  margin: 0 5px;
-  border: none;
-  background-color: #ddd;   /* 연한 회색 */
-  opacity: 0.5;
-  transition: background 0.2s;
+.swiper {
+  width: 100%;
+  padding: 30px 0;
+  position: relative;
 }
-.carousel-indicators.custom-indicator button.active {
-  background-color: #444;   /* 어두운 그레이 */
+.swiper-slide {
+  width: 48%;
+  height: 300px;
+  border-radius: 20px; /* 사진 둥글게 */
+  overflow: hidden;
+  background: #fff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+.swiper-slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.swiper-pagination {
+  text-align: center;
+  font-size: 16px;
+  font-weight: bold;
+  margin-top: 10px;
+}
+.swiper-control {
+  position: absolute;
+  bottom: -40px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+.swiper-control button {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
 }
 </style>
 
 <script>
-  // Bootstrap Carousel 연동
-  const carousel = new bootstrap.Carousel('#mainCarousel', {
-    interval: 3000,
-    ride: 'carousel'
-  });
+let swiper = new Swiper(".mySwiper", {
+  slidesPerView: 2,
+  spaceBetween: 30,
+  loop: true,
+  autoplay: {
+    delay: 3000,
+    disableOnInteraction: false
+  },
+  pagination: {
+    el: ".swiper-pagination",
+    type: "fraction"
+  },
+  navigation: {
+    nextEl: ".swiper-button-next",
+    prevEl: ".swiper-button-prev"
+  }
+});
 
-  document.getElementById("leftArea").addEventListener("click", () => {
-    carousel.prev();
-  });
-
-  document.getElementById("rightArea").addEventListener("click", () => {
-    carousel.next();
-  });
+function toggleAutoplay() {
+  const playIcon = document.getElementById("playIcon");
+  if (swiper.autoplay.running) {
+    swiper.autoplay.stop();
+    playIcon.classList.remove("bi-pause-fill");
+    playIcon.classList.add("bi-play-fill");
+  } else {
+    swiper.autoplay.start();
+    playIcon.classList.remove("bi-play-fill");
+    playIcon.classList.add("bi-pause-fill");
+  }
+}
 </script>

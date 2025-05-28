@@ -15,39 +15,26 @@
 <!-- 부트스트랩 아이콘 -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 
+<!-- ✅ Swiper.js CDN 추가 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
 <style>
-/* ----------- [title.jsp 관련 스타일] ----------- */
+/* ----------- 전체 공통 스타일 ----------- */
 body {
     font-family: 'Noto Sans KR', sans-serif;
-}
-nav.navbar {
-    background-color: #ffffff !important;
-}
-.nav-item > a {
-    font-size: 21px;
-    font-weight: 500;
-}
-.nav-item.dropdown > a::after {
-    display: none !important;
-}
-.login-font {
-    font-family: Arial, sans-serif !important;
-    font-size: 18px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
+    margin: 0;
+    padding: 0;
 }
 
-/* ----------- [photo.jsp 관련 스타일] ----------- */
-.carousel img {
-    width: 100%;
-    height: auto;
-}
-.carousel-item img {
-    height: 55vh;
-    object-fit: cover;
+/* ----------- 중앙 본문 흰 여백 스타일 ----------- */
+.centered-content {
+    max-width: 1500px;     /* 여기 수정해!! → 최대 너비 조절 */
+    margin: 0 auto;
+    padding: 0 20px;       /* 여기 수정해!! → 좌우 여백 조절 */
 }
 
-/* ----------- [main.jsp 관련 스타일] ----------- */
+/* ----------- main.jsp 스타일 ----------- */
 .info-box {
     width: 48%;
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
@@ -55,8 +42,6 @@ nav.navbar {
     background-color: white;
     border-radius: 8px;
 }
-
-/* 공지사항 제목 스타일 */
 .info-box h6 {
     text-align: center;
     margin-bottom: 15px;
@@ -64,40 +49,28 @@ nav.navbar {
     font-weight: 700;
     color: #222222;
 }
-
-/* 테이블 헤더 */
 .info-box table thead th {
     font-size: 18px;
     font-weight: 700;
     color: #444444;
 }
-
-/* 날짜 헤더 중앙 정렬 */
 .info-box table thead th:nth-child(2) {
     text-align: center;
 }
-
-/* 링크 스타일 */
 .info-box table tbody tr td a {
     font-size: 20px;
     font-weight: 500;
     color: #333;
     text-decoration: none;
 }
-
-/* 일반 내용 */
 .info-box table tbody tr td {
     vertical-align: middle;
     font-size: 18px;
     color: #666666;
 }
-
-/* 호버 배경색 */
 .info-box table tbody tr:hover {
     background-color: #f9f9f9;
 }
-
-/* 전체 공지사항 보기 버튼 스타일 */
 .all-notice-btn {
     display: inline-flex;
     align-items: center;
@@ -115,8 +88,6 @@ nav.navbar {
 .all-notice-btn i {
     font-size: 24px;
 }
-
-/* 자주가는 메뉴 버튼 */
 .info-box.d-flex .btn {
     font-size: 18px;
     padding: 10px 0;
@@ -130,7 +101,7 @@ nav.navbar {
     color: white;
 }
 
-/* 공통 footer */
+/* ----------- footer.jsp 스타일 ----------- */
 .footer {
     margin-top: 50px;
     padding: 20px;
@@ -140,9 +111,18 @@ nav.navbar {
 </style>
 </head>
 <body>
+
+    <!-- 전체 폭 title -->
     <jsp:include page="mainform/title.jsp" />
-    <jsp:include page="mainform/photo.jsp" />
-    <jsp:include page="mainform/main.jsp" />
+
+    <!-- 중앙 정렬된 본문 -->
+    <div class="centered-content">
+        <jsp:include page="mainform/photo.jsp" />
+        <jsp:include page="mainform/main.jsp" />
+    </div>
+
+    <!-- 전체 폭 footer -->
     <jsp:include page="mainform/footer.jsp" />
+
 </body>
 </html>

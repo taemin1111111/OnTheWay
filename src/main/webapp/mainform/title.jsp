@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8"%>
 <%
     String root = request.getContextPath();
 %>
@@ -14,10 +14,8 @@
 				<!-- 휴게소 소개 -->
 				<li class="nav-item dropdown me-3 dropdown-hover"><a
 					class="nav-link dropdown-toggle" href="#" role="button"
-					data-bs-toggle="dropdown" aria-expanded="false"> 교통정보 </a>
-					
+					data-bs-toggle="dropdown" aria-expanded="false"> 교통정보 </a></li>
 
-				<!-- 나머지 메뉴들도 동일하게 dropdown-hover 클래스 추가 -->
 				<li class="nav-item dropdown me-3 dropdown-hover"><a
 					class="nav-link dropdown-toggle" href="#" role="button"
 					data-bs-toggle="dropdown" aria-expanded="false">휴게소 소개</a>
@@ -58,61 +56,78 @@
 		</div>
 		<div class="d-flex align-items-center">
 			<i class="bi bi-person-circle me-2" style="font-size: 1.8rem;"></i> <a
-				href="" class="me-3 login-font">로그인</a>
+				href="" class="me-3 login-font">로그인/회원가입</a>
 		</div>
 	</div>
 </nav>
 
 <style>
-/* 드롭다운 메뉴 글자 크기 및 패딩 조절 */
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+nav.navbar {
+    background-color: #ffffff !important;
+}
+
+.nav-item > a {
+    font-size: 21px;
+    font-weight: 500;
+}
+
+.nav-item.dropdown > a::after {
+    display: none !important;
+}
+
+.login-font {
+    font-family: Arial, sans-serif !important;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
 .navbar-nav .dropdown-menu .dropdown-item {
-	font-size: 20px; /* 원하는 크기로 조절 */
-	padding: 10px 20px; /* 여백도 조절 가능 */
+    font-size: 20px;
+    padding: 10px 20px;
 }
 
-/* 네비게이션 기본 스타일 */
 .navbar-nav .nav-link {
-	transition: background 0.4s ease, color 0.4s ease;
+    transition: background 0.4s ease, color 0.4s ease;
 }
 
-/* 드롭다운 메뉴 배경 부드러운 그라데이션 변화 + 텍스트 색상 */
-.navbar-nav .dropdown-menu .dropdown-item:hover, .navbar-nav .dropdown-menu .dropdown-item:focus
-	{
-	background: linear-gradient(90deg, #f5f5f5, #e0e0e0);
-	color: #333 !important;
-	border: none;
-	box-shadow: none;
+.navbar-nav .dropdown-menu .dropdown-item:hover, .navbar-nav .dropdown-menu .dropdown-item:focus {
+    background: linear-gradient(90deg, #f5f5f5, #e0e0e0);
+    color: #333 !important;
+    border: none;
+    box-shadow: none;
 }
 
-/* 드롭다운 토글 마우스 오버 배경변화 (선택사항) */
 .navbar-nav .nav-link.dropdown-toggle:hover, .navbar-nav .nav-link.dropdown-toggle:focus,
-	.navbar-nav .nav-link.dropdown-toggle:active {
-	background: linear-gradient(90deg, #f5f5f5, #e0e0e0);
-	color: #333 !important;
-	border-radius: 6px;
-	outline: none !important;
-	box-shadow: none !important;
-	border: none !important;
+.navbar-nav .nav-link.dropdown-toggle:active {
+    background: linear-gradient(90deg, #f5f5f5, #e0e0e0);
+    color: #333 !important;
+    border-radius: 6px;
+    outline: none !important;
+    box-shadow: none !important;
+    border: none !important;
 }
 
-/* 로고와 메뉴 사이 띄우기 */
 .d-flex.align-items-center>ul.navbar-nav {
-	margin-left: 200px !important;
+    margin-left: 200px !important;
 }
 </style>
 
 <script>
-  // 마우스 오버시 드롭다운 열기
-  document.querySelectorAll('.dropdown-hover').forEach(function(dropdown){
-    dropdown.addEventListener('mouseenter', function() {
-      let toggle = this.querySelector('.dropdown-toggle');
-      let dropdownInstance = bootstrap.Dropdown.getOrCreateInstance(toggle);
-      dropdownInstance.show();
-    });
-    dropdown.addEventListener('mouseleave', function() {
-      let toggle = this.querySelector('.dropdown-toggle');
-      let dropdownInstance = bootstrap.Dropdown.getOrCreateInstance(toggle);
-      dropdownInstance.hide();
-    });
+document.querySelectorAll('.dropdown-hover').forEach(function(dropdown){
+  dropdown.addEventListener('mouseenter', function() {
+    let toggle = this.querySelector('.dropdown-toggle');
+    let dropdownInstance = bootstrap.Dropdown.getOrCreateInstance(toggle);
+    dropdownInstance.show();
   });
+  dropdown.addEventListener('mouseleave', function() {
+    let toggle = this.querySelector('.dropdown-toggle');
+    let dropdownInstance = bootstrap.Dropdown.getOrCreateInstance(toggle);
+    dropdownInstance.hide();
+  });
+});
 </script>
