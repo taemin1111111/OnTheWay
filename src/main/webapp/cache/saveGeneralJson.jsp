@@ -15,11 +15,12 @@
 	    throw new RuntimeException("api.key 값이 설정되지 않았습니다.");
 	}
 
-    int maxPage = 2; // 146개면 99개 기준 2페이지
+
+    int maxPage = 13;
     JSONParser parser = new JSONParser();
     JSONArray allData = new JSONArray();
 
-    String jsonFilePath = application.getRealPath("/data/restThemeData.json");
+    String jsonFilePath = application.getRealPath("/data/restConv.json");
     File jsonFile = new File(jsonFilePath);
 
     // ✅ 3시간 갱신 주기 설정
@@ -37,14 +38,15 @@
     }
 
     if (!shouldRefresh) {
-        out.println("<h3>최근 테마휴게소 데이터가 이미 존재합니다 (3시간 이내)</h3>");
+        out.println("<h3>최근 데이터가 이미 존재합니다 (3시간 이내)</h3>");
         out.println("<p>파일 위치: " + jsonFilePath + "</p>");
         return;
     }
 
+    
     try {
         for (int pageNo = 1; pageNo <= maxPage; pageNo++) {
-            String apiUrl = "https://data.ex.co.kr/openapi/restinfo/restThemeList"
+            String apiUrl = "https://data.ex.co.kr/openapi/restinfo/restConvList"
                           + "?key=" + apiKey
                           + "&type=json"
                           + "&numOfRows=99"
@@ -78,7 +80,7 @@
             fw.write(allData.toJSONString());
         }
 
-        out.println("<h3>테마휴게소 데이터 저장 성공!</h3>");
+        out.println("<h3>브랜드 매장 현황 데이터 저장 성공!</h3>");
         out.println("<p>총 항목 수: " + allData.size() + "</p>");
         out.println("<p>저장된 파일 위치: " + jsonFilePath + "</p>");
 
