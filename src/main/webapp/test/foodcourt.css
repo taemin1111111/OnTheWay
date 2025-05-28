@@ -8,20 +8,53 @@ body {
   font-family: 'Noto Sans KR', sans-serif;
   background-color: #e3f2fd;
 }
+
+/* 상단 헤더 */
+header {
+  background-color: #fff;
+  padding: 15px 40px;
+  display: flex;
+  justify-content: center; /* space-between 대신 중앙 정렬 */
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+  position: relative; /* 로고 위치 조정을 위해 추가 */
+}
+
+#logo {
+  position: absolute; /* 로고를 왼쪽으로 고정 */
+  left: 40px;
+  display: flex;
+  align-items: center;
+  height: 60px;
+}
+
+#logo img {
+  height: 50px;
+  margin-top: 10px;
+  margin-left: 20px;
+}
+
+/* 내비게이션 중앙 정렬 */
 .main-nav {
-  padding: 0 20px;
+  display: flex;
+  justify-content: center; /* 내비게이션 자체를 중앙으로 */
+  width: 100%; /* header 안에서 전체 너비 차지 */
 }
 
 .main-nav ul {
   list-style: none;
   display: flex;
-  justify-content: center;
+  justify-content: center; /* 항목들 중앙 정렬 */
+  align-items: center; /* 수직 중앙 정렬 */
   margin: 0;
   padding: 10px 0;
+  gap: 30px; /* 항목 간 간격 */
 }
 
 .main-nav li {
-  margin: 0 20px;
+  margin: 0;
+  font-weight: 600;
+  color: #5a5a5a;
 }
 
 .main-nav a {
@@ -39,40 +72,7 @@ body {
   border-radius: 4px;
 }
 
-/* 상단 헤더 */
-header {
-  background-color: #fff;
-  padding: 15px 40px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid #ddd;
-}
-
-#logo {
-  display: flex;
-  align-items: center;
-  height: 60px;
-}
-
-#logo img {
-  height: 50px; /* 적당한 크기로 줄임 */
-  margin-top: 10px; /* 아래로 내림 */
-  margin-left: 20px; /* 왼쪽 여백 조정 */
-}
-
-nav ul {
-  display: flex;
-  list-style: none;
-  gap: 30px;
-}
-
-nav li {
-  font-weight: 600;
-  color: #5a5a5a;
-  cursor: pointer;
-}
-
+/* 불필요한 스타일 제거 */
 .auth a {
   text-decoration: none;
   color: #333;
@@ -133,7 +133,7 @@ nav li {
   border-radius: 12px;
   padding: 20px;
   text-align: center;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .img-box {

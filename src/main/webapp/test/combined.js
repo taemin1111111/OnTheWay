@@ -150,22 +150,35 @@ function handleGoogleSignIn(response) {
   });
 }
 
-// 일반 로그인/회원가입 폼 제출
-document.querySelector("#loginForm button[type='submit']").onclick = (e) => {
+// 일반 로그인 폼 제출 (DB 연동)
+document.querySelector("#loginForm button[type='submit']").onclick = async (e) => {
   e.preventDefault();
   const email = loginForm.querySelector("input[type='email']").value;
   const password = loginForm.querySelector("input[type='password']").value;
 
-  if (!email || !password) {
-    alert("모든 필드를 입력해주세요.");
-    return;
+  try {
+    const response = await fetch('http://localhost:3000/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username: email, password })
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+      alert(data.message);
+      modal.style.display = "none";
+      content.style.display = "block";
+    } else {
+      alert(data.message);
+    }
+  } catch (error) {
+    console.error('로그인 요청 오류:', error);
+    alert('로그인 중 오류가 발생했습니다.');
   }
-  alert("로그인 성공!");
-  modal.style.display = "none";
-  content.style.display = "block";
 };
 
-document.querySelector("#signupForm button[type='submit']").onclick = (e) => {
+// 일반 회원가입 폼 제출 (DB 연동)
+document.querySelector("#signupForm button[type='submit']").onclick = async (e) => {
   e.preventDefault();
   const name = signupForm.querySelector("input[type='text']").value;
   const email = signupForm.querySelector("input[type='email']").value;
@@ -180,7 +193,24 @@ document.querySelector("#signupForm button[type='submit']").onclick = (e) => {
     alert("비밀번호가 일치하지 않습니다.");
     return;
   }
-  alert("회원가입 성공!");
-  modal.style.display = "none";
-  content.style.display = "block";
+
+  try {
+    const response = await fetch('http://localhost:3000/api/signup', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email, password })
+    });
+
+    const data = await response.json();
+    if (response.ok) {
+      alert(data.message);
+      modal.style.display = "none";
+      content.style.display = "block";
+    } else {
+      alert(data.message);
+    }
+  } catch (error) {
+    console.error('회원가입 요청 오류:', error);
+    alert('회원가입 중 오류가 발생했습니다.');
+  }
 };
