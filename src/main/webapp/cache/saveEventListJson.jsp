@@ -1,7 +1,21 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"
-    import="java.net.*, java.io.*, org.json.simple.*, org.json.simple.parser.*, java.io.File" %>
+    import="java.net.*, java.io.*, org.json.simple.*, org.json.simple.parser.*, java.util.Properties" %>
 <%
-    String apiKey = "7961459716"; // 실제 API 키로 교체
+	InputStream in = application.getResourceAsStream("/WEB-INF/classes/config.properties");
+	if (in == null) {
+	    throw new RuntimeException("config.properties 파일을 찾을 수 없습니다.");
+	}
+	Properties props = new Properties();
+	props.load(in);
+	in.close();
+	
+	// 2) API 키 꺼내오기
+	String apiKey = props.getProperty("api.key");
+	if (apiKey == null || apiKey.isBlank()) {
+	    throw new RuntimeException("api.key 값이 설정되지 않았습니다.");
+	}
+
+
     int maxPage = 8; // 실제 페이지 수에 따라 조절
     JSONParser parser = new JSONParser();
     JSONArray allData = new JSONArray();

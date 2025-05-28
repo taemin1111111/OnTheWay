@@ -18,7 +18,7 @@ public class HgDao {
 		PreparedStatement pstmt=null;
 		ResultSet rs=null;
 		
-		String sql="select * from test where id=?";
+		String sql="select * from hg.awstest where num=?";
 		
 		try {
 			pstmt=conn.prepareStatement(sql);
