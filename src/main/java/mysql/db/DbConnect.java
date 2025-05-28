@@ -9,7 +9,8 @@ import java.sql.Statement;
 
 public class DbConnect {
 
-static final String URL="jdbc:mysql://localhost:3306/test";
+static final String URL =
+    	      "jdbc:mysql://sy.cxgook0a6rgg.ap-northeast-2.rds.amazonaws.com:3306/hg?useSSL=false&serverTimezone=Asia/Seoul";
 static final String MySqlDriver="com.mysql.cj.jdbc.Driver";
 
 //생성자 안에 드라이버 넣기
@@ -31,7 +32,7 @@ static final String MySqlDriver="com.mysql.cj.jdbc.Driver";
 		Connection conn=null;
 		
 		try {
-			conn=DriverManager.getConnection(URL, "root", "a1234");
+			conn=DriverManager.getConnection(URL, "otw", "");
 			
 			System.out.println("Mysql 연결 성공!!!");
 		} catch (SQLException e) {
