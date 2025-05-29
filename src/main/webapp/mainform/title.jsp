@@ -29,7 +29,7 @@
 					class="nav-link dropdown-toggle" href="#" role="button"
 					data-bs-toggle="dropdown" aria-expanded="false">휴게소 찾기</a>
 					<ul class="dropdown-menu">
-						<li><a class="dropdown-item" href="#">휴게소 찾기</a></li>
+						<li><a class="dropdown-item"  href="index.jsp?main=details/info.jsp">휴게소 찾기</a></li>
 						<li><a class="dropdown-item" href="#">휴게소 목록</a></li>
 						<li><a class="dropdown-item" href="#">교통정보</a></li>
 						<li><a class="dropdown-item" href="#"></a></li>
