@@ -10,12 +10,13 @@ private String userid;
 private String hgName;
 private double stars;
 private String content;
-private double good;
+private int good;
 
-public double getGood() {
+
+public int getGood() {
 	return good;
 }
-public void setGood(double good) {
+public void setGood(int good) {
 	this.good = good;
 }
 private Timestamp writeday;

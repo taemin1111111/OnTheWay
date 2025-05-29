@@ -115,6 +115,39 @@ public int getTotalCount() {
 
     return count;
 }
+//추천수 +1
+public void increaseGood(String num) {
+ Connection conn = db.getConnection();
+ PreparedStatement pstmt = null;
+
+ String sql = "UPDATE review SET good = good + 1 WHERE num = ?";
+ try {
+     pstmt = conn.prepareStatement(sql);
+     pstmt.setString(1, num);
+     pstmt.executeUpdate();
+ } catch (SQLException e) {
+     e.printStackTrace();
+ } finally {
+     db.dbClose(pstmt, conn);
+ }
+}
+
+//추천수 -1
+public void decreaseGood(String num) {
+ Connection conn = db.getConnection();
+ PreparedStatement pstmt = null;
+
+ String sql = "UPDATE review SET good = good - 1 WHERE num = ?";
+ try {
+     pstmt = conn.prepareStatement(sql);
+     pstmt.setString(1, num);
+     pstmt.executeUpdate();
+ } catch (SQLException e) {
+     e.printStackTrace();
+ } finally {
+     db.dbClose(pstmt, conn);
+ }
+}
 
 }
 

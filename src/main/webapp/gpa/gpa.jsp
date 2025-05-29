@@ -1,3 +1,5 @@
+<%@page import="java.util.Date"%>
+<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="GpaData.GpaDto"%>
 <%@page import="java.util.List"%>
 <%@page import="GpaData.GpaDao"%>
@@ -295,6 +297,7 @@ document.addEventListener("DOMContentLoaded", function () {
 			</thead>
 			<tbody>
 				<%
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 				List<GpaDto> list = dao.getAllGpa();
 				for (GpaDto dto : list) {
 				%>
@@ -302,16 +305,18 @@ document.addEventListener("DOMContentLoaded", function () {
 					<td><%=dto.getStars()%></td>
 					<td><%=dto.getUserid() == null ? "null" : dto.getUserid()%></td>
 					<td><%=dto.getContent()%></td>
-					<td><%=dto.getWriteday()%></td>
-					<td><%=dto.getGood()%></td>
-					<td class="thumb-buttons">
-						<button class="btn btn-sm btn-outline-success">
-							<i class="bi bi-hand-thumbs-up"></i>
-						</button>
-						<button class="btn btn-sm btn-outline-danger">
-							<i class="bi bi-hand-thumbs-down"></i>
-						</button>
-					</td>
+					<td><%=sdf.format(dto.getWriteday())%></td>
+					<td><%=dto.getGood() %>
+					<td class="thumb-buttons"><a
+						href="<%=request.getContextPath()%>/gpa/goodUpdate.jsp?num=<%=dto.getNum()%>&type=up"
+						class="btn btn-sm btn-outline-success"> <i
+							class="bi bi-hand-thumbs-up"></i>
+					</a> <a
+						href="<%=request.getContextPath()%>/gpa/goodUpdate.jsp?num=<%=dto.getNum()%>&type=down"
+						class="btn btn-sm btn-outline-danger"> <i
+							class="bi bi-hand-thumbs-down"></i>
+					</a></td>
+
 				</tr>
 				<%
 				}
