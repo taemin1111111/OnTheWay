@@ -6,7 +6,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>로그인/회원가입</title>
-  <link rel="stylesheet" href="login.css" />
+  <link rel="stylesheet" href="sigin.css" />
 </head>
 <body>
   <button id="openModalBtn">로그인 / 회원가입</button>
@@ -20,9 +20,9 @@
         <button id="signupTab">회원가입</button>
       </div>
 
-      <form id="loginForm" class="form active">
-        <input type="email" placeholder="이메일" required />
-        <input type="password" placeholder="비밀번호" required />
+      <form action="loginaction.jsp" class="form active">
+        <input type="text" name = 'id' placeholder="아이디" required />
+        <input type="password" name = 'password' placeholder="비밀번호" required />
         <button type="submit">로그인</button>
         <div class="social-login">
           <button class="kakao">카카오로 로그인</button>
@@ -42,6 +42,6 @@
     </div>
   </div>
 
-  <script src="login.js"></script>
+  <script src="signin.js"></script>
 </body>
 </html>

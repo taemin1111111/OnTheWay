@@ -41,10 +41,33 @@ public class UserDao {
         return user;
     }
 
-    public boolean isValidUser(String username, String password) {
-        UserDto user = getUser(username, password);
-        return user != null;
-    }
+    public boolean isIdPassMember(String m_id, String m_pass) {
+        boolean idpass = false;
+
+        Connection conn = db.getConnection();
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        String sql = "select * from user info where userId=? and password=?";
+
+        try {
+           pstmt = conn.prepareStatement(sql);
+           pstmt.setString(1, m_id);
+           pstmt.setString(2, m_pass);
+           rs = pstmt.executeQuery();
+           if (rs.next()) {
+              idpass = true;
+           }
+
+        } catch (SQLException e) {
+           // TODO Auto-generated catch block
+           e.printStackTrace();
+        } finally {
+           db.dbClose(rs, pstmt, conn);
+        }
+
+        return idpass;
+     }
     public void insertUser(String id, String username, String password, String email, int role) {
         String sql = "INSERT INTO user (userId, username, password, email, role, created_at) VALUES (?, ?, ?, ?, ?, NOW())";
         Connection conn = null;
