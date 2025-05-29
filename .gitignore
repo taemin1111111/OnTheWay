@@ -1,3 +1,3 @@
 src/main/webapp/WEB-INF/classes/config.properties
 /.metadata/
-src/main/java/mysq/db/DbConnect.java
+src/main/java/mysql/db/DbConnect.java

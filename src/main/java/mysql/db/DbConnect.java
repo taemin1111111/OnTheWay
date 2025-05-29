@@ -32,9 +32,10 @@ static final String MySqlDriver="com.mysql.cj.jdbc.Driver";
 		Connection conn=null;
 		
 		try {
-			conn=DriverManager.getConnection(URL, "otw", "");
+			conn=DriverManager.getConnection(URL, "otw", "Tkddyd12!");
 			
 			System.out.println("Mysql 연결 성공!!!");
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			System.out.println("Mysql 연결 실패!!!");

@@ -1,3 +1,4 @@
+<%@page import="java.util.Properties"%>
 <%@page import="java.util.LinkedHashMap"%>
 <%@page import="java.util.Map"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" import="java.io.*, org.json.simple.*, org.json.simple.parser.*" %>
@@ -167,7 +168,13 @@ try {
 	e.printStackTrace();
 }
 %>
+<%
+    Properties prop = new Properties();
+    InputStream input = application.getResourceAsStream("/WEB-INF/classes/config.properties");
+    prop.load(input);
 
+    String channelKey = prop.getProperty("portone.channelKey");
+%>
 <h2>푸드코트 메뉴 현황</h2>
 <div class="mb-3 text-center">
     <label for="restSearch" class="form-label">휴게소 검색:&nbsp;</label>
@@ -502,6 +509,70 @@ try {
             container.innerHTML = '';
         }
     });
+</script>
+
+<!-- 포트원 v1 SDK 로드 -->
+<script src="https://cdn.iamport.kr/v1/iamport.js"></script>
+
+<!-- 결제 버튼 클릭 시 동작 -->
+<script>
+function orderBtn() {
+    // 로그인 체크 (JSP 코드로 세션 검사)
+    <% if (session.getAttribute("loginUserId") == null) { %>
+        alert("로그인이 필요합니다.");
+        return;
+    <% } %>
+
+    // 주문 비어있을 때
+    if (Object.keys(orderMap).length === 0) {
+        alert("주문할 메뉴가 없습니다.");
+        return;
+    }
+
+    const IMP = window.IMP;
+    IMP.init("imp37255548"); // 식별코드
+
+    // 주문 데이터 구성
+    const now = new Date();
+    const channel_key = "<%= channelKey %>";	// ✅ 포트원 채널키
+    const merchantUid = "order_" + now.getTime();	// ✅ 고유한 주문번호
+    
+    // const totalAmount = Object.values(orderMap).reduce((sum, item) => sum + item.price * item.quantity, 0); // ✅ 정수형
+    // 테스트용 100분의 1 금액 -->
+    const totalAmount = Math.round(
+	    Object.values(orderMap).reduce((sum, item) => sum + item.price * item.quantity, 0) / 100
+	);
+    
+    const menuNames = Object.keys(orderMap);
+    const restName = document.getElementById('restSearch').value || "휴게소";
+
+    let orderName = restName;
+    if (menuNames.length > 0) {
+        orderName += " - " + menuNames[0];
+        if (menuNames.length > 1) {
+            orderName += " 외 " + (menuNames.length - 1);
+        }
+    }
+
+    // 결제 요청
+    IMP.request_pay({
+        channelKey: channel_key,
+        pay_method: "card",
+        merchant_uid: merchantUid,
+        name: orderName,
+        amount: totalAmount,
+        buyer_name: "<%= session.getAttribute("loginUserId") %>"
+    }, function (rsp) {
+        console.log("결제 응답", rsp); // ✅ 콘솔 로그 확인
+
+        if (rsp.success) {
+            alert("결제가 완료되었습니다.");
+            clearOrder(); // 주문 목록 전체 초기화
+        } else {
+            alert("결제 실패: " + rsp.error_msg);
+        }
+    });
+}
 </script>
 
 </body>
