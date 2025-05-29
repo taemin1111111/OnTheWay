@@ -1,94 +1,113 @@
 package mysql.db;
 
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Properties;
 
 public class DbConnect {
 
-static final String URL =
-    	      "jdbc:mysql://sy.cxgook0a6rgg.ap-northeast-2.rds.amazonaws.com:3306/hg?useSSL=false&serverTimezone=Asia/Seoul";
-static final String MySqlDriver="com.mysql.cj.jdbc.Driver";
+	private String url;
+	private String user;
+	private String password;
 
-//생성자 안에 드라이버 넣기
-   public DbConnect() {
-	// TODO Auto-generated constructor stub
-	   try {
-		Class.forName(MySqlDriver);
-	} catch (ClassNotFoundException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-		System.out.println("Mysql 드라이버 실패: "+e.getMessage());
-	}
-   
-   }
-	
-	//오라클계정연결
-	public Connection getConnection()
-	{
-		Connection conn=null;
-		
+	static final String MySqlDriver = "com.mysql.cj.jdbc.Driver";
+
+	// 생성자 안에 드라이버 넣기
+	public DbConnect() {
 		try {
-			conn=DriverManager.getConnection(URL, "otw", "");
-			
+			Class.forName(MySqlDriver);
+
+			// config.properties 파일 읽기
+			Properties props = new Properties();
+			InputStream input = getClass().getClassLoader().getResourceAsStream("config.properties");
+
+			if (input == null) {
+				throw new RuntimeException("설정 파일을 찾을 수 없습니다.");
+			}
+
+			props.load(input);
+			url = props.getProperty("db.url");
+			user = props.getProperty("db.user");
+			password = props.getProperty("db.password");
+			System.out.println(url);
+			System.out.println(user);
+			System.out.println(password);
+			//url +="&allowPublicKeyRetrieval=true";
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("DB 설정 로딩 실패: " + e.getMessage());
+		}
+	}
+
+	// 오라클계정연결
+	public Connection getConnection() {
+		Connection conn = null;
+		try {
+			conn = DriverManager.getConnection(url, user, password);
 			System.out.println("Mysql 연결 성공!!!");
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			System.out.println("Mysql 연결 실패!!!");
 			e.printStackTrace();
 			throw new RuntimeException(e);
-			
 		}
-		
 		return conn;
 	}
-	
-	//close 메서드 총4개,오버로딩 메서드
-	public void dbClose(ResultSet rs,Statement stmt,Connection conn)
-	{
+
+	// close 메서드 총4개,오버로딩 메서드
+	public void dbClose(ResultSet rs, Statement stmt, Connection conn) {
 		try {
-			if(rs!=null) rs.close();
-			if(stmt!=null) stmt.close();
-			if(conn!=null) conn.close();
+			if (rs != null)
+				rs.close();
+			if (stmt != null)
+				stmt.close();
+			if (conn != null)
+				conn.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
-	public void dbClose(Statement stmt,Connection conn)
-	{
+
+	public void dbClose(Statement stmt, Connection conn) {
 		try {
-			
-			if(stmt!=null) stmt.close();
-			if(conn!=null) conn.close();
+
+			if (stmt != null)
+				stmt.close();
+			if (conn != null)
+				conn.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
-	public void dbClose(ResultSet rs,PreparedStatement pstmt,Connection conn)
-	{
+
+	public void dbClose(ResultSet rs, PreparedStatement pstmt, Connection conn) {
 		try {
-			if(rs!=null) rs.close();
-			if(pstmt!=null) pstmt.close();
-			if(conn!=null) conn.close();
+			if (rs != null)
+				rs.close();
+			if (pstmt != null)
+				pstmt.close();
+			if (conn != null)
+				conn.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
-	
-	public void dbClose(PreparedStatement pstmt,Connection conn)
-	{
+
+	public void dbClose(PreparedStatement pstmt, Connection conn) {
 		try {
-			
-			if(pstmt!=null) pstmt.close();
-			if(conn!=null) conn.close();
+
+			if (pstmt != null)
+				pstmt.close();
+			if (conn != null)
+				conn.close();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
