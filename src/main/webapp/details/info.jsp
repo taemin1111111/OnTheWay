@@ -1,173 +1,146 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%-- Import necessary DAOs, DTOs, and utility classes --%>
+<%@ page import="java.sql.SQLException" %>
+<%@ page import="java.util.List, java.util.ArrayList" %>
 <%@ page import="hg.HgDao, hg.HgDto" %>
 <%@ page import="conv.ConvDao, conv.ConvDto" %>
 <%@ page import="brand.BrandDao, brand.BrandDto" %>
-<%@ page import="java.util.List, java.util.ArrayList" %> <%-- Using List now, but Vector is also fine --%>
-<%@ page import="java.sql.SQLException" %>
 
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-<meta charset="UTF-8">
-<title>휴게소 상세 정보</title>
-<style>
-    body { font-family: sans-serif; margin: 20px; }
-    .container { border: 1px solid #ccc; padding: 20px; max-width: 800px; margin: auto; }
-    h1 { text-align: center; color: #333; }
-    h2 { color: #555; border-bottom: 1px solid #eee; padding-bottom: 5px; }
-    ul { list-style-type: none; padding-left: 0; }
-    li { background-color: #f9f9f9; border: 1px solid #eee; padding: 8px; margin-bottom: 5px; border-radius: 4px; }
-    .error { color: red; font-weight: bold; }
-    .info { margin-bottom: 10px; }
-    .info p { margin: 5px 0; }
-</style>
+    <meta charset="UTF-8">
+    <title>휴게소 정보</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=a4883e0847e98b2ab0137a4ad0f7669d&libraries=services"></script>
 </head>
 <body>
-<script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=a4883e0847e98b2ab0137a4ad0f7669d&libraries=services"></script>
+<%
+    String hgIdFromUrl = request.getParameter("hg_id");
+    if (hgIdFromUrl == null) hgIdFromUrl = "A00001";
 
+    HgDto hgDetails = null;
+    List<ConvDto> convFacilitiesList = new ArrayList<>();
+    List<BrandDto> brandStoresList = new ArrayList<>();
+    String errorMessage = null;
 
-<div class="container">
-    <%
-        String hgIdFromUrl = request.getParameter("hg_id");
-    	if (hgIdFromUrl==null){
-    		hgIdFromUrl="A00001";
-    	}
+    try {
+        HgDao hgDao = new HgDao();
+        ConvDao convDao = new ConvDao();
+        BrandDao brandDao = new BrandDao();
 
-        HgDto hgDetails = null;
-        List<ConvDto> convFacilitiesList = new ArrayList<>();
-        List<BrandDto> brandStoresList = new ArrayList<>();
-        String errorMessage = null;
-        boolean hgFound = false;
-
-        if (hgIdFromUrl == null || hgIdFromUrl.trim().isEmpty()) {
-            errorMessage = "휴게소 ID가 제공되지 않았습니다.";
+        hgDetails = hgDao.getHgByID(hgIdFromUrl);
+        if (hgDetails != null) {
+            String restStopName = hgDetails.getName();
+            convFacilitiesList = convDao.getConvsByName(restStopName);
+            brandStoresList = brandDao.getBrandsByName(restStopName);
+        } else {
+            errorMessage = "휴게소 정보를 찾을 수 없습니다.";
         }
+    } catch (Exception e) {
+        errorMessage = "오류 발생: " + e.getMessage();
+    }
+%>
 
-        if (errorMessage == null) {
-            HgDao hgDao = new HgDao();
-            ConvDao convDao = new ConvDao();
-            BrandDao brandDao = new BrandDao();
-
-            try {
-                hgDetails = hgDao.getHgByID(hgIdFromUrl);
-
-                if (hgDetails != null) {
-                    hgFound = true;
-                    String restStopName = hgDetails.getName();
-
-                    if (restStopName != null && !restStopName.trim().isEmpty()) {
-                        convFacilitiesList.addAll(convDao.getConvsByName(restStopName));
-                        brandStoresList.addAll(brandDao.getBrandsByName(restStopName));
-                    } else {   
-                        errorMessage = "휴게소 이름 정보를 가져올 수 없습니다.";
-                    }
-                } else {
-                    errorMessage = "ID '" + hgIdFromUrl + "'에 해당하는 휴게소 정보를 찾을 수 없습니다.";
-                }
-
-            } catch (SQLException e) {
-                errorMessage = "데이터베이스 오류가 발생했습니다: " + e.getMessage();
-                System.err.println("SQL Error fetching details for hg_id " + hgIdFromUrl + ":");
-                e.printStackTrace(new java.io.PrintWriter(out));
-                e.printStackTrace();
-            } catch (Exception e) {
-                errorMessage = "처리 중 알 수 없는 오류가 발생했습니다: " + e.getMessage();
-                System.err.println("General Error fetching details for hg_id " + hgIdFromUrl + ":");
-                e.printStackTrace(new java.io.PrintWriter(out));
-                e.printStackTrace();
-            }
-        }
-    %>
-
+<div class="container py-5">
     <% if (errorMessage != null) { %>
-        <h1>오류</h1>
-        <p class="error"><%= errorMessage %></p>
-    <% } else if (hgFound && hgDetails != null) { %>
-        <h1>휴게소 정보: <%= hgDetails.getName() %></h1>
-
-        <div id="map" style="width:100%;height:400px; margin-bottom:20px;"></div>
-
-        <div class="info">
-            <% if (hgDetails.getTel_no() != null && !hgDetails.getTel_no().isEmpty()) { %>
-                <p><strong>전화번호:</strong> <%= hgDetails.getTel_no() %></p>
-            <% } else { %>
-                <p><strong>전화번호:</strong> 정보 없음</p>
-            <% } %>
-            <% if (hgDetails.getAddr() != null && !hgDetails.getAddr().isEmpty()) { %>
-                <p><strong>주소:</strong> <%= hgDetails.getAddr() %></p>
-            <% } else { %>
-                <p><strong>주소:</strong> 정보 없음</p>
-            <% } %>
-            <p><strong>화물 휴게소:</strong> <%= hgDetails.isTruck() ? "O" : "X" %></p>
-            <p><strong>경정비 가능:</strong> <%= hgDetails.isMaintenance() ? "가능" : "불가능" %></p>
+        <div class="alert alert-danger text-center">
+            <h4 class="alert-heading">오류</h4>
+            <p><%= errorMessage %></p>
         </div>
+    <% } else if (hgDetails != null) { %>
+        <div class="row g-4">
+            <!-- Left Side: Basic Info -->
+            <div class="col-lg-4">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0"><a href="index.jsp?main=gpa/gpa.jsp?hg_id=<%= hgDetails.getId() %>"><%= hgDetails.getName() %></a></h5>
+                        
+                    </div>
+                    <div class="card-body">
+                        <p><strong>전화번호:</strong> <%= hgDetails.getTel_no() != null ? hgDetails.getTel_no() : "정보 없음" %></p>
+                        <p><strong>주소:</strong> <%= hgDetails.getAddr() != null ? hgDetails.getAddr() : "정보 없음" %></p>
+                        <p><strong>화물 휴게소:</strong> <%= hgDetails.isTruck() ? "O" : "X" %></p>
+                        <p><strong>경정비 가능:</strong> <%= hgDetails.isMaintenance() ? "가능" : "불가능" %></p>
+                    </div>
+                </div>
 
-        <h2>편의시설</h2>
-        <% if (convFacilitiesList == null || convFacilitiesList.isEmpty()) { %>
-            <p>등록된 편의시설 정보가 없습니다.</p>
-        <% } else { %>
-            <ul>
-                <% for (ConvDto facility : convFacilitiesList) { %>
-                    <li><%= facility.getConv_name() %> <%-- ConvDto has getConv_name() --%>
-                        <% if (facility.getConv_desc() != null && !facility.getConv_desc().isEmpty()) { %>
-                            (<%= facility.getConv_desc() %>)
+                <div class="card mt-4 shadow-sm">
+                    <div class="card-header bg-secondary text-white">
+                        <h6 class="mb-0">편의시설</h6>
+                    </div>
+                    <div class="card-body">
+                        <% if (convFacilitiesList.isEmpty()) { %>
+                            <p class="text-muted">등록된 편의시설 정보가 없습니다.</p>
+                        <% } else { %>
+                            <ul class="list-group list-group-flush">
+                                <% for (ConvDto facility : convFacilitiesList) { %>
+                                    <li class="list-group-item">
+                                        <%= facility.getConv_name() %>
+                                        <% if (facility.getConv_desc() != null && !facility.getConv_desc().isEmpty()) { %>
+                                            <span class="text-muted small">(<%= facility.getConv_desc() %>)</span>
+                                        <% } %>
+                                    </li>
+                                <% } %>
+                            </ul>
                         <% } %>
-                    </li>
-                <% } %>
-            </ul>
-        <% } %>
+                    </div>
+                </div>
+            </div>
 
-		<h2>브랜드 매장</h2>
-		<% if (brandStoresList == null || brandStoresList.isEmpty()) { %>
-		<p>등록된 브랜드 매장 정보가 없습니다.</p>
-		<% } else { %>
-		<div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap; justify-content: flex-start;">
-		<% for (BrandDto store : brandStoresList) { %>
-		<img src="../BrandLogoImage/<%= store.getBrand_name() %>.png" alt="<%= store.getBrand_name() %>" 
-		     style="max-width: 120px; height: auto; flex-shrink: 0;">
-		<% } %>
-		</div>
-		<% } %>
+            <!-- Right Side: Map and Brand Info -->
+            <div class="col-lg-8">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-header bg-success text-white">
+                        <h6 class="mb-0">지도 위치</h6>
+                    </div>
+                    <div class="card-body p-0">
+                        <div id="map" style="width: 100%; height: 400px;"></div>
+                    </div>
+                </div>
 
-    <% } else { %>
-        <h1>정보 없음</h1>
-        <p>요청하신 휴게소 정보를 표시할 수 없습니다. ID를 확인해주세요.</p>
+                <div class="card shadow-sm">
+                    <div class="card-header bg-dark text-white">
+                        <h6 class="mb-0">브랜드 매장</h6>
+                    </div>
+                    <div class="card-body">
+                        <% if (brandStoresList.isEmpty()) { %>
+                            <p class="text-muted">등록된 브랜드 매장이 없습니다.</p>
+                        <% } else { %>
+                            <div class="row g-3">
+                                <% for (BrandDto store : brandStoresList) { %>
+                                    <div class="col-6 col-md-4 col-lg-3 text-center">
+                                        <img src="../BrandLogoImage/<%= store.getBrand_name() %>.png"
+                                             alt="<%= store.getBrand_name() %>"
+                                             class="img-fluid rounded border p-2 bg-light">
+                                        <p class="mt-2 small"><%= store.getBrand_name() %></p>
+                                    </div>
+                                <% } %>
+                            </div>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
     <% } %>
-    
-	<script>
-	var mapContainer = document.getElementById('map'), // 지도를 표시할 div 
-	    mapOption = {
-	        center: new kakao.maps.LatLng(33.450701, 126.570667), // 지도의 중심좌표
-	        level: 3 // 지도의 확대 레벨
-	    };  
-	
-	// 지도를 생성합니다    
-	var map = new kakao.maps.Map(mapContainer, mapOption); 
-	
-	// 주소-좌표 변환 객체를 생성합니다
-	var geocoder = new kakao.maps.services.Geocoder();
-	
-	// 주소로 좌표를 검색합니다
-	geocoder.addressSearch('<%= hgDetails.getAddr() %>', function(result, status) {
-	
-	    // 정상적으로 검색이 완료됐으면 
-	     if (status === kakao.maps.services.Status.OK) {
-	
-	        var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
-	
-	        // 결과값으로 받은 위치를 마커로 표시합니다
-	        var marker = new kakao.maps.Marker({
-	            map: map,
-	            position: coords
-	        });
-	
-	        // 지도의 중심을 결과값으로 받은 위치로 이동시킵니다
-	        map.setCenter(coords);
-	    } 
-	});    
-	</script>
-
 </div>
+
+<script>
+    const mapContainer = document.getElementById('map');
+    const mapOption = {
+        center: new kakao.maps.LatLng(33.450701, 126.570667),
+        level: 3
+    };
+    const map = new kakao.maps.Map(mapContainer, mapOption);
+    const geocoder = new kakao.maps.services.Geocoder();
+
+    geocoder.addressSearch('<%= hgDetails != null ? hgDetails.getAddr() : "" %>', function(result, status) {
+        if (status === kakao.maps.services.Status.OK) {
+            const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+            const marker = new kakao.maps.Marker({ map: map, position: coords });
+            map.setCenter(coords);
+        }
+    });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
