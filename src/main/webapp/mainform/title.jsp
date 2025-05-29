@@ -62,6 +62,7 @@
 </nav>
 
 <style>
+/* ----------- 타이틀 ----------- */
 body {
     font-family: 'Noto Sans KR', sans-serif;
 }
@@ -115,6 +116,7 @@ nav.navbar {
 .d-flex.align-items-center>ul.navbar-nav {
     margin-left: 200px !important;
 }
+/* ----------- 타이틀 ----------- */
 </style>
 
 <script>
