@@ -1,5 +1,6 @@
 src/main/webapp/WEB-INF/classes/config.properties
 src/main/java/mysql/db/DbConnect.java
-.idea/
+/.metadata/
 .metadata/
+.idea/
 build/
