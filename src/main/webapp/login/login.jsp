@@ -1,3 +1,5 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -29,10 +31,11 @@
         </div>
       </form>
 
-      <form id="signupForm" class="form">
-        <input type="text" placeholder="이름" required />
-        <input type="email" placeholder="이메일" required />
-        <input type="password" placeholder="비밀번호" required />
+      <form action="REGaction.jsp" method="post" onsubmit="return check(this)">
+      	<input type="text" name = 'name' placeholder="이름" required />
+        <input type="text" name = 'id' placeholder="아이디" required />
+        <input type="email" name = 'email' placeholder="이메일" required />
+        <input type="password" name = 'password' placeholder="비밀번호" required />
         <input type="password" placeholder="비밀번호 확인" required />
         <button type="submit">회원가입</button>
       </form>
