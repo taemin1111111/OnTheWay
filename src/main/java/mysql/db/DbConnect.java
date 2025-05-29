@@ -32,7 +32,7 @@ static final String MySqlDriver="com.mysql.cj.jdbc.Driver";
 		Connection conn=null;
 		
 		try {
-			conn=DriverManager.getConnection(URL, "otw", "");
+			conn=DriverManager.getConnection(URL, "otw", "Tkddyd12!");
 			
 			System.out.println("Mysql 연결 성공!!!");
 		} catch (SQLException e) {
@@ -93,6 +93,37 @@ static final String MySqlDriver="com.mysql.cj.jdbc.Driver";
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public class userDao {
+		DbConnect db = new DbConnect();
+		
+	    public boolean isValidUser(String username, String password) {
+	        boolean isValid = false;
+
+	        String sql = "SELECT * FROM user WHERE username = ? AND password = ?";
+	        Connection conn = null;
+	        PreparedStatement pstmt = null;
+	        ResultSet rs = null;
+
+	        try {
+	            conn = db.getConnection();
+	            pstmt = conn.prepareStatement(sql);
+	            pstmt.setString(1, username);
+	            pstmt.setString(2, password);
+	            rs = pstmt.executeQuery();
+
+	            if (rs.next()) {
+	                isValid = true;
+	            }
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        } finally {
+	            db.dbClose(rs, pstmt, conn);
+	        }
+
+	        return isValid;
+	    }
 	}
 
 }
