@@ -30,10 +30,5 @@
 db접속 테스트 페이지
 <br>
 
-<%
-    HgDao dao = new HgDao();
-    String name = dao.getName("1");
-%>
-<%= name %>
 </body>
 </html>
