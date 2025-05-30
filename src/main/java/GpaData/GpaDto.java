@@ -7,7 +7,7 @@ import mysql.db.DbConnect;
 public class GpaDto {
 private String num;
 private String userid;
-private String hgName;
+private String hg_id;
 private double stars;
 private String content;
 private int good;
@@ -32,13 +32,13 @@ public String getUserid() {
 public void setUserid(String userid) {
 	this.userid = userid;
 }
-public String getHgName() {
-	return hgName;
-}
-public void setHgName(String hgName) {
-	this.hgName = hgName;
-}
 
+public String getHg_id() {
+	return hg_id;
+}
+public void setHg_id(String hg_id) {
+	this.hg_id = hg_id;
+}
 public double getStars() {
 	return stars;
 }
