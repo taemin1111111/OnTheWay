@@ -102,8 +102,6 @@ List<hgRestDto> list;
 <br>
 
 
- 
-
  <script>
 
 	
@@ -122,7 +120,7 @@ List<hgRestDto> list;
     var addresses = [
     	<%
     	    for (int i = 0; i < list.size(); i++) {
-    	        String addr = list.get(i).getAddr(); // ✅ 여기서 list 사용!
+    	        String addr = list.get(i).getAddr(); 
     	        out.print("\"" + addr.replace("\"", "\\\"") + "\"");
     	        if (i < list.size() - 1) out.print(", ");
     	    }
@@ -137,11 +135,20 @@ List<hgRestDto> list;
         } %>
     ];
     
-    
+     var ids = [
+        <% for (int i = 0; i < list.size(); i++) {
+        	out.print("\"" + list.get(i).getId() + "\"");
+            if (i < list.size() - 1) out.print(", ");
+        } %>
+    ]; 
+   
     
    
 
     addresses.forEach(function(address,index) {
+    	const name = names[index];
+        const id = ids[index];
+    	
         geocoder.addressSearch(address, function(result, status) {
             if (status === kakao.maps.services.Status.OK) {
                 var coords = new kakao.maps.LatLng(result[0].y, result[0].x);
@@ -150,12 +157,15 @@ List<hgRestDto> list;
                     position: coords
                 });
                 
+                 kakao.maps.event.addListener(marker, 'click', function() {
+                    window.location.href = '../details/info.jsp?hg_id=' + id;
+                }); 
                 
                
                 
                 if(searchName && searchName.length > 0){
                  var infowindow = new kakao.maps.InfoWindow({
-                	 content: '<div style="padding:2px; font-size:8px; font-weight:bold; white-space:nowrap;" id=>' + names[index] + '</div>' 
+                	 content: '<div style="padding:2px; font-size:8px; font-weight:bold; white-space:nowrap;" id=>' + name + '</div>' 
                 });
                 infowindow.open(map, marker);  
                } 
