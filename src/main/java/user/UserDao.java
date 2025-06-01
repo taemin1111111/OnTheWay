@@ -69,7 +69,7 @@ public class UserDao {
         return idpass;
      }
     public void insertUser(String id, String username, String password, String email, int role) {
-        String sql = "INSERT INTO user (userId, username, password, email, role, created_at) VALUES (?, ?, ?, ?, ?, NOW())";
+        String sql = "INSERT INTO user (userId, userName, password, email, role, created_at) VALUES (?, ?, ?, ?, ?, NOW())";
         Connection conn = null;
         PreparedStatement pstmt = null;
 

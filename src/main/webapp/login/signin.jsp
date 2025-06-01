@@ -1,47 +1,62 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>로그인/회원가입</title>
-  <link rel="stylesheet" href="sigin.css" />
-</head>
-<body>
-  <button id="openModalBtn">로그인 / 회원가입</button>
+<%@ page import="java.io.InputStream, java.util.Properties, java.sql.*" %>
+<%@ page session="true" contentType="text/html;charset=UTF-8" language="java" %>
+<%
+    request.setCharacterEncoding("UTF-8");
 
-  <div id="loginModal" class="modal">
-    <div class="modal-content">
-      <span class="close" id="closeModalBtn">&times;</span>
+    String id = request.getParameter("id");
+    String password = request.getParameter("password");
 
-      <div class="tab-buttons">
-        <button id="loginTab" class="active">로그인</button>
-        <button id="signupTab">회원가입</button>
-      </div>
+    Connection conn = null;
+    PreparedStatement pstmt = null;
+    ResultSet rs = null;
 
-      <form action="loginaction.jsp" class="form active">
-        <input type="text" name = 'id' placeholder="아이디" required />
-        <input type="password" name = 'password' placeholder="비밀번호" required />
-        <button type="submit">로그인</button>
-        <div class="social-login">
-          <button class="kakao">카카오로 로그인</button>
-          <button class="naver">네이버로 로그인</button>
-          <button class="google">Google로 로그인</button>
-        </div>
-      </form>
+    try {
+        InputStream input = application.getResourceAsStream("/WEB-INF/classes/config.properties");
+        if (input == null) throw new Exception("config.properties 파일을 찾을 수 없습니다.");
 
-      <form action="REGaction.jsp" method="post" onsubmit="return check(this)">
-      	<input type="text" name = 'name' placeholder="이름" required />
-        <input type="text" name = 'id' placeholder="아이디" required />
-        <input type="email" name = 'email' placeholder="이메일" required />
-        <input type="password" name = 'password' placeholder="비밀번호" required />
-        <input type="password" placeholder="비밀번호 확인" required />
-        <button type="submit">회원가입</button>
-      </form>
-    </div>
-  </div>
+        Properties prop = new Properties();
+        prop.load(input);
 
-  <script src="signin.js"></script>
-</body>
-</html>
+        String url = prop.getProperty("db.url");
+        String dbUser = prop.getProperty("db.user");
+        String dbPassword = prop.getProperty("db.password");
+
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        conn = DriverManager.getConnection(url, dbUser, dbPassword);
+
+        // ✔ userId 기준으로 로그인 시도
+        String sql = "SELECT * FROM user WHERE userId = ? AND password = ?";
+        pstmt = conn.prepareStatement(sql);
+        pstmt.setString(1, id);
+        pstmt.setString(2, password);
+
+        rs = pstmt.executeQuery();
+
+        if (rs.next()) {
+            session.setAttribute("userId", rs.getString("userId"));
+            session.setAttribute("userName", rs.getString("userName"));
+
+            response.sendRedirect(request.getContextPath() + "/index.jsp");
+        } else {
+%>
+            <script>
+                alert("아이디 또는 비밀번호가 올바르지 않습니다.");
+                history.back();
+            </script>
+<%
+        }
+
+    } catch (Exception e) {
+        e.printStackTrace();
+%>
+        <script>
+            alert("로그인 중 오류 발생: <%= e.getMessage() %>");
+            history.back();
+        </script>
+<%
+    } finally {
+        if (rs != null) try { rs.close(); } catch (Exception ignored) {}
+        if (pstmt != null) try { pstmt.close(); } catch (Exception ignored) {}
+        if (conn != null) try { conn.close(); } catch (Exception ignored) {}
+    }
+%>
