@@ -22,7 +22,9 @@ public class hgRestDao {
 		PreparedStatement pstmt=null;
 		ResultSet rs=null;
 		
-		String sql="select * from hg";
+		String sql="SELECT hg.*, hg_data.latitude, hg_data.longitude\r\n"
+				+ "FROM hg\r\n"
+				+ "LEFT JOIN hg_data ON hg.tel_no = hg_data.tel_no;";
 		
 		try {
 			pstmt=conn.prepareStatement(sql);
@@ -38,6 +40,8 @@ public class hgRestDao {
 				dto.setAddr(rs.getString("addr"));
 				dto.setTruck(rs.getInt("truck"));
 				dto.setMaintenance(rs.getInt("maintenance"));
+				dto.setLatitude(rs.getDouble("latitude"));
+				dto.setLongitude(rs.getDouble("longitude"));
 				
 				list.add(dto);
 				
@@ -205,6 +209,7 @@ public class hgRestDao {
 		
 		return list;
 	}
+	
 	
 	
 	
