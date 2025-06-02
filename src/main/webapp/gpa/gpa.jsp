@@ -210,6 +210,9 @@ int totalCount = dao.getCountByHgId(hg_id);
 String hgName = dao.getHgName(hg_id);
 List<GpaDto> list = dao.getReviewsByHgIdPaging(hg_id, start, perPage, order);
 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+String userid = (String) session.getAttribute("userId");
+
 %>
 
 <div class="custom-content-wrapper">
@@ -259,15 +262,15 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 	</table>
 
 	<form action="<%=request.getContextPath()%>/gpa/gpaAction.jsp" method="post">
+		<input type="hidden" name="userid" value="<%= userid %>">
 		<input type="hidden" name="hg_id" value="<%= hg_id %>">
 		<input type="hidden" name="order" value="<%= order %>"><!-- ✅ 정렬 상태 유지 -->
 		<div class="review-form" id="reviewForm">
 			<table>
 				<colgroup>
 					<col style="width: 20%;">
-					<col style="width: 15%;">
-					<col style="width: 15%;">
-					<col style="width: 50%;">
+					<col style="width: 15%;">					
+					<col style="width: 65%;">
 				</colgroup>
 				<tbody>
 					<tr style="height: 50px;">
@@ -285,7 +288,7 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 							</div>
 						</td>
 						<td>아이디</td>
-						<td>닉네임</td>
+						
 						<td><textarea name="content" class="form-control" placeholder="후기를 입력해주세요..." required></textarea></td>
 					</tr>
 				</tbody>

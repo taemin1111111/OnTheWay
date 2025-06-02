@@ -16,13 +16,14 @@ public class GpaDao {
     public void insertGpa(GpaDto dto) {
         Connection conn = db.getConnection();
         PreparedStatement pstmt = null;
-        String sql = "INSERT INTO review VALUES (NULL, NULL, ?, ?, ?, 0, NOW())";
+        String sql = "INSERT INTO review VALUES (NULL, ?, ?, ?, ?, 0, NOW())";
 
         try {
             pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, dto.getHg_id());
-            pstmt.setDouble(2, dto.getStars());
-            pstmt.setString(3, dto.getContent());
+            pstmt.setString(1, dto.getUserid());
+            pstmt.setString(2, dto.getHg_id());
+            pstmt.setDouble(3, dto.getStars());
+            pstmt.setString(4, dto.getContent());
             pstmt.execute();
         } catch (SQLException e) {
             e.printStackTrace();

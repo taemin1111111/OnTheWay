@@ -11,6 +11,7 @@
     dao.insertGpa(dto); 
 
     String root = request.getContextPath();
+    
     String hg_id = request.getParameter("hg_id");
     String order = request.getParameter("order"); 
     order = URLEncoder.encode(order, "UTF-8");
