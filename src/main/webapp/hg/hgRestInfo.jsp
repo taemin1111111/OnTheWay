@@ -20,7 +20,7 @@ $(function(){
 		
 		var hg_num=$(this).attr("hgId");
 		
-		location.href="../details/info.jsp?hg_id="+hg_num;
+		location.href="<%=request.getContextPath()%>/index.jsp?main=details/info.jsp?hg_id="+hg_num;
 	})
 })
 
@@ -158,7 +158,7 @@ List<hgRestDto> list;
                 });
                 
                  kakao.maps.event.addListener(marker, 'click', function() {
-                    window.location.href = '../details/info.jsp?hg_id=' + id;
+                    window.location.href="<%=request.getContextPath()%>/index.jsp?main=details/info.jsp?hg_id="+id;
                 }); 
                 
                
