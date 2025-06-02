@@ -181,7 +181,7 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light px-4">
   <div class="container-fluid d-flex align-items-center justify-content-between">
     <div class="d-flex align-items-center">
-      <a class="navbar-brand" href="">
+      <a class="navbar-brand" href="<%=root%>/index.jsp">
         <img src="<%=root%>/image/rogo1.png" style="max-height: 60px;">
       </a>
       <ul class="navbar-nav d-flex flex-row ms-5">
@@ -197,13 +197,13 @@
         <li class="nav-item dropdown me-3 dropdown-hover">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">휴게소 찾기</a>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">휴게소 목록</a></li>
+            <li><a class="dropdown-item" href="<%=root%>/index.jsp?main=hw/map.jsp">휴게소 목록</a></li>
           </ul>
         </li>
         <li class="nav-item dropdown me-3 dropdown-hover">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">푸드코드 정보</a>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">푸드코트 메뉴</a></li>
+            <li><a class="dropdown-item" href="<%=root%>/index.jsp?main=restFoodMenu.jsp">푸드코트 메뉴</a></li>
           </ul>
         </li>
         <li class="nav-item dropdown me-3 dropdown-hover">

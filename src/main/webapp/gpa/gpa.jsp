@@ -210,6 +210,9 @@ int totalCount = dao.getCountByHgId(hg_id);
 String hgName = dao.getHgName(hg_id);
 List<GpaDto> list = dao.getReviewsByHgIdPaging(hg_id, start, perPage, order);
 SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+String userid = (String) session.getAttribute("userId");
+
 %>
 
 <div class="custom-content-wrapper">
@@ -259,6 +262,7 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 	</table>
 
 	<form action="<%=request.getContextPath()%>/gpa/gpaAction.jsp" method="post">
+		<input type="hidden" name="userid" value="<%= userid %>">
 		<input type="hidden" name="hg_id" value="<%= hg_id %>">
 		<input type="hidden" name="order" value="<%= order %>"><!-- ✅ 정렬 상태 유지 -->
 		<div class="review-form" id="reviewForm">
