@@ -7,6 +7,9 @@
 <title>Insert title here</title>
 </head>
 <body>
-
+<%
+    session.invalidate();
+    response.sendRedirect(request.getContextPath() + "/index.jsp");
+%>
 </body>
 </html>
