@@ -2,6 +2,7 @@ package hgDao;
 
 public class hgRestDto {
 	
+	private String id;
 	private String name;
 	private String tel_no;
 	private String addr;
@@ -37,6 +38,12 @@ public class hgRestDto {
 	}
 	public void setMaintenance(int maintenance) {
 		this.maintenance = maintenance;
+	}
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
 	}
 	
 	
