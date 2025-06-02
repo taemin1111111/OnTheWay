@@ -338,7 +338,18 @@ try {
     // 메뉴 목록 로딩 함수
     function loadMenu(code) {
         container.innerHTML = '';
-        if (!code) return;
+        
+        if (!code) {
+            container.innerHTML = '';
+            const msg = document.createElement('div');
+            msg.className = 'no-data text-center';
+            msg.textContent = '휴게소를 선택해주세요.';
+            msg.style.gridColumn = '1 / -1';  // 🔥 전체 열 차지
+            msg.style.fontSize = '22px';
+            msg.style.padding = '150px 0';
+            container.appendChild(msg);
+            return;
+        }
 
         fetch('restFoodMenuJson.jsp?stdRestCd=' + encodeURIComponent(code))
             .then(res => {
@@ -399,30 +410,29 @@ try {
 
     // 셀렉트 박스 변경 이벤트
     select.addEventListener('change', () => {
-        const code = select.value;
-
-        if (isOrderNotEmpty) {
-            const proceed = confirm("주문 목록이 초기화됩니다. 계속하시겠습니까?");
-            if (!proceed) {
-                select.value = '';
-                return;
-            }
-            clearOrder();
-        }
-
-        if (!code) {
-            restInput.value = "";
-            container.innerHTML = "";
-            history.replaceState(null, "", "restFoodMenu.jsp");
-            return;
-        }
-
-        const name = Object.keys(restAreaMap).find(k => restAreaMap[k] === code);
-        if (name) restInput.value = name;
-
-        loadMenu(code);
-        history.pushState(null, "", "restFoodMenu.jsp?stdRestCd=" + encodeURIComponent(code));
-    });
+	    const code = select.value;
+	
+	    if (isOrderNotEmpty) {
+	        const proceed = confirm("주문 목록이 초기화됩니다. 계속하시겠습니까?");
+	        if (!proceed) {
+	            select.value = '';
+	            return;
+	        }
+	        clearOrder();
+	    }
+	
+	    const name = Object.keys(restAreaMap).find(k => restAreaMap[k] === code);
+	    restInput.value = name || "";
+	
+	    // 🔽 항상 loadMenu 호출
+	    loadMenu(code);
+	
+	    if (code) {
+	        history.pushState(null, "", "restFoodMenu.jsp?stdRestCd=" + encodeURIComponent(code));
+	    } else {
+	        history.replaceState(null, "", "restFoodMenu.jsp");
+	    }
+	});
 
     // 자동완성 검색 기능
     restInput.addEventListener('input', () => {
@@ -479,36 +489,33 @@ try {
                 select.value = code;
                 loadMenu(code);
             }
+        } else {
+            loadMenu(); // 🔽 아무것도 선택되지 않았을 때 문구 표시
         }
+        
         renderOrderList();
     });
 
     // 브라우저 뒤로/앞으로 이동 대응
     window.addEventListener('popstate', () => {
-        if (isOrderNotEmpty) {
-            const proceed = confirm("주문 목록이 초기화됩니다. 계속하시겠습니까?");
-            if (!proceed) {
-                history.forward();
-                return;
-            }
-            clearOrder();
-        }
-
-        const params = new URLSearchParams(location.search);
-        const code = params.get('stdRestCd');
-        if (code) {
-            const name = Object.keys(restAreaMap).find(k => restAreaMap[k] === code);
-            if (name) {
-                restInput.value = name;
-                select.value = code;
-                loadMenu(code);
-            }
-        } else {
-            select.value = '';
-            restInput.value = '';
-            container.innerHTML = '';
-        }
-    });
+	    if (isOrderNotEmpty) {
+	        const proceed = confirm("주문 목록이 초기화됩니다. 계속하시겠습니까?");
+	        if (!proceed) {
+	            history.forward(); // 이동 취소
+	            return;
+	        }
+	        clearOrder();
+	    }
+	
+	    const params = new URLSearchParams(location.search);
+	    const code = params.get('stdRestCd');
+	
+	    const name = Object.keys(restAreaMap).find(k => restAreaMap[k] === code);
+	    restInput.value = name || "";
+	    select.value = code || "";
+	
+	    loadMenu(code); // 🔥 항상 loadMenu 호출
+	});
 </script>
 
 <!-- 포트원 v1 SDK 로드 -->
@@ -516,63 +523,83 @@ try {
 
 <!-- 결제 버튼 클릭 시 동작 -->
 <script>
-function orderBtn() {
-    // 로그인 체크 (JSP 코드로 세션 검사)
-    <% if (session.getAttribute("loginUserId") == null) { %>
-        alert("로그인이 필요합니다.");
-        return;
-    <% } %>
-
-    // 주문 비어있을 때
-    if (Object.keys(orderMap).length === 0) {
-        alert("주문할 메뉴가 없습니다.");
-        return;
-    }
-
-    const IMP = window.IMP;
-    IMP.init("imp37255548"); // 식별코드
-
-    // 주문 데이터 구성
-    const now = new Date();
-    const channel_key = "<%= channelKey %>";	// ✅ 포트원 채널키
-    const merchantUid = "order_" + now.getTime();	// ✅ 고유한 주문번호
-    
-    // const totalAmount = Object.values(orderMap).reduce((sum, item) => sum + item.price * item.quantity, 0); // ✅ 정수형
-    // 테스트용 100분의 1 금액 -->
-    const totalAmount = Math.round(
-	    Object.values(orderMap).reduce((sum, item) => sum + item.price * item.quantity, 0) / 100
-	);
-    
-    const menuNames = Object.keys(orderMap);
-    const restName = document.getElementById('restSearch').value || "휴게소";
-
-    let orderName = restName;
-    if (menuNames.length > 0) {
-        orderName += " - " + menuNames[0];
-        if (menuNames.length > 1) {
-            orderName += " 외 " + (menuNames.length - 1);
-        }
-    }
-
-    // 결제 요청
-    IMP.request_pay({
-        channelKey: channel_key,
-        pay_method: "card",
-        merchant_uid: merchantUid,
-        name: orderName,
-        amount: totalAmount,
-        buyer_name: "<%= session.getAttribute("loginUserId") %>"
-    }, function (rsp) {
-        console.log("결제 응답", rsp); // ✅ 콘솔 로그 확인
-
-        if (rsp.success) {
-            alert("결제가 완료되었습니다.");
-            clearOrder(); // 주문 목록 전체 초기화
-        } else {
-            alert("결제 실패: " + rsp.error_msg);
-        }
-    });
-}
+	function orderBtn() {
+	    // 로그인 체크 (JSP 코드로 세션 검사)
+	    <% if (session.getAttribute("userId") == null) { %>
+	        alert("로그인이 필요합니다.");
+	        return;
+	    <% } %>
+	
+	    // 주문 비어있을 때
+	    if (Object.keys(orderMap).length === 0) {
+	        alert("주문할 메뉴가 없습니다.");
+	        return;
+	    }
+	
+	    const IMP = window.IMP;
+	    IMP.init("imp37255548"); // 식별코드
+	
+	    // 주문 데이터 구성
+	    const now = new Date();
+	    const channel_key = "<%= channelKey %>";	// ✅ 포트원 채널키
+	    const merchantUid = "order_" + now.getTime();	// ✅ 고유한 주문번호
+	    
+	    // const totalAmount = Object.values(orderMap).reduce((sum, item) => sum + item.price * item.quantity, 0); // ✅ 정수형
+	    // 테스트용 100분의 1 금액 -->
+	    const totalAmount = Math.round(
+		    Object.values(orderMap).reduce((sum, item) => sum + item.price * item.quantity, 0) / 100
+		);
+	    
+	    const menuNames = Object.keys(orderMap);
+	    const restName = document.getElementById('restSearch').value || "휴게소";
+	
+	    let orderName = restName;
+	    if (menuNames.length > 0) {
+	        orderName += " - " + menuNames[0];
+	        if (menuNames.length > 1) {
+	            orderName += " 외 " + (menuNames.length - 1);
+	        }
+	    }
+	
+	    // 결제 요청
+	    IMP.request_pay({
+	        channelKey: channel_key,
+	        pay_method: "card",
+	        merchant_uid: merchantUid,
+	        name: orderName,
+	        amount: totalAmount,
+	        buyer_name: "<%= session.getAttribute("userName") %>",
+	        buyer_email: "<%= session.getAttribute("email") %>"
+	    }, function (rsp) {
+	        console.log("결제 응답", rsp); // ✅ 콘솔 로그 확인
+	
+	        if (rsp.success) {
+	        	
+	        	$.ajax({
+	                url: "food/orderAction.jsp",
+	                type: "POST",
+	                data: {
+	                    merchant_uid: rsp.merchant_uid,
+	                    imp_uid: rsp.imp_uid,
+	                    userName: rsp.buyer_name,
+	                    email: rsp.buyer_email,
+	                    orderName: rsp.name,
+	                    orderPrice: rsp.paid_amount
+	                },
+	                success: function() {
+	                	alert("결제가 완료되었습니다.");
+	                    clearOrder(); // 주문 목록 전체 초기화
+	                },
+	                error: function() {
+	                    alert("주문 정보 저장에 실패했습니다.");
+	                }
+	            });
+	        	
+	        } else {
+	            alert("결제 실패: " + rsp.error_msg);
+	        }
+	    });
+	}
 </script>
 
 </body>
