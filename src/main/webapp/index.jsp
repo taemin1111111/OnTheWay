@@ -125,4 +125,52 @@ body {
     <jsp:include page="mainform/footer.jsp" />
 
 </body>
+	<!-- 이벤트 팝업 모달 -->
+<div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #003366;">
+        <h5 class="modal-title text-white" id="eventModalLabel">📢 이벤트 안내</h5>
+        <button type="button" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center">
+        <img src="image2/top_01.jpg" alt="이벤트 배너" style="max-width: 100%; height: auto;">
+      </div>
+      <div class="modal-footer d-flex justify-content-between">
+        <button type="button" class="btn btn-outline-secondary" id="dismissForWeekBtn">일주일 동안 다시 보지 않기</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 모달 자동 표시 및 일주일간 안보기 처리 스크립트 -->
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const modal = new bootstrap.Modal(document.getElementById('eventModal'));
+    const dismissForWeekBtn = document.getElementById('dismissForWeekBtn');
+
+    // 날짜 계산 (오늘 + 7일)
+    function getExpiryDate(days) {
+      const date = new Date();
+      date.setDate(date.getDate() + days);
+      return date.getTime();
+    }
+
+    // 모달 표시 조건
+    const modalDismissedUntil = localStorage.getItem('eventModalDismissedUntil');
+    const now = new Date().getTime();
+
+    if (!modalDismissedUntil || now > parseInt(modalDismissedUntil)) {
+      modal.show();
+    }
+
+    // 일주일간 다시 보지 않기 버튼 클릭 시
+    dismissForWeekBtn.addEventListener('click', function () {
+      const expiry = getExpiryDate(7);
+      localStorage.setItem('eventModalDismissedUntil', expiry);
+      modal.hide();
+    });
+  });
+</script>
 </html>
