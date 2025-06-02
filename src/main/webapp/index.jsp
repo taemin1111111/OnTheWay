@@ -108,6 +108,11 @@ body {
     background-color: #eee;
     text-align: center;
 }
+
+.modal-header {
+	max-width: 100%;
+	height: auto;
+}
 </style>
 </head>
 <%
@@ -154,30 +159,21 @@ body {
 <!-- 모달 자동 표시 및 일주일간 안보기 처리 스크립트 -->
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    const modal = new bootstrap.Modal(document.getElementById('eventModal'));
-    const dismissForWeekBtn = document.getElementById('dismissForWeekBtn');
+	  const modal = new bootstrap.Modal(document.getElementById('eventModal'));
+	  const dismissForWeekBtn = document.getElementById('dismissForWeekBtn');
 
-    // 날짜 계산 (오늘 + 7일)
-    function getExpiryDate(days) {
-      const date = new Date();
-      date.setDate(date.getDate() + days);
-      return date.getTime();
-    }
+	  // 모달 항상 표시
+	  modal.show();
 
-    // 모달 표시 조건
-    const modalDismissedUntil = localStorage.getItem('eventModalDismissedUntil');
-    const now = new Date().getTime();
+	  // 일주일간 다시 보지 않기 버튼 클릭 시
+	  dismissForWeekBtn.addEventListener('click', function () {
+	    // localStorage 저장은 그대로 두되, 표시 조건을 무시하므로 실제로는 효과 없음
+	    const expiry = new Date();
+	    expiry.setDate(expiry.getDate() + 7);
+	    localStorage.setItem('eventModalDismissedUntil', expiry.getTime());
 
-    if (!modalDismissedUntil || now > parseInt(modalDismissedUntil)) {
-      modal.show();
-    }
-
-    // 일주일간 다시 보지 않기 버튼 클릭 시
-    dismissForWeekBtn.addEventListener('click', function () {
-      const expiry = getExpiryDate(7);
-      localStorage.setItem('eventModalDismissedUntil', expiry);
-      modal.hide();
-    });
-  });
+	    modal.hide();
+	  });
+	});
 </script>
 </html>

@@ -103,8 +103,8 @@
     };
 
     window.onclick = e => {
+      console.log("모달 바깥 클릭으로 닫기");
       if (e.target === modal) {
-        console.log("모달 바깥 클릭으로 닫기");
         modal.style.display = "none";
       }
     };
