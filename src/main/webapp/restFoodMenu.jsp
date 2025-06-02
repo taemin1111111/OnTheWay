@@ -25,7 +25,8 @@ body {
 h2 {
 	font-size: 28px;
 	font-weight: 600;
-	margin-bottom: 30px;
+	margin-top: 60px;
+	margin-bottom: 40px;
 	color: #1a1a1a;
 	text-align: center;
 }
@@ -41,7 +42,7 @@ label {
 	position: absolute;
 	z-index: 1000;
 	width: 100%;
-	max-width: 300px;
+	max-width: 280px;
 }
 
 #autocompleteList .list-group-item {
@@ -57,8 +58,8 @@ label {
 
 #menuList {
 	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-	gap: 20px;
+	grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+	gap: 15px;
 }
 
 #orderPanel {
@@ -196,7 +197,7 @@ try {
     </select>
 </div>
 
-<hr style="margin-top: 50px">
+<hr style="margin-top: 30px">
 
 <div class="d-flex justify-content-between gap-4" style="margin-top: 30px">
     <!-- 왼쪽: 메뉴 리스트 -->
@@ -270,7 +271,8 @@ try {
             const emptyItem = document.createElement('li');
             emptyItem.className = 'list-group-item text-center text-muted';
             emptyItem.textContent = '메뉴가 비어있습니다.';
-            emptyItem.style.padding = '220px';
+            emptyItem.style.paddingTop = '221px';
+            emptyItem.style.paddingBottom = '221px';
             orderList.appendChild(emptyItem);
             summaryArea.textContent = '';
             return;
@@ -428,9 +430,9 @@ try {
 	    loadMenu(code);
 	
 	    if (code) {
-	        history.pushState(null, "", "restFoodMenu.jsp?stdRestCd=" + encodeURIComponent(code));
+	        history.pushState(null, "", "index.jsp?main=restFoodMenu.jsp&stdRestCd=" + encodeURIComponent(code));
 	    } else {
-	        history.replaceState(null, "", "restFoodMenu.jsp");
+	        history.replaceState(null, "", "index.jsp?main=restFoodMenu.jsp");
 	    }
 	});
 
@@ -462,7 +464,7 @@ try {
                 restInput.value = name;
                 select.value = code;
                 loadMenu(code);
-                history.pushState(null, "", "restFoodMenu.jsp?stdRestCd=" + encodeURIComponent(code));
+                history.pushState(null, "", "index.jsp?main=restFoodMenu.jsp&stdRestCd=" + encodeURIComponent(code));
                 listDiv.style.display = 'none';
             };
             listDiv.appendChild(item);
