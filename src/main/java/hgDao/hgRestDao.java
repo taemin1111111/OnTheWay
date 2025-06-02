@@ -1,4 +1,4 @@
-package hgDto;
+package hgDao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,7 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import hgDao.hgRestDto;
+import hgDto.hgRestDto;
 import mysql.db.DbConnect;
 
 public class hgRestDao {
@@ -22,9 +22,10 @@ public class hgRestDao {
 		PreparedStatement pstmt=null;
 		ResultSet rs=null;
 		
-		String sql="SELECT hg.*, hg_data.latitude, hg_data.longitude\r\n"
+		String sql="SELECT hg.*, hg_data.latitude, hg_data.id, hg_data.longitude\r\n"
 				+ "FROM hg\r\n"
-				+ "LEFT JOIN hg_data ON hg.tel_no = hg_data.tel_no;";
+				+ "LEFT JOIN hg_data ON hg.tel_no = hg_data.tel_no\r\n"
+				+ "WHERE hg_data.id IS NOT NULL;";
 		
 		try {
 			pstmt=conn.prepareStatement(sql);
@@ -34,7 +35,7 @@ public class hgRestDao {
 			{
 				hgRestDto dto=new hgRestDto();
 				
-				dto.setId(rs.getString("id"));
+			
 				dto.setName(rs.getString("name"));
 				dto.setTel_no(rs.getString("tel_no"));
 				dto.setAddr(rs.getString("addr"));
@@ -42,6 +43,7 @@ public class hgRestDao {
 				dto.setMaintenance(rs.getInt("maintenance"));
 				dto.setLatitude(rs.getDouble("latitude"));
 				dto.setLongitude(rs.getDouble("longitude"));
+				dto.setId2(rs.getInt("id"));
 				
 				list.add(dto);
 				
@@ -118,7 +120,8 @@ public class hgRestDao {
 		PreparedStatement pstmt=null;
 		ResultSet rs=null;
 		
-		String sql="select * from hg.hg where name LIKE ?";
+		//String sql="select * from hg.hg where name LIKE ?";
+		String sql="SELECT hg.*, hg_data.latitude, hg_data.longitude, hg_data.id FROM hg LEFT JOIN hg_data ON hg.tel_no = hg_data.tel_no where hg_data.id IS NOT NULL and name LIKE ? ;";
 		
 		try {
 			pstmt=conn.prepareStatement(sql);
@@ -129,12 +132,13 @@ public class hgRestDao {
 			{
 				hgRestDto dto=new hgRestDto();
 				
-				dto.setId(rs.getString("id"));
+				
 				dto.setName(rs.getString("name"));
 				dto.setTel_no(rs.getString("tel_no"));
-				dto.setAddr(rs.getString("addr"));
-				dto.setTruck(rs.getInt("truck"));
-				dto.setMaintenance(rs.getInt("maintenance"));
+				//dto.setAddr(rs.getString("addr"));
+				dto.setLatitude(rs.getDouble("latitude"));
+				dto.setLongitude(rs.getDouble("longitude"));
+				dto.setId2(rs.getInt("id"));
 				
 				list.add(dto);
 				
@@ -210,6 +214,9 @@ public class hgRestDao {
 		return list;
 	}
 	
+	
+	
+		
 	
 	
 	

@@ -1,6 +1,8 @@
+<%@page import="hg.HgDataDto"%>
+<%@page import="hg.HgDataDao"%>
 <%@page import="java.util.List"%>
-<%@page import="hgDto.hgRestDao"%>
-<%@page import="hgDao.hgRestDto"%>
+<%@page import="hgDao.hgRestDao"%>
+<%@page import="hgDto.hgRestDto"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -15,10 +17,15 @@
 <title>Insert title here</title>
 <script type="text/javascript">
 
+
+
+
 $(function(){
 	$("a.hg_num").click(function(){
-		var hg_num=$(this).attr("hgId");
-		location.href="../details/info.jsp?hg_id="+hg_num;
+		
+		var hg_num=$(this).attr("id");
+		
+		location.href="<%=request.getContextPath()%>/index.jsp?main=details/info.jsp?hg_id="+hg_num;
 	})
 })
 
@@ -30,149 +37,144 @@ $(function(){
     }
     
     a.hg_num{
-      text-decoration: none;
-      color: black;
+    text-decoration: none;
+    color: black;
     }
     
     a.hg_num:hover{
-      color:blue;
-      text-decoration: underline;    
+    
+    color:blue;
+    text-decoration: underline;    
     }
-</style>  
+  </style>  
 </head>
 <%
 request.setCharacterEncoding("utf-8");
 String searchName=request.getParameter("searchName");
 hgRestDao dao=new hgRestDao();
 
+
 List<hgRestDto> list;
 
-if (searchName != null && !searchName.trim().equals("")) {
-	list = dao.getData(searchName); // 검색어가 있을 때
-} else {
-	list = dao.getRestList(); // 전체 조회
-}
+	if (searchName != null && !searchName.trim().equals("")) {
+    	list = dao.getData(searchName); // 검색어가 있을 때
+	} else {
+    	list = dao.getRestList(); // 전체 조회
+	}
 %>
 
 <body>
 
+
 <div style="margin: 100px 100px;" class="container mt-3" >
 
 <h3>고속도로 휴게소</h3>
-<br> 
-
-<form method="get" action="hgRestInfo.jsp">
-	<input type="text" name="searchName" placeholder="검색할 휴게소 이름을 입력하세요." style="width:500px;" id="sName">&nbsp;&nbsp;&nbsp;
-	<button type="submit" class="btn btn-success" id="search">검색</button>
+    <br> 
+    
+    <form method="get" action="<%=request.getContextPath()%>/index.jsp">
+    <input type="hidden" name="main" value="hg/hgRestInfo.jsp">
+    <input type="text" name="searchName" placeholder="검색할 휴게소 이름을 입력하세요." style="width:500px;" id="sName">
+    <button type="submit" class="btn btn-success" id="search">검색</button>
 </form>
-<br>
-<div id="map"></div>
-<br><br>    
-<div style="overflow-y: auto;  max-height: 400px; width:1220px;">	
-<table class="table table-bordered" style="width:1200px;">
-	<tr class="table-success" align="center">			
-		<th style="width:50; align:center;">번호</th>
-		<th style="width:100; align:center;">이름</th>
-		<th style="width:150; align:center;">전화번호</th>			
-		<th style="width:100; align:center;">평점</th>
-		<th style="width:200; align:center;">주소</th>
-	</tr>	
-	
-	<%int n=1;
-	for(hgRestDto dto:list)
-	{
-	%>
-	<tr >
-		<td ><%=n++ %></td>
-		<td><a class="hg_num" hgId=<%=dto.getId() %> style="cursor: pointer;"><%=dto.getName() %></a></td>
-		<td><%=dto.getTel_no() %></td>				
-		<td><%=dao.getReview() %></td>
-		<td><%=dto.getAddr() %></td>
-	</tr>
-	<%}
-	%>
-</table>
+    <br>
+	<div id="map"></div>
+	<br><br>    
+	<div style="overflow-y: auto;  max-height: 400px; width:1220px;">	
+	<table class="table table-bordered" style="width:1200px;">
+		<tr class="table-success" align="center">			
+			<th style="width:50; align:center;">번호</th>
+			<th style="width:100; align:center;">이름</th>
+			<th style="width:150; align:center;">전화번호</th>			
+			<th style="width:100; align:center;">평점</th>
+			<th style="width:200; align:center;">주소</th>
+		</tr>	
+		
+		<%int n=1;
+		 int i = 0;
+		for(hgRestDto dto:list)
+		{
+			%>
+			<tr >
+				<td ><%=n++ %></td>
+				<td><a class="hg_num" href="<%=request.getContextPath()%>/index.jsp?main=details/info.jsp?hg_id=<%= dto.getId2() %>"><%= dto.getName() %></a></td>
+				<td><%=dto.getTel_no() %></td>				
+				<td><%=dao.getReview() %></td>
+				<td class="addr-cell" data-index="<%= i %>"></td>
+			</tr>
+		<% i++; }
+		%>
+	</table>
 </div>
 <br>
 
-<script>
-	var searchName = "<%= (searchName == null) ? "" : searchName.trim() %>";
 
-	var map = new kakao.maps.Map(document.getElementById('map'), {
-		center: new kakao.maps.LatLng(36.5, 127.5),
-		level: 12
+ <script>
+
+ var searchName = "<%= searchName != null ? searchName.trim() : "" %>";
+ var map = new kakao.maps.Map(document.getElementById('map'), {
+	    center: new kakao.maps.LatLng(36.5, 127.5),
+	    level: 12
 	});
 
 	var geocoder = new kakao.maps.services.Geocoder();
 
-	// DB에서 위도 배열
-	var lats = [
-		<% for(int i=0; i<list.size(); i++) {
-			out.print(list.get(i).getLatitude());
-			if(i < list.size()-1) out.print(", ");
-			System.out.println(list.get(i).getLatitude());
-			
-		} %>
-	];
-	
-	// DB에서 경도 배열
-	var lngs = [
-		<% for(int i=0; i<list.size(); i++) {
-			out.print(list.get(i).getLongitude());
-			if(i < list.size()-1) out.print(", ");
-		} %>
-	];
+	// JSP에서 값 전달
+	var lats = [<%= String.join(",", list.stream().map(dto -> String.valueOf(dto.getLatitude())).toArray(String[]::new)) %>];
+	var lngs = [<%= String.join(",", list.stream().map(dto -> String.valueOf(dto.getLongitude())).toArray(String[]::new)) %>];
+	var names = [<%= String.join(",", list.stream().map(dto -> "\"" + dto.getName().replace("\"", "\\\"") + "\"").toArray(String[]::new)) %>];
+	var ids = [<%= String.join(",", list.stream().map(dto -> "\"" + dto.getId2() + "\"").toArray(String[]::new)) %>];
 
-	// 이름 배열
-	var names = [
-		<% for(int i=0; i<list.size(); i++) {
-			out.print("\"" + list.get(i).getName().replace("\"","\\\"") + "\"");
-			if(i < list.size()-1) out.print(", ");
-		} %>
-	];
+	for (let i = 0; i < lats.length; i++) {
+	    let lat = parseFloat(lats[i]);
+	    let lng = parseFloat(lngs[i]);
+	    let name = names[i];
+	    let id = ids[i];
 
-	// id 배열
-	var ids = [
-		<% for(int i=0; i<list.size(); i++) {
-			out.print(list.get(i).getId());
-			if(i < list.size()-1) out.print(", ");
-		} %>
-	];
+	    if (isNaN(lat) || isNaN(lng)) {
+	        console.warn(`잘못된 좌표: index ${i}, lat=${lat}, lng=${lng}`);
+	        continue;
+	    }
 
-	for(let i=0; i<lats.length; i++) {
-		(function(index) {
-			let lat = lats[index];
-			let lng = lngs[index];
-			let name = names[index];
-			let id = ids[index];
-			console.log("lat:", lat, "lng:", lng);
+	    let coords = new kakao.maps.LatLng(lat, lng);
 
-			geocoder.coord2Address(lng, lat, function(result, status) {
-				if(status === kakao.maps.services.Status.OK) {
-					let address = result[0].address.address_name;
+	    let marker = new kakao.maps.Marker({
+	        map: map,
+	        position: coords
+	    });
 
-					let coords = new kakao.maps.LatLng(lat, lng);
-					let marker = new kakao.maps.Marker({
-						map: map,
-						position: coords
-					});
+	    kakao.maps.event.addListener(marker, 'click', function() {
+	        window.location.href = '<%=request.getContextPath()%>/index.jsp?main=details/info.jsp?hg_id=' + id;
+	    });
 
-					kakao.maps.event.addListener(marker, 'click', function() {
-						window.location.href = '../details/info.jsp?hg_id=' + id;
-					});
-
-					var infowindow = new kakao.maps.InfoWindow({
-						content: '<div style="padding:2px; font-size:8px; font-weight:bold; white-space:nowrap;">' + name + '</div>'
-					});
-					infowindow.open(map, marker);
-				} else {
-					console.warn("주소 변환 실패: " + lat + ", " + lng);
-				}
-			});
-		})(i);
+	    // 주소 변환 후 테이블 채우기
+	    (function(index, marker, name, coords) {
+	        geocoder.coord2Address(coords.getLng(), coords.getLat(), function(result, status) {
+	            if (status === kakao.maps.services.Status.OK) {
+	                let roadAddr = result[0].address.address_name;
+	                
+	                if (searchName.trim() !== "") {
+	                let infowindow = new kakao.maps.InfoWindow({
+	                    content: '<div style="padding:0px; font-size:5px;">' + name + '</div>'
+	                }); 
+	                infowindow.open(map, marker);
+	                }
+	                
+	                let cell = document.querySelector('td.addr-cell[data-index="' + index + '"]');
+	                if (cell) {
+	                    cell.textContent = roadAddr;
+	                } else {
+	                    console.warn('주소 셀을 찾을 수 없음: index=' + index);
+	                }
+	            } else {
+	                console.warn("주소 변환 실패:", coords);
+	            }
+	        });
+	    })(i, marker, name, coords);
 	}
 
+
 </script>
+
 
 </div>
 

@@ -1,6 +1,6 @@
-<%@page import="hgDao.hgRestDto"%>
+<%@page import="hgDto.hgRestDto"%>
 <%@page import="java.util.List"%>
-<%@page import="hgDto.hgRestDao"%>
+<%@page import="hgDao.hgRestDao"%>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
     hgRestDao dao = new hgRestDao();

@@ -1,6 +1,6 @@
 <%@ page import="java.util.List" %>
-<%@ page import="hgDto.hgRestDao" %>
-<%@ page import="hgDao.hgRestDto" %>
+<%@ page import="hgDao.hgRestDao" %>
+<%@ page import="hgDto.hgRestDto" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>
 <html>
@@ -10,6 +10,18 @@
     <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
     <script src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=5ac2ea2e11f7b380cdf52afbcc384b44&libraries=services"></script>
     <title>휴게소 지도</title>
+    
+    <script type="text/javascript">
+
+$(function(){
+	$("a.hg_num").click(function(){
+		
+		var hg_num=$(this).attr("hgId");
+		
+		location.href="<%=request.getContextPath()%>/index.jsp?main=details/info.jsp?hg_id="+hg_num;
+	})
+})
+    </script>
     <style>
         #map { width: 700px; height: 400px; }
         a.hg_num {
@@ -21,6 +33,7 @@
             text-decoration: underline;
         }
     </style>
+    
 </head>
 <body>
 <%
@@ -50,84 +63,81 @@
             </tr>
             <%
                 int n = 1;
-            	int i = 0;
+                int i = 0;
                 for (hgRestDto dto : list) {
             %>
             <tr>
                 <td><%= n++ %></td>
-                <td><a class="hg_num" href="../details/info.jsp?hg_id=<%= dto.getId() %>"><%= dto.getName() %></a></td>
+                <td><a class="hg_num"><%= dto.getName() %></a></td>
                 <td><%= dto.getTel_no() %></td>
                 <td><%= dao.getReview() %></td>
-                <td class="addr-cell" data-index="<%=i%>"><%=dto.getAddr() %></td>
+                <td class="addr-cell" data-index="<%= i %>"></td> <!-- 주소는 JS에서 삽입 -->
             </tr>
             <% i++; } %>
-            
         </table>
     </div>
 </div>
 
 <script>
+var map = new kakao.maps.Map(document.getElementById('map'), {
+    center: new kakao.maps.LatLng(36.5, 127.5),
+    level: 12
+});
 
+var geocoder = new kakao.maps.services.Geocoder();
 
-    var map = new kakao.maps.Map(document.getElementById('map'), {
-        center: new kakao.maps.LatLng(36.5, 127.5),
-        level: 12
+// JSP에서 값 전달
+var lats = [<%= String.join(",", list.stream().map(dto -> String.valueOf(dto.getLatitude())).toArray(String[]::new)) %>];
+var lngs = [<%= String.join(",", list.stream().map(dto -> String.valueOf(dto.getLongitude())).toArray(String[]::new)) %>];
+var names = [<%= String.join(",", list.stream().map(dto -> "\"" + dto.getName().replace("\"", "\\\"") + "\"").toArray(String[]::new)) %>];
+var ids = [<%= String.join(",", list.stream().map(dto -> "\"" + dto.getId() + "\"").toArray(String[]::new)) %>];
+
+for (let i = 0; i < lats.length; i++) {
+    let lat = parseFloat(lats[i]);
+    let lng = parseFloat(lngs[i]);
+    let name = names[i];
+    let id = ids[i];
+
+    if (isNaN(lat) || isNaN(lng)) {
+        console.warn(`잘못된 좌표: index ${i}, lat=${lat}, lng=${lng}`);
+        continue;
+    }
+
+    let coords = new kakao.maps.LatLng(lat, lng);
+
+    let marker = new kakao.maps.Marker({
+        map: map,
+        position: coords
     });
 
-    var geocoder = new kakao.maps.services.Geocoder();
+    kakao.maps.event.addListener(marker, 'click', function() {
+        window.location.href = '../details/info.jsp?hg_id=' + id;
+    });
 
-    var lats = [<%= String.join(",", list.stream().map(dto -> String.valueOf(dto.getLatitude())).toArray(String[]::new)) %>];
-    var lngs = [<%= String.join(",", list.stream().map(dto -> String.valueOf(dto.getLongitude())).toArray(String[]::new)) %>];
-    var names = [<%= String.join(",", list.stream().map(dto -> "\"" + dto.getName().replace("\"", "\\\"") + "\"").toArray(String[]::new)) %>];
-    var ids = [<%= String.join(",", list.stream().map(dto -> "\"" + dto.getId() + "\"").toArray(String[]::new)) %>];
-
-    for (let i = 0; i < lats.length; i++) {
-        let lat = parseFloat(lats[i]);
-        let lng = parseFloat(lngs[i]);
-        let name = names[i];
-        let id = ids[i];
-
-        let coords = new kakao.maps.LatLng(lat, lng);
-
-        let marker = new kakao.maps.Marker({
-            map: map,
-            position: coords
-        });
-
-        kakao.maps.event.addListener(marker, 'click', function() {
-            window.location.href = '../details/info.jsp?hg_id=' + id;
-        });
-        (function(index, marker, name, coords) {
+    // 주소 변환 후 테이블 채우기
+    (function(index, marker, name, coords) {
         geocoder.coord2Address(coords.getLng(), coords.getLat(), function(result, status) {
             if (status === kakao.maps.services.Status.OK) {
                 let roadAddr = result[0].address.address_name;
+
                 let infowindow = new kakao.maps.InfoWindow({
-                    content: '<div style="padding:2px; font-size:12px;">' + name + '</div>'
+                    content: '<div style="padding:2px; font-size:12px;">' + name + '<br>' + roadAddr + '</div>'
                 });
                 infowindow.open(map, marker);
-                let cell = document.querySelector(`td.addr-cell[data-index="${index}"]`);
+
+                let cell = document.querySelector('td.addr-cell[data-index="' + index + '"]');
                 if (cell) {
                     cell.textContent = roadAddr;
-                }	
-
-                console.log('lats.length:', lats.length);
-                console.log('lngs.length:', lngs.length);
-                console.log('names.length:', names.length);
-                console.log('ids.length:', ids.length);
-                console.log(i, lats[i], lngs[i], names[i], ids[i]);
-                console.log('Updating cell:', cell, 'with roadAddr:', roadAddr);
+                } else {
+                    console.warn('주소 셀을 찾을 수 없음: index=' + index);
+                }
             } else {
-                console.warn("주소 변환 실패:", lat, lng);
-                
+                console.warn("주소 변환 실패:", coords);
             }
         });
-        })(i, marker, name, coords);
-    }
-
+    })(i, marker, name, coords);
+}
 </script>
-
-</body>
-</html>
 
 </body>
 </html>

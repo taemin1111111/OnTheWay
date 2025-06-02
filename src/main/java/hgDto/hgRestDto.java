@@ -1,8 +1,8 @@
-package hgDao;
+package hgDto;
 
 public class hgRestDto {
 	
-	private String id;
+	
 	private String name;
 	private String tel_no;
 	private String addr;
@@ -10,12 +10,19 @@ public class hgRestDto {
 	private int	maintenance;
 	private double latitude;
 	private double longitude;
+	private int id2;
 	
 	
 	
 	
 	
 	
+	public int getId2() {
+		return id2;
+	}
+	public void setId2(int id2) {
+		this.id2 = id2;
+	}
 	public double getLatitude() {
 		return latitude;
 	}
@@ -58,12 +65,7 @@ public class hgRestDto {
 	public void setMaintenance(int maintenance) {
 		this.maintenance = maintenance;
 	}
-	public String getId() {
-		return id;
-	}
-	public void setId(String id) {
-		this.id = id;
-	}
+
 	
 	
 	
