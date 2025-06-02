@@ -181,12 +181,14 @@ public class GpaDao {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
 
-        // 🔥 정렬 기준 처리
-        String orderBy = "good DESC"; // 기본은 추천순
-        if ("추천낮은순".equals(order)) {
-            orderBy = "good ASC";
-        } else if ("최신순".equals(order)) {
-            orderBy = "num DESC";
+        // 정렬 기준 처리
+        String orderBy = "num DESC"; // 기본: 최신순
+        if ("추천순".equals(order)) {
+            orderBy = "good DESC";
+        } else if ("평점 높은순".equals(order)) {
+            orderBy = "stars DESC";
+        } else if ("평점 낮은순".equals(order)) {
+            orderBy = "stars ASC";
         }
 
         String sql = "SELECT * FROM review WHERE hg_id = ? ORDER BY " + orderBy + " LIMIT ?, ?";
@@ -216,6 +218,130 @@ public class GpaDao {
         }
 
         return list;
+    }
+    //id중복 여부 찾기 이걸로 후기 아이디당 한번만 쓸수있게끔 
+    public boolean hasUserRated(String userid, String hg_id) {
+        boolean exists = false;
+        Connection conn = db.getConnection();
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        String sql = "SELECT COUNT(*) FROM review WHERE user_id = ? AND hg_id = ?";
+
+        try {
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, userid);
+            pstmt.setString(2, hg_id);
+            rs = pstmt.executeQuery();
+            if (rs.next()) {
+                exists = rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            db.dbClose(rs, pstmt, conn);
+        }
+
+        return exists;
+    }
+ //==================굿 아이디당 하나  dao===============================================================
+    // 이미 추천했는지 확인
+    public boolean hasUserRecommended(String userId, String renum) {
+        String sql = "SELECT COUNT(*) FROM good WHERE user_id = ? AND renum = ?";
+        boolean exists = false;
+        Connection conn = db.getConnection();
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, userId);
+            pstmt.setString(2, renum);
+            rs = pstmt.executeQuery();
+            if (rs.next()) {
+                exists = rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            db.dbClose(rs, pstmt, conn);
+        }
+
+        return exists;
+    }
+
+    // 추천 기록 추가 + review 테이블 good 수 증가
+    public void addRecommendation(String userId, String renum) {
+        Connection conn = db.getConnection();
+        PreparedStatement pstmt1 = null;
+        PreparedStatement pstmt2 = null;
+
+        String sql1 = "UPDATE review SET good = good + 1 WHERE num = ?";
+        String sql2 = "INSERT INTO good (renum, user_id) VALUES (?, ?)";
+
+        try {
+            conn.setAutoCommit(false); // 트랜잭션 처리
+
+            pstmt1 = conn.prepareStatement(sql1);
+            pstmt1.setString(1, renum);
+            pstmt1.executeUpdate();
+
+            pstmt2 = conn.prepareStatement(sql2);
+            pstmt2.setString(1, renum);
+            pstmt2.setString(2, userId);
+            pstmt2.executeUpdate();
+
+            conn.commit();
+        } catch (SQLException e) {
+            try { conn.rollback(); } catch (SQLException ex) { ex.printStackTrace(); }
+            e.printStackTrace();
+        } finally {
+            db.dbClose(pstmt2, null);
+            db.dbClose(pstmt1, conn);
+        }
+    }
+ // 평점 소유자인지 확인
+    public boolean isOwnerOfReview(String num, String userid) {
+        boolean result = false;
+        Connection conn = db.getConnection();
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        String sql = "SELECT COUNT(*) FROM review WHERE num = ? AND user_id = ?";
+
+        try {
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, num);
+            pstmt.setString(2, userid);
+            rs = pstmt.executeQuery();
+            if (rs.next()) {
+                result = rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            db.dbClose(rs, pstmt, conn);
+        }
+
+        return result;
+    }
+
+    // 실제 삭제
+    public void deleteGpa(String num) {
+        Connection conn = db.getConnection();
+        PreparedStatement pstmt = null;
+
+        String sql = "DELETE FROM review WHERE num = ?";
+
+        try {
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, num);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            db.dbClose(pstmt, conn);
+        }
     }
 
 }
