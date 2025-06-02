@@ -265,9 +265,8 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 			<table>
 				<colgroup>
 					<col style="width: 20%;">
-					<col style="width: 15%;">
-					<col style="width: 15%;">
-					<col style="width: 50%;">
+					<col style="width: 15%;">					
+					<col style="width: 65%;">
 				</colgroup>
 				<tbody>
 					<tr style="height: 50px;">
@@ -285,7 +284,7 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 							</div>
 						</td>
 						<td>아이디</td>
-						<td>닉네임</td>
+						
 						<td><textarea name="content" class="form-control" placeholder="후기를 입력해주세요..." required></textarea></td>
 					</tr>
 				</tbody>
