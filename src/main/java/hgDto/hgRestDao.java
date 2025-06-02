@@ -32,7 +32,7 @@ public class hgRestDao {
 			{
 				hgRestDto dto=new hgRestDto();
 				
-				
+				dto.setId(rs.getString("id"));
 				dto.setName(rs.getString("name"));
 				dto.setTel_no(rs.getString("tel_no"));
 				dto.setAddr(rs.getString("addr"));
@@ -125,7 +125,7 @@ public class hgRestDao {
 			{
 				hgRestDto dto=new hgRestDto();
 				
-				
+				dto.setId(rs.getString("id"));
 				dto.setName(rs.getString("name"));
 				dto.setTel_no(rs.getString("tel_no"));
 				dto.setAddr(rs.getString("addr"));
@@ -205,6 +205,9 @@ public class hgRestDao {
 		
 		return list;
 	}
+	
+	
+	
 	
 	
 	
