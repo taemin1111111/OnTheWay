@@ -2,8 +2,8 @@
 <%
     response.setContentType("application/json; charset=UTF-8");
 
-    String stdRestCd = request.getParameter("stdRestCd");
-    if (stdRestCd == null || stdRestCd.trim().isEmpty()) {
+    String stdRestNm = request.getParameter("stdRestNm");
+    if (stdRestNm == null || stdRestNm.trim().isEmpty()) {
         response.setStatus(400);
         out.print("[]");
         return;
@@ -18,7 +18,7 @@
 
         for (Object obj : allData) {
             JSONObject item = (JSONObject) obj;
-            if (stdRestCd.equals(item.get("stdRestCd"))) {
+            if (stdRestNm.equals(item.get("stdRestNm"))) {
                 totalList.add(item);
             }
         }

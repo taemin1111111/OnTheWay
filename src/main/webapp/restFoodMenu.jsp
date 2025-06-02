@@ -338,10 +338,10 @@ try {
     }
 
     // 메뉴 목록 로딩 함수
-    function loadMenu(code) {
+    function loadMenu(name) {
         container.innerHTML = '';
         
-        if (!code) {
+        if (!name) {
             container.innerHTML = '';
             const msg = document.createElement('div');
             msg.className = 'no-data text-center';
@@ -353,7 +353,7 @@ try {
             return;
         }
 
-        fetch('restFoodMenuJson.jsp?stdRestCd=' + encodeURIComponent(code))
+        fetch('restFoodMenuJson.jsp?stdRestNm=' + encodeURIComponent(name))
             .then(res => {
                 if (!res.ok) throw new Error('네트워크 오류');
                 return res.json();
@@ -427,10 +427,10 @@ try {
 	    restInput.value = name || "";
 	
 	    // 🔽 항상 loadMenu 호출
-	    loadMenu(code);
+	    loadMenu(name);
 	
-	    if (code) {
-	        history.pushState(null, "", "index.jsp?main=restFoodMenu.jsp&stdRestCd=" + encodeURIComponent(code));
+	    if (name) {
+	        history.pushState(null, "", "index.jsp?main=restFoodMenu.jsp&stdRestNm=" + encodeURIComponent(name));
 	    } else {
 	        history.replaceState(null, "", "index.jsp?main=restFoodMenu.jsp");
 	    }
@@ -463,8 +463,8 @@ try {
 
                 restInput.value = name;
                 select.value = code;
-                loadMenu(code);
-                history.pushState(null, "", "index.jsp?main=restFoodMenu.jsp&stdRestCd=" + encodeURIComponent(code));
+                loadMenu(name);
+                history.pushState(null, "", "index.jsp?main=restFoodMenu.jsp&stdRestNm=" + encodeURIComponent(name));
                 listDiv.style.display = 'none';
             };
             listDiv.appendChild(item);
@@ -482,41 +482,41 @@ try {
 
     // 페이지 로드시 URL 파라미터 처리
     window.addEventListener('DOMContentLoaded', () => {
-        const params = new URLSearchParams(location.search);
-        const code = params.get('stdRestCd');
-        if (code) {
-            const name = Object.keys(restAreaMap).find(k => restAreaMap[k] === code);
-            if (name) {
-                restInput.value = name;
-                select.value = code;
-                loadMenu(code);
-            }
-        } else {
-            loadMenu(); // 🔽 아무것도 선택되지 않았을 때 문구 표시
-        }
-        
-        renderOrderList();
-    });
+	    const params = new URLSearchParams(location.search);
+	    const name = params.get('stdRestNm');  // 휴게소명
+	    const code = restAreaMap[name];         // 코드 얻기
+	
+	    if (name && code) {
+	        restInput.value = name;     // 자동완성 입력창에 휴게소명 넣기
+	        select.value = code;        // select 박스는 코드값으로 선택
+	        loadMenu(name);             // 메뉴 로딩도 휴게소명 기준
+	    } else {
+	        restInput.value = '';
+	        select.value = '';
+	        loadMenu();
+	    }
+	
+	    renderOrderList();
+	});
 
     // 브라우저 뒤로/앞으로 이동 대응
     window.addEventListener('popstate', () => {
 	    if (isOrderNotEmpty) {
 	        const proceed = confirm("주문 목록이 초기화됩니다. 계속하시겠습니까?");
 	        if (!proceed) {
-	            history.forward(); // 이동 취소
+	            history.forward();
 	            return;
 	        }
 	        clearOrder();
 	    }
 	
 	    const params = new URLSearchParams(location.search);
-	    const code = params.get('stdRestCd');
+	    const name = params.get('stdRestNm');
+	    const code = restAreaMap[name];
 	
-	    const name = Object.keys(restAreaMap).find(k => restAreaMap[k] === code);
-	    restInput.value = name || "";
-	    select.value = code || "";
-	
-	    loadMenu(code); // 🔥 항상 loadMenu 호출
+	    restInput.value = name || '';
+	    select.value = code || '';
+	    loadMenu(name);
 	});
 </script>
 
