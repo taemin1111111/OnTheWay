@@ -17,12 +17,12 @@ public class BrandDao {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
 
-        String sql = "SELECT id, hg_name, brand_name, brand_id FROM hg.hg_brand WHERE hg_name = ?";
+        String sql = "SELECT id, hg_name, brand_name, brand_id FROM hg.hg_brand WHERE hg_name LIKE ?";
 
         try {
             conn = db.getConnection(); // Get connection from your DbConnect class
             pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, hgName); // Set the hg_name parameter
+            pstmt.setString(1, hgName + "%"); // Set the hg_name parameter
 
             rs = pstmt.executeQuery();
 

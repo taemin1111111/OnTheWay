@@ -34,9 +34,9 @@ public class DbConnect {
 			url = props.getProperty("db.url");
 			user = props.getProperty("db.user");
 			password = props.getProperty("db.password");
-			System.out.println(url);
-			System.out.println(user);
-			System.out.println(password);
+			//System.out.println(url);
+			//System.out.println(user);
+			//System.out.println(password);
 			//url +="&allowPublicKeyRetrieval=true";
 
 		} catch (Exception e) {
