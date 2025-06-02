@@ -9,6 +9,6 @@
 <jsp:setProperty property="*" name="dto"/>
 <%
     dao.insertGpa(dto);
-    // AJAX에서 success 콜백을 위해 문자열로 응답
-    out.print("ok");
+    response.sendRedirect("gpa.jsp?success=1"); 
 %>
+

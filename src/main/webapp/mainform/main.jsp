@@ -114,6 +114,7 @@
 
 </head>
 <body>
+<jsp:include page="photo.jsp" />
 	<div style="margin: 30px 0 10px 0; text-align: center;">
 		<h5 style="font-size: 28px; font-weight: 700;">세미프로젝트</h5>
 		<p style="font-size: 17px;">프로젝트 메인 화면 구성중입니다</p>

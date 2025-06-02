@@ -110,6 +110,14 @@ body {
 }
 </style>
 </head>
+<%
+   String mainPage="mainform/main.jsp"; 
+  
+  if(request.getParameter("main")!=null)
+  {
+	  mainPage=request.getParameter("main");
+  }
+%>
 <body>
 
     <!-- 전체 폭 title -->
@@ -117,8 +125,7 @@ body {
 
     <!-- 중앙 정렬된 본문 -->
     <div class="centered-content">
-        <jsp:include page="mainform/photo.jsp" />
-        <jsp:include page="mainform/main.jsp" />
+    <jsp:include page="<%=mainPage %>"/>
     </div>
 
     <!-- 전체 폭 footer -->
