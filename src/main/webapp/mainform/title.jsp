@@ -229,6 +229,63 @@
   </div>
 </nav>
 
+<style>
+/* ----------- 타이틀 ----------- */
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+}
+
+nav.navbar {
+    background-color: #ffffff !important;
+}
+
+.nav-item > a {
+    font-size: 21px;
+    font-weight: 500;
+}
+
+.nav-item.dropdown > a::after {
+    display: none !important;
+}
+
+.login-font {
+    font-family: Arial, sans-serif !important;
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+}
+
+.navbar-nav .dropdown-menu .dropdown-item {
+    font-size: 20px;
+    padding: 10px 20px;
+}
+
+.navbar-nav .nav-link {
+    transition: background 0.4s ease, color 0.4s ease;
+}
+
+.navbar-nav .dropdown-menu .dropdown-item:hover, .navbar-nav .dropdown-menu .dropdown-item:focus {
+    background: linear-gradient(90deg, #f5f5f5, #e0e0e0);
+    color: #333 !important;
+    border: none;
+    box-shadow: none;
+}
+
+.navbar-nav .nav-link.dropdown-toggle:hover, .navbar-nav .nav-link.dropdown-toggle:focus,
+.navbar-nav .nav-link.dropdown-toggle:active {
+    background: linear-gradient(90deg, #f5f5f5, #e0e0e0);
+    color: #333 !important;
+    border-radius: 6px;
+    outline: none !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+.d-flex.align-items-center>ul.navbar-nav {
+    margin-left: 200px !important;
+}
+/* ----------- 타이틀 ----------- */
+</style>
 <!-- 로그인/회원가입 모달 -->
 <div id="loginModal" class="modal">
   <div class="modal-content">
