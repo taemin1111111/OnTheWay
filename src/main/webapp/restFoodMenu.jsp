@@ -25,7 +25,8 @@ body {
 h2 {
 	font-size: 28px;
 	font-weight: 600;
-	margin-bottom: 30px;
+	margin-top: 60px;
+	margin-bottom: 40px;
 	color: #1a1a1a;
 	text-align: center;
 }
@@ -41,7 +42,7 @@ label {
 	position: absolute;
 	z-index: 1000;
 	width: 100%;
-	max-width: 300px;
+	max-width: 280px;
 }
 
 #autocompleteList .list-group-item {
@@ -57,8 +58,8 @@ label {
 
 #menuList {
 	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-	gap: 20px;
+	grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+	gap: 15px;
 }
 
 #orderPanel {
@@ -196,7 +197,7 @@ try {
     </select>
 </div>
 
-<hr style="margin-top: 50px">
+<hr style="margin-top: 30px">
 
 <div class="d-flex justify-content-between gap-4" style="margin-top: 30px">
     <!-- 왼쪽: 메뉴 리스트 -->
@@ -270,7 +271,8 @@ try {
             const emptyItem = document.createElement('li');
             emptyItem.className = 'list-group-item text-center text-muted';
             emptyItem.textContent = '메뉴가 비어있습니다.';
-            emptyItem.style.padding = '220px';
+            emptyItem.style.paddingTop = '221px';
+            emptyItem.style.paddingBottom = '221px';
             orderList.appendChild(emptyItem);
             summaryArea.textContent = '';
             return;
@@ -336,11 +338,22 @@ try {
     }
 
     // 메뉴 목록 로딩 함수
-    function loadMenu(code) {
+    function loadMenu(name) {
         container.innerHTML = '';
-        if (!code) return;
+        
+        if (!name) {
+            container.innerHTML = '';
+            const msg = document.createElement('div');
+            msg.className = 'no-data text-center';
+            msg.textContent = '휴게소를 선택해주세요.';
+            msg.style.gridColumn = '1 / -1';  // 🔥 전체 열 차지
+            msg.style.fontSize = '22px';
+            msg.style.padding = '150px 0';
+            container.appendChild(msg);
+            return;
+        }
 
-        fetch('restFoodMenuJson.jsp?stdRestCd=' + encodeURIComponent(code))
+        fetch('restFoodMenuJson.jsp?stdRestNm=' + encodeURIComponent(name))
             .then(res => {
                 if (!res.ok) throw new Error('네트워크 오류');
                 return res.json();
@@ -399,30 +412,29 @@ try {
 
     // 셀렉트 박스 변경 이벤트
     select.addEventListener('change', () => {
-        const code = select.value;
-
-        if (isOrderNotEmpty) {
-            const proceed = confirm("주문 목록이 초기화됩니다. 계속하시겠습니까?");
-            if (!proceed) {
-                select.value = '';
-                return;
-            }
-            clearOrder();
-        }
-
-        if (!code) {
-            restInput.value = "";
-            container.innerHTML = "";
-            history.replaceState(null, "", "restFoodMenu.jsp");
-            return;
-        }
-
-        const name = Object.keys(restAreaMap).find(k => restAreaMap[k] === code);
-        if (name) restInput.value = name;
-
-        loadMenu(code);
-        history.pushState(null, "", "restFoodMenu.jsp?stdRestCd=" + encodeURIComponent(code));
-    });
+	    const code = select.value;
+	
+	    if (isOrderNotEmpty) {
+	        const proceed = confirm("주문 목록이 초기화됩니다. 계속하시겠습니까?");
+	        if (!proceed) {
+	            select.value = '';
+	            return;
+	        }
+	        clearOrder();
+	    }
+	
+	    const name = Object.keys(restAreaMap).find(k => restAreaMap[k] === code);
+	    restInput.value = name || "";
+	
+	    // 🔽 항상 loadMenu 호출
+	    loadMenu(name);
+	
+	    if (name) {
+	        history.pushState(null, "", "index.jsp?main=restFoodMenu.jsp&stdRestNm=" + encodeURIComponent(name));
+	    } else {
+	        history.replaceState(null, "", "index.jsp?main=restFoodMenu.jsp");
+	    }
+	});
 
     // 자동완성 검색 기능
     restInput.addEventListener('input', () => {
@@ -451,8 +463,8 @@ try {
 
                 restInput.value = name;
                 select.value = code;
-                loadMenu(code);
-                history.pushState(null, "", "restFoodMenu.jsp?stdRestCd=" + encodeURIComponent(code));
+                loadMenu(name);
+                history.pushState(null, "", "index.jsp?main=restFoodMenu.jsp&stdRestNm=" + encodeURIComponent(name));
                 listDiv.style.display = 'none';
             };
             listDiv.appendChild(item);
@@ -470,45 +482,42 @@ try {
 
     // 페이지 로드시 URL 파라미터 처리
     window.addEventListener('DOMContentLoaded', () => {
-        const params = new URLSearchParams(location.search);
-        const code = params.get('stdRestCd');
-        if (code) {
-            const name = Object.keys(restAreaMap).find(k => restAreaMap[k] === code);
-            if (name) {
-                restInput.value = name;
-                select.value = code;
-                loadMenu(code);
-            }
-        }
-        renderOrderList();
-    });
+	    const params = new URLSearchParams(location.search);
+	    const name = params.get('stdRestNm');  // 휴게소명
+	    const code = restAreaMap[name];         // 코드 얻기
+	
+	    if (name && code) {
+	        restInput.value = name;     // 자동완성 입력창에 휴게소명 넣기
+	        select.value = code;        // select 박스는 코드값으로 선택
+	        loadMenu(name);             // 메뉴 로딩도 휴게소명 기준
+	    } else {
+	        restInput.value = '';
+	        select.value = '';
+	        loadMenu();
+	    }
+	
+	    renderOrderList();
+	});
 
     // 브라우저 뒤로/앞으로 이동 대응
     window.addEventListener('popstate', () => {
-        if (isOrderNotEmpty) {
-            const proceed = confirm("주문 목록이 초기화됩니다. 계속하시겠습니까?");
-            if (!proceed) {
-                history.forward();
-                return;
-            }
-            clearOrder();
-        }
-
-        const params = new URLSearchParams(location.search);
-        const code = params.get('stdRestCd');
-        if (code) {
-            const name = Object.keys(restAreaMap).find(k => restAreaMap[k] === code);
-            if (name) {
-                restInput.value = name;
-                select.value = code;
-                loadMenu(code);
-            }
-        } else {
-            select.value = '';
-            restInput.value = '';
-            container.innerHTML = '';
-        }
-    });
+	    if (isOrderNotEmpty) {
+	        const proceed = confirm("주문 목록이 초기화됩니다. 계속하시겠습니까?");
+	        if (!proceed) {
+	            history.forward();
+	            return;
+	        }
+	        clearOrder();
+	    }
+	
+	    const params = new URLSearchParams(location.search);
+	    const name = params.get('stdRestNm');
+	    const code = restAreaMap[name];
+	
+	    restInput.value = name || '';
+	    select.value = code || '';
+	    loadMenu(name);
+	});
 </script>
 
 <!-- 포트원 v1 SDK 로드 -->
@@ -516,63 +525,83 @@ try {
 
 <!-- 결제 버튼 클릭 시 동작 -->
 <script>
-function orderBtn() {
-    // 로그인 체크 (JSP 코드로 세션 검사)
-    <% if (session.getAttribute("loginUserId") == null) { %>
-        alert("로그인이 필요합니다.");
-        return;
-    <% } %>
-
-    // 주문 비어있을 때
-    if (Object.keys(orderMap).length === 0) {
-        alert("주문할 메뉴가 없습니다.");
-        return;
-    }
-
-    const IMP = window.IMP;
-    IMP.init("imp37255548"); // 식별코드
-
-    // 주문 데이터 구성
-    const now = new Date();
-    const channel_key = "<%= channelKey %>";	// ✅ 포트원 채널키
-    const merchantUid = "order_" + now.getTime();	// ✅ 고유한 주문번호
-    
-    // const totalAmount = Object.values(orderMap).reduce((sum, item) => sum + item.price * item.quantity, 0); // ✅ 정수형
-    // 테스트용 100분의 1 금액 -->
-    const totalAmount = Math.round(
-	    Object.values(orderMap).reduce((sum, item) => sum + item.price * item.quantity, 0) / 100
-	);
-    
-    const menuNames = Object.keys(orderMap);
-    const restName = document.getElementById('restSearch').value || "휴게소";
-
-    let orderName = restName;
-    if (menuNames.length > 0) {
-        orderName += " - " + menuNames[0];
-        if (menuNames.length > 1) {
-            orderName += " 외 " + (menuNames.length - 1);
-        }
-    }
-
-    // 결제 요청
-    IMP.request_pay({
-        channelKey: channel_key,
-        pay_method: "card",
-        merchant_uid: merchantUid,
-        name: orderName,
-        amount: totalAmount,
-        buyer_name: "<%= session.getAttribute("loginUserId") %>"
-    }, function (rsp) {
-        console.log("결제 응답", rsp); // ✅ 콘솔 로그 확인
-
-        if (rsp.success) {
-            alert("결제가 완료되었습니다.");
-            clearOrder(); // 주문 목록 전체 초기화
-        } else {
-            alert("결제 실패: " + rsp.error_msg);
-        }
-    });
-}
+	function orderBtn() {
+	    // 로그인 체크 (JSP 코드로 세션 검사)
+	    <% if (session.getAttribute("userId") == null) { %>
+	        alert("로그인이 필요합니다.");
+	        return;
+	    <% } %>
+	
+	    // 주문 비어있을 때
+	    if (Object.keys(orderMap).length === 0) {
+	        alert("주문할 메뉴가 없습니다.");
+	        return;
+	    }
+	
+	    const IMP = window.IMP;
+	    IMP.init("imp37255548"); // 식별코드
+	
+	    // 주문 데이터 구성
+	    const now = new Date();
+	    const channel_key = "<%= channelKey %>";	// ✅ 포트원 채널키
+	    const merchantUid = "order_" + now.getTime();	// ✅ 고유한 주문번호
+	    
+	    // const totalAmount = Object.values(orderMap).reduce((sum, item) => sum + item.price * item.quantity, 0); // ✅ 정수형
+	    // 테스트용 100분의 1 금액 -->
+	    const totalAmount = Math.round(
+		    Object.values(orderMap).reduce((sum, item) => sum + item.price * item.quantity, 0) / 100
+		);
+	    
+	    const menuNames = Object.keys(orderMap);
+	    const restName = document.getElementById('restSearch').value || "휴게소";
+	
+	    let orderName = restName;
+	    if (menuNames.length > 0) {
+	        orderName += " - " + menuNames[0];
+	        if (menuNames.length > 1) {
+	            orderName += " 외 " + (menuNames.length - 1);
+	        }
+	    }
+	
+	    // 결제 요청
+	    IMP.request_pay({
+	        channelKey: channel_key,
+	        pay_method: "card",
+	        merchant_uid: merchantUid,
+	        name: orderName,
+	        amount: totalAmount,
+	        buyer_name: "<%= session.getAttribute("userName") %>",
+	        buyer_email: "<%= session.getAttribute("email") %>"
+	    }, function (rsp) {
+	        console.log("결제 응답", rsp); // ✅ 콘솔 로그 확인
+	
+	        if (rsp.success) {
+	        	
+	        	$.ajax({
+	                url: "food/orderAction.jsp",
+	                type: "POST",
+	                data: {
+	                    merchant_uid: rsp.merchant_uid,
+	                    imp_uid: rsp.imp_uid,
+	                    userName: rsp.buyer_name,
+	                    email: rsp.buyer_email,
+	                    orderName: rsp.name,
+	                    orderPrice: rsp.paid_amount
+	                },
+	                success: function() {
+	                	alert("결제가 완료되었습니다.");
+	                    clearOrder(); // 주문 목록 전체 초기화
+	                },
+	                error: function() {
+	                    alert("주문 정보 저장에 실패했습니다.");
+	                }
+	            });
+	        	
+	        } else {
+	            alert("결제 실패: " + rsp.error_msg);
+	        }
+	    });
+	}
 </script>
 
 </body>
