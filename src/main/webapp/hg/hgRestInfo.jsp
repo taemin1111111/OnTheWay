@@ -153,10 +153,31 @@ List<hgRestDto> list;
 	                let roadAddr = result[0].address.address_name;
 	                
 	                if (searchName.trim() !== "") {
-	                let infowindow = new kakao.maps.InfoWindow({
-	                    content: '<div style="padding:0px; font-size:5px;">' + name + '</div>'
-	                }); 
-	                infowindow.open(map, marker);
+	                	let overlayDiv = document.createElement('div');
+	                	
+	                    overlayDiv.style.background = 'white';
+	                    overlayDiv.style.border = '1px solid #666';
+	                    overlayDiv.style.padding = '4px 8px';
+	                    overlayDiv.style.fontSize = '13px';
+	                    overlayDiv.style.whiteSpace = 'nowrap';
+	                    overlayDiv.style.borderRadius = '4px';
+	                    overlayDiv.style.boxShadow = '2px 2px 6px rgba(0,0,0,0.3)';
+	                    overlayDiv.style.color = 'black';
+	                   
+	                    overlayDiv.textContent = name;
+	                    
+
+
+	                    let customOverlay = new kakao.maps.CustomOverlay({
+	                        content: overlayDiv,
+	                        map: map,
+	                        position: coords,
+	                        yAnchor: 1.5
+	                    });
+	                    overlayDiv.addEventListener('click', function() {
+	                        window.location.href = '<%=request.getContextPath()%>/index.jsp?main=details/info.jsp?hg_id=' + id;
+	                    });
+	                
 	                }
 	                
 	                let cell = document.querySelector('td.addr-cell[data-index="' + index + '"]');
