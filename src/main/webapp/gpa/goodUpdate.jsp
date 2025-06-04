@@ -4,17 +4,24 @@
 
 <%
 String num = request.getParameter("num");
-String type = request.getParameter("type");
 String hg_id = request.getParameter("hg_id");
 String order = request.getParameter("order");
+String userid = (String) session.getAttribute("userId");
 
 GpaDao dao = new GpaDao();
-if ("up".equals(type)) {
-    dao.increaseGood(num);
-} else if ("down".equals(type)) {
-    dao.decreaseGood(num);
-}
-order = URLEncoder.encode(order, "UTF-8");
+
 String root = request.getContextPath();
+order = URLEncoder.encode(order, "UTF-8");
+
+if (userid != null && !"".equals(userid)) {
+    if (!dao.hasUserRecommended(userid, num)) {
+        dao.addRecommendation(userid, num);
+    } else {
+        // 이미 추천한 경우
+        response.sendRedirect(root + "/index.jsp?main=gpa/gpa.jsp&hg_id=" + hg_id + "&order=" + order + "&already=1");
+        return;
+    }
+}
+
 response.sendRedirect(root + "/index.jsp?main=gpa/gpa.jsp&hg_id=" + hg_id + "&order=" + order);
 %>
