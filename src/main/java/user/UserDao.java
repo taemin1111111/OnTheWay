@@ -40,6 +40,38 @@ public class UserDao {
 
         return user;
     }
+    
+    
+    public UserDto getUserSession(String username) {
+        UserDto user = null;
+        String sql = "SELECT * FROM user WHERE userId = ?";
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = db.getConnection();
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, username);
+            rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                user = new UserDto();
+                user.setId(rs.getString("userId"));	
+                user.setUsername(rs.getString("userName"));
+                user.setPassword(rs.getString("password"));
+                user.setEmail(rs.getString("email"));
+                user.setRole(rs.getInt("role"));
+                user.setCreatedAt(rs.getTimestamp("created_at"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            db.dbClose(rs, pstmt, conn);
+        }
+
+        return user;
+    }
 
     public boolean isIdPassMember(String m_id, String m_pass) {
         boolean idpass = false;
@@ -88,4 +120,63 @@ public class UserDao {
             db.dbClose(null, pstmt, conn);
         }
     }
+    
+    public boolean isPasswordCorrect(String userId, String password) {
+        String sql = "SELECT COUNT(*) FROM user WHERE userId = ? AND password = ?";
+        try (Connection conn = db.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, userId);
+            pstmt.setString(2, password);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+    
+    public void deleteUser(String userId) {
+        String sql = "DELETE FROM user WHERE userId = ?";
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            conn = db.getConnection();
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setString(1, userId);
+            int rowsAffected = pstmt.executeUpdate();
+
+            if (rowsAffected > 0) {
+                System.out.println("User deleted successfully.");
+            } else {
+                System.out.println("No user found with the given userId.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            db.dbClose(null, pstmt, conn);
+        }
+    }
+    
+    public void updateUser(UserDto user) {
+        String sql = "UPDATE user SET username = ?, email = ?, password = ? WHERE userId = ?";
+        try (Connection conn = db.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        	System.out.println("호출");
+        	System.out.println(user.getUsername()+ user.getId());
+
+            pstmt.setString(1, user.getUsername());
+            pstmt.setString(2, user.getEmail());
+            pstmt.setString(3, user.getPassword());
+            pstmt.setString(4, user.getId()); // 반드시 userId 사용
+
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    
 }
