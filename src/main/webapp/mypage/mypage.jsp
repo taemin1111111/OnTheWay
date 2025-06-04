@@ -1,4 +1,3 @@
-jsp
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%
     String root = request.getContextPath();
@@ -67,7 +66,7 @@ jsp
     /* 탭 메뉴 (브라우저 탭 스타일) */
     .tab-menu {
       display: flex; /* 플렉스 박스를 사용하여 배치 */
-      padding: 10px 30px; /* 상하 및 좌우 패딩 설정 */
+      padding: 10px 50px; /* 상하 및 좌우 패딩 설정 */
       background: #d6ecfc; /* 배경색 설정 */
       border-bottom: 1px solid #ccc; /* 하단 경계 설정 */
       position: sticky; /* 스크롤 시 고정 */
@@ -78,7 +77,7 @@ jsp
       background: white; /* 배경색 설정 */
       border: 1px solid #ccc; /* 경계 설정 */
       border-bottom: none; /* 하단 경계 제거 */
-      margin-right: 5px; /* 우측 여백 설정 */
+      margin-right: -5px; /* 우측 여백 설정 */
       padding: 8px 20px; /* 패딩 설정 */
       cursor: pointer; /* 커서 포인터로 변경 */
       border-top-left-radius: 8px; /* 좌측 상단 모서리를 둥글게 설정 */
