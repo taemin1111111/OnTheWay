@@ -355,15 +355,19 @@ document.addEventListener("DOMContentLoaded", function () {
 		</a>
 	<% } %>
 
-	<%-- ✅ 삭제 버튼을 td 밖에, 오른쪽 띄워서 배치 (작성자일 경우만, confirm 포함) --%>
+	<%-- ✅ 삭제 버튼 조건부 삽입 --%>
 	<% if (userid != null && userid.equals(dto.getUserid())) { %>
-		<span style="position: absolute; top: 50%; left: 100%; transform: translate(10px, -50%);">
-			<button onclick="confirmDelete('<%=dto.getNum()%>')" 
-				style="background-color: #dc3545; color: white; border: none;
-					   padding: 4px 12px; border-radius: 5px; font-weight: bold; cursor: pointer; white-space: nowrap;">
-				삭제
-			</button>
-		</span>
+	
+	<span style="position: absolute; top: 50%; left: 100%; transform: translate(10px, -50%);">
+		<button
+			class="btn btn-danger"
+			data-num="<%=dto.getNum()%>"
+			data-hg="<%=hg_id%>"
+			data-order="<%=order%>"
+			onclick="confirmDeleteBtn(this)">
+			삭제
+		</button>
+	</span>
 	<% } %>
 </td>
 
@@ -514,14 +518,20 @@ function toggleOrder() {
 	location.href = "<%=request.getContextPath()%>/index.jsp?main=gpa/gpa.jsp&hg_id=" + "<%=hg_id%>" + "&" + urlParams.toString();
 }
 
-function confirmDelete(num) {
-    if (confirm("삭제하시겠습니까?")) {
-        const params = new URLSearchParams(window.location.search);
-        const hg_id = params.get("hg_id");
-        const order = params.get("order");
-        location.href = `<%=request.getContextPath()%>/gpa/deleteGpa.jsp?num=${num}&hg_id=${hg_id}&order=${order}`;
-    }
+function confirmDeleteBtn(btn) {
+	const num = btn.getAttribute("data-num");
+	const hg_id = btn.getAttribute("data-hg");
+	const order = btn.getAttribute("data-order");
+
+	const context = "<%=request.getContextPath()%>"; // 여길 따로 분리!
+	if (confirm("삭제하시겠습니까?")) {
+		const encodedOrder = encodeURIComponent(order);
+		// 🔥 이건 백틱 쓰면 안 됨! 문자열 더하기로 해야 안전함
+		location.href = context + "/gpa/deleteGpa.jsp?num=" + num + "&hg_id=" + hg_id + "&order=" + encodedOrder;
+	}
 }
+
+
 
 </script>
 

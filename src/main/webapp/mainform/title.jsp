@@ -189,7 +189,7 @@
         <li class="nav-item dropdown me-3 dropdown-hover">
           <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">고객센터</a>
           <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">고객후기</a></li>
+            <li><a class="dropdown-item" href="<%=root%>/index.jsp?main=Question/QuestionForm.jsp">자주 묻는 질문</a></li>
           </ul>
         </li>
       </ul>
