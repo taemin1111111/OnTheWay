@@ -26,8 +26,47 @@ $(function(){
 		var hg_num=$(this).attr("id");
 		
 		location.href="<%=request.getContextPath()%>/index.jsp?main=details/info.jsp?hg_id="+hg_num;
+
+		
+	
 	})
+	
+	<%-- $("input.a").change(function() {
+    // 체크박스 상태 읽기
+    let lpg = $("input[name='lpg']").is(":checked") ? "Y" : "";
+    let ev = $("input[name='ev']").is(":checked") ? "Y" : "";
+    let pharm = $("input[name='pharm']").is(":checked") ? "Y" : "";
+    let searchName = $("#sName").val();
+    
+	$.ajax({
+	    url: '<%=request.getContextPath()%>/hg/test2.jsp', /*  부분 데이터만 반환 */
+	    method: 'GET',
+	    data: {
+	        searchName: searchName,
+	        lpg: lpg === "Y" ? "Y" : "",
+	        ev: ev === "Y" ? "Y" : "",
+	        pharm: pharm === "Y" ? "Y" : ""
+	    },
+	    success: function(response) {
+	        // 테이블 부분만 바꿔주기
+	        document.querySelector('div#table-container').innerHTML = response;
+
+	        // 여기서 지도 마커 다시 찍는 함수 호출 필요
+	        // 예) updateMapMarkers();
+	    },
+	    error: function() {
+	        alert("데이터 로딩 실패");
+	    }
+	});
+
+	}) --%>
+    
+
 })
+
+
+    
+
 
 </script>
 <style>
@@ -52,31 +91,47 @@ $(function(){
 request.setCharacterEncoding("utf-8");
 String searchName=request.getParameter("searchName");
 hgRestDao dao=new hgRestDao();
+String lpg = request.getParameter("lpg");
+String ev = request.getParameter("ev");
+String pharm = request.getParameter("pharm");
+
 
 
 List<hgRestDto> list;
 
 	if (searchName != null && !searchName.trim().equals("")) {
-    	list = dao.getData(searchName); // 검색어가 있을 때
+    	list = dao.getData(searchName,lpg, ev, pharm); // 검색어가 있을 때
 	} else {
-    	list = dao.getRestList(); // 전체 조회
+    	list = dao.getLpgList(lpg, ev, pharm); // 전체 조회
 	}
-%>
-
+	
+	
+	%>
 <body>
 
 
-<div style="margin: 100px 100px;" class="container mt-3" >
+<div style="margin: 100px 100px;" class="container mt-3">
 
 <h3>고속도로 휴게소</h3>
     <br> 
+    <!--<%=request.getContextPath()%>/index  -->
     
     <form method="get" action="<%=request.getContextPath()%>/index.jsp">
     <input type="hidden" name="main" value="hg/hgRestInfo.jsp">
-    <input type="text" name="searchName" placeholder="검색할 휴게소 이름을 입력하세요." style="width:500px;" id="sName">
+    <input type="text" name="searchName" placeholder="검색할 휴게소 이름을 입력하세요." style="width:500px;" id="sName" value="<%= (searchName == null || searchName.trim().equals("")) ? "" : searchName %>">
     <button type="submit" class="btn btn-success" id="search">검색</button>
-</form>
     <br>
+    <label><input type="checkbox" name="lpg" value="Y" <%= "Y".equals(lpg) ? "checked" : "" %> class="a"> LPG충전소</label>
+    <label><input type="checkbox" name="ev" value="Y" <%= "Y".equals(ev) ? "checked" : "" %> class="a"> 전기차충전소</label>
+    <label><input type="checkbox" name="pharm" value="Y" <%= "Y".equals(pharm) ? "checked" : "" %> class="a"> 약국</label>
+
+</form>
+
+	
+    
+    <br>
+   
+    
 	<div id="map"></div>
 	<br><br>    
 	<div style="overflow-y: auto;  max-height: 400px; width:1220px;">	
@@ -93,9 +148,12 @@ List<hgRestDto> list;
 		 int i = 0;
 		for(hgRestDto dto:list)
 		{
+			
+			
 			%>
+			
 			<tr >
-				<td ><%=n++ %></td>
+				<td style="text-align:center" ><%=n++ %></td>
 				<td><a class="hg_num" href="<%=request.getContextPath()%>/index.jsp?main=details/info.jsp?hg_id=<%= dto.getId2() %>"><%= dto.getName() %></a></td>
 				<td><%=dto.getTel_no() %></td>				
 				<td><%=dao.getReview() %></td>
@@ -109,6 +167,15 @@ List<hgRestDto> list;
 
 
  <script>
+ 
+  /* document.querySelectorAll(".a").forEach(cb => {
+	    cb.addEventListener('change', () => {
+	        document.querySelector('form').submit();
+	    });
+	});  
+ */ 
+ 
+ 
 
  var searchName = "<%= searchName != null ? searchName.trim() : "" %>";
  var map = new kakao.maps.Map(document.getElementById('map'), {
@@ -152,7 +219,7 @@ List<hgRestDto> list;
 	            if (status === kakao.maps.services.Status.OK) {
 	                let roadAddr = result[0].address.address_name;
 	                
-	                if (searchName.trim() !== "") {
+	                if (searchName.trim() !== ""||$(".a").is(":checked")) {
 	                	let overlayDiv = document.createElement('div');
 	                	
 	                    overlayDiv.style.background = 'white';
@@ -182,7 +249,7 @@ List<hgRestDto> list;
 	                
 	                let cell = document.querySelector('td.addr-cell[data-index="' + index + '"]');
 	                if (cell) {
-	                    cell.textContent = roadAddr;
+	                    cell.textContent = roadAddr;s
 	                } else {
 	                    console.warn('주소 셀을 찾을 수 없음: index=' + index);
 	                }
