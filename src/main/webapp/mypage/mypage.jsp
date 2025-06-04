@@ -1,6 +1,8 @@
 
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@page import="user.UserDto"%>
+<%@page import="user.UserDao"%>
 <%
 String root = request.getContextPath();
 %>
@@ -166,22 +168,23 @@ header {
 </style>
 </head>
 <body>
-	<header>
-		<a href="<%=request.getContextPath()%>/index.jsp" id="logo"> <img
-			src="../imgway/way.png" alt="로고">
-		</a>
-		<nav class="main-nav">
-			<ul>
-				<li><a href="#">교통정보</a></li>
-				<li><a href="#">휴게소 찾기</a></li>
-				<li><a href="#">휴게소 소개</a></li>
-				<li><a href="<%=request.getContextPath()%>/restFoodMenu.jsp">푸드코트
-						정보</a></li>
-				<li><a href="#">고객센터</a></li>
-			</ul>
-		</nav>
-	</header>
+<%
+    request.setCharacterEncoding("UTF-8");
+    String username = (String) session.getAttribute("userId");
 
+    System.out.println(username);
+    
+    UserDao dao = new UserDao(); 
+    UserDto user = dao.getUserSession(username);
+    System.out.println(user.toString());
+    
+    String error = request.getParameter("error");
+%>
+<script>
+<% if (error != null && !error.isEmpty()) { %>
+    alert("<%= error %>");
+<% } %>
+</script>
 	<div class="tab-menu">
 		<button class="tab-btn active" onclick="showSection('edit')">회원정보수정</button>
 		<button class="tab-btn" onclick="showSection('activity')">나의활동내역</button>
@@ -190,7 +193,7 @@ header {
 
 	<div class="content">
 		<!-- 회원정보수정 -->
-		<form id="edit" action="#" method="post"
+		<form id="edit" action="<%=request.getContextPath()%>/mypage/editUser.jsp" method="post"
 			style="display: flex; flex-direction: column;">
 			<div class="profile-section">
 				<div class="profile-img"></div>
@@ -198,10 +201,14 @@ header {
 				<button type="submit" class="save-btn">완료</button>
 			</div>
 			<div class="form-section">
-				<input type="text" name="nickname" placeholder="닉네임" readonly /> <input
-					type="text" name="userid" placeholder="아이디" readonly /> <input
-					type="email" name="email" placeholder="이메일" readonly /> <input
-					type="text" name="birth" placeholder="생년월일" readonly />
+			    닉네임 <input type="text" name="nickname" placeholder="닉네임" readonly 
+			           value="<%= user != null ? user.getUsername() : "" %>" />
+			
+			    이메일 <input type="email" name="email" placeholder="이메일" readonly 
+			           value="<%= user != null ? user.getEmail() : "" %>" />
+				기존 비밀번호 <input type="password" name="oldPass" placeholder="비밀번호 확인" readonly required />
+				새로운 비밀번호 <input type="password" name="newPass" placeholder="새로운 비밀번호 입력" readonly />
+				새로운 비밀번호 재입력<input type="password" name="newPassConfirm" placeholder="새로운 비밀번호 재입력" readonly />
 			</div>
 		</form>
 
@@ -211,8 +218,9 @@ header {
 		</form>
 
 		<!-- 회원탈퇴 -->
-		<form id="withdraw" action="deleteUser.jsp" method="post"
+		<form id="withdraw" action="<%=request.getContextPath()%>/mypage/deleteUser.jsp" method="post"
 			style="display: none;">
+			<input type="password" name="password" placeholder="비밀번호를 입력해주세요" required />
 			<button type="submit" class="withdraw-btn"
 				onclick="return confirmWithdrawal(this)">회원 탈퇴하기</button>
 		</form>
@@ -247,6 +255,15 @@ header {
     function confirmWithdrawal(button) {
       return confirm('정말로 회원 탈퇴를 하시겠습니까?');
     }
+    
+    
+    document.getElementById('edit').addEventListener('submit', function(e) {
+    	  console.log("EDIT form submitted to:", this.action);
+    	});
+
+    	document.getElementById('withdraw').addEventListener('submit', function(e) {
+    	  console.log("WITHDRAW form submitted to:", this.action);
+    	});
   </script>
 </body>
 </html>
