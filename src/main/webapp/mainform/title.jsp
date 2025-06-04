@@ -11,172 +11,148 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #f4f4f4;
-      margin: 0;
-      padding: 20px;
+      font-family: Arial, sans-serif; /* 기본 글꼴 설정 */
+      background: #f4f4f4; /* 배경색 설정 */
+      margin: 0; /* 기본 여백 제거 */
+      padding: 20px; /* 본문 패딩 설정 */
     }
-
     nav.navbar {
-      background-color: #ffffff !important;
-      padding-top: 20px;
-      padding-bottom: 20px; 
+      background-color: #ffffff !important; /* 네비게이션 바 배경색 설정 */
+      padding-top: 20px; /* 상단 패딩 설정 */
+      padding-bottom: 20px; /* 하단 패딩 설정 */
+      width: 100%; /* 전체 너비 설정 */
     }
-
     .nav-item > a {
-      font-size: 20px;
-      font-weight: 700;
+      font-size: 20px; /* 링크 글꼴 크기 설정 */
+      font-weight: 700; /* 링크 글꼴 두께 설정 */
     }
-
     .nav-item.dropdown > a::after {
-      display: none !important;
+      display: none !important; /* 드롭다운 화살표 제거 */
     }
-
     .navbar-nav .dropdown-menu .dropdown-item {
-      font-size: 20px;
-      padding: 10px 20px;
+      font-size: 20px; /* 드롭다운 메뉴 아이템 글꼴 크기 설정 */
+      padding: 10px 20px; /* 드롭다운 아이템 패딩 설정 */
     }
-
     .navbar-nav .nav-link {
-      transition: background 0.4s ease, color 0.4s ease;
+      transition: background 0.4s ease, color 0.4s ease; /* 링크 호버 효과 설정 */
     }
-
     .navbar-nav .dropdown-menu .dropdown-item:hover,
     .navbar-nav .dropdown-menu .dropdown-item:focus {
-      background: linear-gradient(90deg, #f5f5f5, #e0e0e0);
-      color: #333 !important;
-      border: none;
+      background: linear-gradient(90deg, #f5f5f5, #e0e0e0); /* 드롭다운 아이템 호버 색상 */
+      color: #333 !important; /* 드롭다운 아이템 호버 글자 색상 */
+      border: none; /* 드롭다운 아이템 경계 제거 */
     }
-
     .navbar-nav .nav-link.dropdown-toggle:hover,
     .navbar-nav .nav-link.dropdown-toggle:focus {
-      background: linear-gradient(90deg, #f5f5f5, #e0e0e0);
-      color: #333 !important;
-      border-radius: 6px;
+      background: linear-gradient(90deg, #f5f5f5, #e0e0e0); /* 드롭다운 링크 호버 색상 */
+      color: #333 !important; /* 드롭다운 링크 호버 글자 색상 */
+      border-radius: 6px; /* 드롭다운 링크 경계 둥글게 설정 */
     }
-
     .navbar-nav {
       justify-content: center; /* 중앙 정렬 */
       flex-grow: 1; /* 남은 공간을 차지하도록 설정 */
     }
-
     #openModalBtn {
-      padding: 10px 20px;
-      font-size: 16px;
+      padding: 10px 20px; /* 로그인 버튼 패딩 설정 */
+      font-size: 16px; /* 로그인 버튼 글꼴 크기 설정 */
     }
-
     .modal {
-      display: none;
-      position: fixed;
-      z-index: 9999;
-      left: 0; top: 0;
-      width: 100%; height: 100%;
-      background: rgba(0, 0, 0, 0.5);
+      display: none; /* 모달 기본 숨김 */
+      position: fixed; /* 모달 고정 위치 설정 */
+      z-index: 9999; /* 모달의 z-index 설정 */
+      left: 0; top: 0; /* 모달 위치 설정 */
+      width: 100%; height: 100%; /* 모달 크기 설정 */
+      background: rgba(0, 0, 0, 0.5); /* 모달 배경 색상 및 투명도 설정 */
     }
-
     .modal-content {
-      background: #fff;
-      width: 100%;
-      max-width: 400px;
-      margin: 100px auto;
-      padding: 30px;
-      border-radius: 10px;
-      position: relative;
-      box-shadow: 0 0 15px rgba(0,0,0,0.2);
-      text-align: center;
+      background: #fff; /* 모달 내용 배경 색상 설정 */
+      width: 100%; /* 모달 내용 너비 설정 */
+      max-width: 400px; /* 모달 내용 최대 너비 설정 */
+      margin: 100px auto; /* 모달 내용 중앙 정렬 */
+      padding: 30px; /* 모달 내용 패딩 설정 */
+      border-radius: 10px; /* 모달 내용 경계 둥글게 설정 */
+      position: relative; /* 상대 위치 설정 */
+      box-shadow: 0 0 15px rgba(0,0,0,0.2); /* 모달 그림자 설정 */
+      text-align: center; /* 모달 내용 텍스트 중앙 정렬 */
     }
-
     .close {
-      position: absolute;
-      right: 20px;
-      top: 10px;
-      font-size: 24px;
-      cursor: pointer;
+      position: absolute; /* 닫기 버튼 위치 설정 */
+      right: 20px; /* 오른쪽 여백 설정 */
+      top: 10px; /* 위쪽 여백 설정 */
+      font-size: 24px; /* 닫기 버튼 글꼴 크기 설정 */
+      cursor: pointer; /* 커서 포인터로 변경 */
     }
-
     .tab-buttons {
-      display: flex;
-      justify-content: center;
-      margin-bottom: 20px;
+      display: flex; /* 버튼들을 flexbox로 배치 */
+      justify-content: center; /* 버튼 중앙 정렬 */
+      margin-bottom: 20px; /* 버튼 아래 여백 설정 */
     }
-
     .tab-buttons button {
-      flex: 1;
-      padding: 10px;
-      border: none;
-      cursor: pointer;
-      background: #eee;
-      font-weight: bold;
+      flex: 1; /* 버튼들 동일한 너비 설정 */
+      padding: 10px; /* 버튼 패딩 설정 */
+      border: none; /* 버튼 경계 제거 */
+      cursor: pointer; /* 커서 포인터로 변경 */
+      background: #eee; /* 버튼 배경 색상 설정 */
+      font-weight: bold; /* 버튼 글꼴 두께 설정 */
     }
-
     .tab-buttons button.active {
-      background: #007BFF;
-      color: white;
+      background: #007BFF; /* 활성화된 버튼 배경 색상 설정 */
+      color: white; /* 활성화된 버튼 글자 색상 설정 */
     }
-
     .form {
-      display: none;
+      display: none; /* 기본적으로 폼 숨김 */
     }
-
     .form.active {
-      display: block;
+      display: block; /* 활성화된 폼 표시 */
     }
-
     input {
-      display: block;
-      width: 100%;
-      max-width: 280px;
-      margin: 10px auto;
-      padding: 10px;
-      box-sizing: border-box;
+      display: block; /* 입력 필드 블록 요소로 설정 */
+      width: 100%; /* 입력 필드 너비 100% 설정 */
+      max-width: 280px; /* 입력 필드 최대 너비 설정 */
+      margin: 10px auto; /* 입력 필드 마진 설정 */
+      padding: 10px; /* 입력 필드 패딩 설정 */
+      box-sizing: border-box; /* 박스 크기 계산 방법 설정 */
     }
-
     button[type="submit"] {
-      width: 100%;
-      max-width: 280px;
-      margin: 10px auto;
-      padding: 12px;
-      background: #007BFF;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      font-size: 16px;
-      cursor: pointer;
+      width: 100%; /* 제출 버튼 너비 100% 설정 */
+      max-width: 280px; /* 제출 버튼 최대 너비 설정 */
+      margin: 10px auto; /* 제출 버튼 마진 설정 */
+      padding: 12px; /* 제출 버튼 패딩 설정 */
+      background: #007BFF; /* 제출 버튼 배경 색상 설정 */
+      color: white; /* 제출 버튼 글자 색상 설정 */
+      border: none; /* 제출 버튼 경계 제거 */
+      border-radius: 5px; /* 제출 버튼 경계 둥글게 설정 */
+      font-size: 16px; /* 제출 버튼 글꼴 크기 설정 */
+      cursor: pointer; /* 커서 포인터로 변경 */
     }
-
     .social-login {
-      margin-top: 20px;
+      margin-top: 20px; /* 소셜 로그인 버튼 위 여백 설정 */
     }
-
     .social-login button {
-      width: 100%;
-      max-width: 280px;
-      margin: 5px auto;
-      padding: 10px;
-      border: none;
-      border-radius: 4px;
-      font-weight: bold;
-      cursor: pointer;
+      width: 100%; /* 소셜 로그인 버튼 너비 100% 설정 */
+      max-width: 280px; /* 소셜 로그인 버튼 최대 너비 설정 */
+      margin: 5px auto; /* 소셜 로그인 버튼 마진 설정 */
+      padding: 10px; /* 소셜 로그인 버튼 패딩 설정 */
+      border: none; /* 소셜 로그인 버튼 경계 제거 */
+      border-radius: 4px; /* 소셜 로그인 버튼 경계 둥글게 설정 */
+      font-weight: bold; /* 소셜 로그인 버튼 글꼴 두께 설정 */
+      cursor: pointer; /* 커서 포인터로 변경 */
     }
-
     .kakao {
-      background: #FEE500;
-      color: #3C1E1E;
+      background: #FEE500; /* 카카오 로그인 버튼 배경 색상 설정 */
+      color: #3C1E1E; /* 카카오 로그인 버튼 글자 색상 설정 */
     }
-
     .naver {
-      background: #03C75A;
-      color: white;
+      background: #03C75A; /* 네이버 로그인 버튼 배경 색상 설정 */
+      color: white; /* 네이버 로그인 버튼 글자 색상 설정 */
     }
-
     .google {
-      background: #DB4437;
-      color: white;
+      background: #DB4437; /* Google 로그인 버튼 배경 색상 설정 */
+      color: white; /* Google 로그인 버튼 글자 색상 설정 */
     }
   </style>
 </head>
 <body>
-
 <!-- 상단 네비게이션 -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light px-4">
   <div class="container-fluid d-flex align-items-center justify-content-between">
@@ -219,77 +195,20 @@
       </ul>
     </div>
     <%
-  String userName = (String) session.getAttribute("userName");
-%>
-
-<% if (userName == null) { %>
-  <button id="openModalBtn" class="btn btn-primary">로그인 / 회원가입</button>
-<% } else { %>
-  <div class="d-flex align-items-center">
-    <span class="me-3"><strong><%= userName %></strong>님 환영합니다</span>
-    <a href="<%=root%>/login/logout.jsp" class="btn btn-outline-secondary">로그아웃</a>
-  </div>
-<% } %>
+      String userName = (String) session.getAttribute("userName");
+    %>
+    <% if (userName == null) { %>
+      <button id="openModalBtn" class="btn btn-primary">로그인 / 회원가입</button>
+    <% } else { %>
+      <div class="d-flex align-items-center">
+        <a href="<%=root%>/mypage/mypage.jsp" class="me-3 text-decoration-none fw-bold text-dark">
+          <%= userName %>님 환영합니다
+        </a>
+        <a href="<%=root%>/login/logout.jsp" class="btn btn-outline-secondary">로그아웃</a>
+      </div>
+    <% } %>
   </div>
 </nav>
-
-<style>
-/* ----------- 타이틀 ----------- */
-body {
-    font-family: 'Noto Sans KR', sans-serif;
-}
-
-nav.navbar {
-    background-color: #ffffff !important;
-}
-
-.nav-item > a {
-    font-size: 21px;
-    font-weight: 500;
-}
-
-.nav-item.dropdown > a::after {
-    display: none !important;
-}
-
-.login-font {
-    font-family: Arial, sans-serif !important;
-    font-size: 18px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-}
-
-.navbar-nav .dropdown-menu .dropdown-item {
-    font-size: 20px;
-    padding: 10px 20px;
-}
-
-.navbar-nav .nav-link {
-    transition: background 0.4s ease, color 0.4s ease;
-}
-
-.navbar-nav .dropdown-menu .dropdown-item:hover, .navbar-nav .dropdown-menu .dropdown-item:focus {
-    background: linear-gradient(90deg, #f5f5f5, #e0e0e0);
-    color: #333 !important;
-    border: none;
-    box-shadow: none;
-}
-
-.navbar-nav .nav-link.dropdown-toggle:hover, .navbar-nav .nav-link.dropdown-toggle:focus,
-.navbar-nav .nav-link.dropdown-toggle:active {
-    background: linear-gradient(90deg, #f5f5f5, #e0e0e0);
-    color: #333 !important;
-    border-radius: 6px;
-    outline: none !important;
-    box-shadow: none !important;
-    border: none !important;
-}
-
-.d-flex.align-items-center>ul.navbar-nav {
-    margin-left: 200px !important;
-}
-/* ----------- 타이틀 ----------- */
-</style>
 <!-- 로그인/회원가입 모달 -->
 <div id="loginModal" class="modal">
   <div class="modal-content">
@@ -298,7 +217,6 @@ nav.navbar {
       <button id="loginTab" class="active">로그인</button>
       <button id="signupTab">회원가입</button>
     </div>
-<!--  -->
     <form id="loginForm" action="<%=root %>/login/loginaction.jsp" method="post" class="form active">
       <input type="text" name="id" placeholder="아이디" required />
       <input type="password" name="password" placeholder="비밀번호" required />
@@ -309,7 +227,6 @@ nav.navbar {
         <button class="google">Google로 로그인</button>
       </div>
     </form>
-
     <form id="signupForm" action="<%=root %>/login/REGaction.jsp" method="post" class="form" onsubmit="return check(this)">
       <input type="text" name="name" placeholder="이름" required />
       <input type="text" name="id" placeholder="아이디" required />
@@ -320,7 +237,6 @@ nav.navbar {
     </form>
   </div>
 </div>
-
 <!-- JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 <script>
@@ -337,30 +253,25 @@ nav.navbar {
       dropdownInstance.hide();
     });
   });
-
   // 로그인 모달
   const modal = document.getElementById("loginModal");
   const openBtn = document.getElementById("openModalBtn");
   const closeBtn = document.getElementById("closeModalBtn");
-
   openBtn.onclick = () => modal.style.display = "block";
   closeBtn.onclick = () => modal.style.display = "none";
   window.onclick = e => {
     if (e.target === modal) modal.style.display = "none";
   };
-
   const loginTab = document.getElementById("loginTab");
   const signupTab = document.getElementById("signupTab");
   const loginForm = document.getElementById("loginForm");
   const signupForm = document.getElementById("signupForm");
-
   loginTab.onclick = () => {
     loginTab.classList.add("active");
     signupTab.classList.remove("active");
     loginForm.classList.add("active");
     signupForm.classList.remove("active");
   };
-
   signupTab.onclick = () => {
     signupTab.classList.add("active");
     loginTab.classList.remove("active");
