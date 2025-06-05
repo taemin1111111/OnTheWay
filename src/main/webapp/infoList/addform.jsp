@@ -79,7 +79,7 @@
 <div class="form-wrapper">
   <h2>공지사항 등록</h2>
 
-  <form id="eventForm" action="addaction.jsp" method="post">
+  <form id="eventForm" action="addaction.jsp" method="post" enctype="multipart/form-data">
     <!-- 이벤트명 -->
     <div class="mb-4">
       <label for="title">제목</label>

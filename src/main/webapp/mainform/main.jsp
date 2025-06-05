@@ -295,7 +295,7 @@ scale
 			List<EventDto> list = dao.getAllEvents();
 			HgDataDao hgDao = new HgDataDao();
 
-			int count = Math.min(3, list.size()); // 최대 3개까지만 반복
+			int count = Math.min(3, list.size()); //3개 띄우기
 			for (int i = 0; i < count; i++) {
 				EventDto dto = list.get(i);
 				String restName = "";

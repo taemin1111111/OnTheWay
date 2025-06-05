@@ -1,3 +1,6 @@
+<%@page import="java.io.File"%>
+<%@page import="com.oreilly.servlet.multipart.DefaultFileRenamePolicy"%>
+<%@page import="com.oreilly.servlet.MultipartRequest"%>
 <%@page import="hgDto.infoDto"%>
 <%@page import="hgDao.infoDao"%>
 <%@page import="java.sql.Date"%>
@@ -7,12 +10,18 @@
 
 <%
     request.setCharacterEncoding("utf-8");
+	String uploadPath = application.getRealPath("/infoimage"); // 실제 물리적 경로
+	MultipartRequest multi = new MultipartRequest(request, uploadPath, 10 * 1024 * 1024, "utf-8", new DefaultFileRenamePolicy());
 
-    // 폼 데이터 받기
-    String hgId =request.getParameter("hgId");
-    String title = request.getParameter("title");
-    String content = request.getParameter("content");
-    String photoName = request.getParameter("photoFilename");
+	String fileName = multi.getFilesystemName("photo");
+	String fullFilePath = uploadPath + File.separator + fileName;
+	System.out.println("파일 저장 위치: " + fullFilePath);
+	
+    // 폼 데이터 받기s
+    String hgId = multi.getParameter("hgId");
+	String title = multi.getParameter("title");
+	String content = multi.getParameter("content");
+	String photoName = multi.getFilesystemName("photo");
 
     /* System.out.println(hgId);
     System.out.println(title);

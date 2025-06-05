@@ -110,16 +110,16 @@
       <span><i class="bi bi-calendar-event"></i> <%= dto.getWriteday() == null ? "" : sdf.format(dto.getWriteday()) %></span>
       <span><i class="bi bi-eye"></i> 조회수: <%= dto.getReadcount() %></span>
     </div>
-    <% if(dto.getPhotoName() != null && !dto.getPhotoName().isEmpty()) { %>
-      <img class="post-image" alt="게시글 이미지" src="../infoimage/<%= dto.getPhotoName() %>">
-    <% } %>
+   
+	<img class="post-image" alt="" src="<%=request.getContextPath()%>/infoimage/<%= dto.getPhotoName() %>">
+    
     <div class="post-content">
       <%= dto.getContent() %>
     </div>
   </div>
 
   <div class="btn-list">
-    <button type="button" class="btn btn-outline-primary" onclick="location.href='infoList.jsp'">
+    <button type="button" class="btn btn-outline-primary" onclick="location.href='<%=request.getContextPath()%>/index.jsp?main=infoList/infoList.jsp'">
       <i class="bi bi-list"></i> 목록
     </button>
   </div>
