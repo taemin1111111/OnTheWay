@@ -11,12 +11,33 @@ public class hgRestDto {
 	private double latitude;
 	private double longitude;
 	private int id2;
+	private String lpg;
+	private String ev;
+	private String pharm;
 	
 	
 	
 	
 	
 	
+	public String getLpg() {
+		return lpg;
+	}
+	public void setLpg(String lpg) {
+		this.lpg = lpg;
+	}
+	public String getEv() {
+		return ev;
+	}
+	public void setEv(String ev) {
+		this.ev = ev;
+	}
+	public String getPharm() {
+		return pharm;
+	}
+	public void setPharm(String pharm) {
+		this.pharm = pharm;
+	}
 	public int getId2() {
 		return id2;
 	}

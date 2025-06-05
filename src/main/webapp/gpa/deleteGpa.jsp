@@ -12,7 +12,6 @@
 
     String userid = (String) session.getAttribute("userId");
     
-   
     GpaDao dao = new GpaDao();
 
     // 유효성 확인: 로그인 상태 + 자기 글만 삭제

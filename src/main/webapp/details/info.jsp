@@ -224,7 +224,7 @@
 					        <i class="bi bi-star-fill facility-icon"></i> 대표 메뉴
 					    </div>
 					    <div class="header-action">
-					        <a href="<%=request.getContextPath()%>/index.jsp?main=restFoodMenu.jsp?stdRestNm=<%= hgDetails.getRest_name() %>휴게소">모든 메뉴 보기</a>
+					        <a href="<%=request.getContextPath()%>/index.jsp?main=restFoodMenu.jsp&stdRestNm=<%= hgDetails.getRest_name() %>휴게소">모든 메뉴 보기</a>
 					    </div>
 					</div>
                     <div class="card-body">
