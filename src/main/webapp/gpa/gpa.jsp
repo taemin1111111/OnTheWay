@@ -460,38 +460,75 @@ document.addEventListener("DOMContentLoaded", function () {
 
    <!-- 별점 JS -->
    <script>
-document.addEventListener("DOMContentLoaded", function () {
-  const modalStars = document.querySelectorAll(".modal-star");
-  const input = document.getElementById("modalRatingValue");
 
-  modalStars.forEach((star, idx) => {
-    const half = star.querySelector(".half-hover");
-    const full = star.querySelector(".full-hover");
-    half.addEventListener("mouseenter", () => updateStars(idx + 0.5));
-    full.addEventListener("mouseenter", () => updateStars(idx + 1));
-    half.addEventListener("click", () => selectStars(idx + 0.5));
-    full.addEventListener("click", () => selectStars(idx + 1));
-  });
+   document.addEventListener("DOMContentLoaded", function () {
+	   const modalStars = document.querySelectorAll(".modal-star");
+	   const input = document.getElementById("modalRatingValue");
 
-  function updateStars(value) {
-    modalStars.forEach((c, i) => {
-      const overlay = c.querySelector(".star-overlay");
-      overlay.style.width = "0";
-      if (value >= i + 1) {
-        overlay.style.width = "100%";
-      } else if (value > i) {
-        overlay.style.width = "50%";
-      }
-    });
-  }
+	   let locked = false;
+	   let currentValue = 0;
 
-  function selectStars(value) {
-    input.value = value;
-    updateStars(value);
-  }
+	   modalStars.forEach((star, idx) => {
+	     const half = star.querySelector(".half-hover");
+	     const full = star.querySelector(".full-hover");
 
-  updateStars(0); // 초기 상태
-});
+	     // Hover
+	     half.addEventListener("mouseenter", () => {
+	       if (!locked) paintStars(idx + 0.5);
+	     });
+
+	     full.addEventListener("mouseenter", () => {
+	       if (!locked) paintStars(idx + 1);
+	     });
+
+	     // Click
+	     half.addEventListener("click", () => {
+	       if (!locked) {
+	         lockStars(idx + 0.5);
+	       } else {
+	         resetStars();
+	       }
+	     });
+
+	     full.addEventListener("click", () => {
+	       if (!locked) {
+	         lockStars(idx + 1);
+	       } else {
+	         resetStars();
+	       }
+	     });
+	   });
+
+	   function paintStars(value) {
+	     modalStars.forEach((star, i) => {
+	       const overlay = star.querySelector(".star-overlay");
+	       if (value >= i + 1) {
+	         overlay.style.width = "100%";
+	       } else if (value >= i + 0.5) {
+	         overlay.style.width = "50%";
+	       } else {
+	         overlay.style.width = "0";
+	       }
+	     });
+	   }
+
+	   function lockStars(value) {
+	     locked = true;
+	     currentValue = value;
+	     input.value = value.toFixed(1); // 💥 핵심: 소수점 포함해서 정확히 넘김
+	     paintStars(value);
+	   }
+
+	   function resetStars() {
+	     locked = false;
+	     currentValue = 0;
+	     input.value = "";
+	     paintStars(0);
+	   }
+
+	   // 초기 별 상태
+	   paintStars(0);
+	 });
 
 function showToast(message, type = "success") {
    const toast = document.getElementById("toast");
