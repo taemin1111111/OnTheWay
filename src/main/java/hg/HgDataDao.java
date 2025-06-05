@@ -4,6 +4,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import mysql.db.DbConnect;
 
 public class HgDataDao {
@@ -81,4 +86,69 @@ public class HgDataDao {
         }
         return hgData;
     }
+    
+    // 이벤트 작성 시 선택할 휴게소 목록 로드
+    public List<Map<String, String>> getAllRestStops() throws SQLException {
+        List<Map<String, String>> restStops = new ArrayList<>();
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        String sql = "SELECT id, rest_name FROM hg_data";
+
+        try {
+            conn = db.getConnection();
+            pstmt = conn.prepareStatement(sql);
+            rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                Map<String, String> restStop = new HashMap<>();
+                restStop.put("id", String.valueOf(rs.getInt("id"))); // hg_id
+                restStop.put("rest_name", rs.getString("rest_name")); // 휴게소명
+                restStops.add(restStop);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error fetching rest stop list: " + e.getMessage());
+            throw e;
+        } finally {
+            db.dbClose(rs, pstmt, conn);
+        }
+
+        return restStops;
+    }
+    
+    /**
+     * 휴게소 ID로 휴게소명을 조회
+     *
+     * @param hgId 휴게소 ID
+     * @return 해당 휴게소의 이름 (rest_name), 없으면 null
+     * @throws SQLException DB 오류 발생 시
+     */
+    public String getRestNameById(int hgId) throws SQLException {
+        String restName = null;
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        String sql = "SELECT rest_name FROM hg_data WHERE id = ?";
+
+        try {
+            conn = db.getConnection();
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, hgId);
+            rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                restName = rs.getString("rest_name");
+            }
+        } catch (SQLException e) {
+            System.err.println("Error fetching rest_name by ID: " + e.getMessage());
+            throw e;
+        } finally {
+            db.dbClose(rs, pstmt, conn);
+        }
+
+        return restName;
+    }
+    
 }
