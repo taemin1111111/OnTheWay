@@ -168,12 +168,12 @@ List<hgRestDto> list;
 
  <script>
  
-  /* document.querySelectorAll(".a").forEach(cb => {
+ /* document.querySelectorAll(".a").forEach(cb => {
 	    cb.addEventListener('change', () => {
 	        document.querySelector('form').submit();
 	    });
-	});  
- */ 
+	});   */
+ 
  
  
 

@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import event.EventDto;
 import hgDto.infoDto;
 import mysql.db.DbConnect;
 
@@ -22,7 +23,7 @@ public class infoDao {
 		PreparedStatement pstmt=null;
 		ResultSet rs=null;
 		
-		String sql="select * from infoboard order by id";
+		String sql="select * from infoboard";
 		
 		try {
 			pstmt=conn.prepareStatement(sql);
@@ -32,13 +33,13 @@ public class infoDao {
 			{
 				infoDto dto=new infoDto();
 				
-				dto.setId(rs.getString("id"));
+				dto.setId(rs.getInt("id"));
+				dto.setHgId(rs.getString("hgId"));
 				dto.setTitle(rs.getString("title"));
-				dto.setContent(rs.getString("content"));
-				dto.setName(rs.getString("name"));
+				dto.setContent(rs.getString("content"));				
 				dto.setPhotoName(rs.getString("photoname"));
 				dto.setWriteday(rs.getTimestamp("writeday"));
-				
+				dto.setReadcount(rs.getInt("readcount"));
 				
 				list.add(dto);
 				
@@ -81,9 +82,10 @@ public class infoDao {
 			
 			if(rs.next())
 			{
-				dto.setId(rs.getString("id"));
+				dto.setId(rs.getInt("id"));
+				dto.setHgId(rs.getString("hgId"));
 				dto.setTitle(rs.getString("title"));
-				dto.setName(rs.getString("name"));
+				
 				dto.setContent(rs.getString("content"));
 				dto.setWriteday(rs.getTimestamp("writeday"));
 				dto.setReadcount(rs.getInt("readcount"));
@@ -159,6 +161,34 @@ public class infoDao {
 		
 	}
 	
+	
+	public void insertInfo(infoDto dto) { //데이터 추가
+		Connection conn=db.getConnection();
+		PreparedStatement pstmt=null;
+
+		String sql = "INSERT INTO infoboard (hgId, title, content, photoname, readcount, writeday) "
+				+ "VALUES (?, ?, ?, ?,0, NOW())";
+
+		try {
+			pstmt=conn.prepareStatement(sql);
+
+			
+			pstmt.setString(1, dto.getHgId());
+			pstmt.setString(2, dto.getTitle());
+			pstmt.setString(3, dto.getContent());
+			pstmt.setString(4, dto.getPhotoName());
+			
+			pstmt.execute();
+			
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			db.dbClose(pstmt, conn);
+		}
+	}
+	
+
 	
 
 }
