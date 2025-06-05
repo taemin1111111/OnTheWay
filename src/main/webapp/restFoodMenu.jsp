@@ -15,134 +15,146 @@
 
 <style>
 /* 스타일은 기존 유지 */
+/* body */
 body {
-	font-family: 'Noto Sans KR', sans-serif;
-	background-color: #f9fafb;
-	padding: 40px;
-	color: #212529;
+  font-family: 'Noto Sans KR', sans-serif;
+  background-color: #f9fafb;
+  color: #212529;
+  padding: 0;
 }
 
+/* 타이틀 */
 h2 {
-	font-size: 28px;
-	font-weight: 600;
-	margin-top: 60px;
-	margin-bottom: 40px;
-	color: #1a1a1a;
-	text-align: center;
+  font-size: 2rem;
+  font-weight: 600;
+  margin-top: 4rem;
+  margin-bottom: 2.5rem;
+  color: #1a1a1a;
+  text-align: center;
 }
 
+/* label 기본 폰트 조절 */
 label {
-	font-weight: 500;
-	font-size: 16px;
+  font-weight: 500;
+  font-size: 1rem;
 }
 
+/* 자동완성 리스트 */
 #autocompleteList {
-	margin-top: 2px;
-	display: none;
-	position: absolute;
-	z-index: 1000;
-	width: 100%;
-	max-width: 280px;
+  margin-top: 0.25rem;
+  display: none;
+  position: absolute;
+  z-index: 1050;
+  width: 100%;
+  max-width: 280px;
 }
 
+/* 자동완성 아이템 */
 #autocompleteList .list-group-item {
-	cursor: pointer;
+  cursor: pointer;
 }
 
+/* 휴게소 선택 셀렉트 */
 #restSelect {
-	font-size: 16px;
-	padding: 8px 12px;
-	width: 100%;
-	max-width: 400px;
+  font-size: 1rem;
+  padding: 0.5rem 1rem;
+  width: auto;
+  max-width: 400px;
 }
 
+/* 메뉴 리스트: 그리드 */
 #menuList {
-	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-	gap: 15px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
 }
 
+/* 주문 패널 */
 #orderPanel {
-	max-height: 600px;
-	overflow-y: auto;
+  max-height: 600px;
+  overflow-y: auto;
 }
 
+/* 주문 타이틀 */
 #orderPanel h5 {
-	font-size: 20px;
-	font-weight: 500;
-	color: #333;
-	margin-bottom: 8px;
+  font-size: 1.25rem;
+  font-weight: 500;
+  color: #333;
+  margin-bottom: 0.5rem;
 }
 
+/* 메뉴 아이템 */
 .menu-item {
-	position: relative;
-	background-color: #fff;
-	border: 1px solid #d6d6d6;
-	padding: 16px;
-	border-radius: 10px;
-	transition: background-color 0.3s;
+  position: relative;
+  background-color: #fff;
+  border: 1px solid #d6d6d6;
+  padding: 1rem;
+  border-radius: 0.625rem; /* 10px */
+  transition: background-color 0.3s;
 }
 
 .menu-item:hover {
-	background-color: rgba(0, 0, 0, 0.1);
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
-/* 담기 버튼 초기 상태 숨김 */
+/* 담기 버튼 숨기기 */
 .menu-item .add-btn {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	display: none;
-	z-index: 10;
-	background-color: #212529;
-	color: #fff;
-	border: none;
-	padding: 10px 14px;
-	border-radius: 8px;
-	font-size: 14px;
-	font-weight: 600;
-	box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: none;
+  z-index: 10;
+  background-color: #212529;
+  color: #fff;
+  border: none;
+  padding: 0.625rem 0.875rem; /* 10px 14px */
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
-/* 마우스 호버 시 버튼 표시 */
 .menu-item:hover .add-btn {
-	display: block;
+  display: block;
 }
 
 .menu-item h5 {
-	font-size: 18px;
-	font-weight: 600;
-	color: #333;
-	margin-bottom: 8px;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 0.5rem;
 }
 
 .menu-item p {
-	font-size: 15px;
-	color: #555;
-	margin: 4px 0;
+  font-size: 0.9375rem;
+  color: #555;
+  margin: 0.25rem 0;
 }
 
+/* Best 아이콘 */
 .best {
-	color: #d9230f;
-	font-weight: bold;
-	margin-left: 6px;
+  color: #d9230f;
+  font-weight: bold;
+  margin-left: 0.375rem;
 }
 
+/* 메뉴 없을 때 메시지 */
 .no-data {
-	text-align: center;
-	font-size: 18px;
-	color: #888;
-	margin-top: 40px;
+  text-align: center;
+  font-size: 1.125rem;
+  color: #888;
+  margin-top: 2.5rem;
 }
 
-@media ( max-width : 576px) {
-	body {
-		padding: 20px;
-	}
-	#menuList {
-		grid-template-columns: 1fr;
-	}
+/* 모바일 대응 */
+@media (max-width: 576px) {
+  body {
+    padding: 1.25rem;
+  }
+  #menuList {
+    grid-template-columns: 1fr;
+  }
 }
 </style>
 
@@ -177,45 +189,44 @@ try {
     String channelKey = prop.getProperty("portone.channelKey");
 %>
 <h2>푸드코트 메뉴 현황</h2>
-<div class="mb-3 text-center">
-    <label for="restSearch" class="form-label">휴게소 검색:&nbsp;</label>
+<div class="mb-3 text-center d-flex flex-wrap justify-content-center align-items-center gap-3">
 
-    <!-- 🔧 감싸는 div 추가: 입력창과 자동완성 박스를 같이 묶고 position-relative 설정 -->
-    <div class="d-inline-block position-relative" style="width: 300px;">
-        <input type="text" id="restSearch" class="form-control" placeholder="휴게소명을 입력하세요">
-        <div id="autocompleteList" class="list-group position-absolute w-100" style="z-index:1000;"></div>
-    </div>
+  <label for="restSearch" class="form-label mb-0">휴게소 검색:&nbsp;</label>
 
-    &nbsp;&nbsp;&nbsp;
+  <div class="position-relative" style="width: 300px;">
+    <input type="text" id="restSearch" class="form-control" placeholder="휴게소명을 입력하세요" autocomplete="off">
+    <div id="autocompleteList" class="list-group position-absolute w-100"></div>
+  </div>
 
-    <label for="restSelect" class="form-label">휴게소 선택:&nbsp;</label>
-    <select id="restSelect" class="form-select d-inline-block w-auto">
-        <option value="">휴게소를 선택하세요</option>
-        <% for (Map.Entry<String, String> entry : restMap.entrySet()) { %>
-            <option value="<%= entry.getKey() %>"><%= entry.getValue() %></option>
-        <% } %>
-    </select>
+  <label for="restSelect" class="form-label mb-0 ms-3">휴게소 선택:&nbsp;</label>
+
+  <select id="restSelect" class="form-select w-auto" style="max-width:400px;">
+    <option value="">휴게소를 선택하세요</option>
+    <% for (Map.Entry<String, String> entry : restMap.entrySet()) { %>
+      <option value="<%= entry.getKey() %>"><%= entry.getValue() %></option>
+    <% } %>
+  </select>
 </div>
 
 <hr style="margin-top: 30px">
 
-<div class="d-flex justify-content-between gap-4" style="margin-top: 30px">
-    <!-- 왼쪽: 메뉴 리스트 -->
-    <div id="menuPanel" class="flex-grow-1" style="flex-basis: 60%; max-height: 600px; overflow-y: auto;">
-	    <div id="menuList"></div>
-	</div>
+<div class="d-flex justify-content-between gap-4 mt-4 flex-wrap">
+  <!-- 메뉴 리스트 -->
+  <div id="menuPanel" class="flex-grow-1" style="flex-basis: 60%; max-height: 600px; overflow-y: auto;">
+    <div id="menuList"></div>
+  </div>
 
-	<!-- 오른쪽: 주문 목록 -->
-	<div id="orderPanel" class="bg-white border rounded p-3" style="width: 35%; min-width: 300px;">
-	    <h5 class="mt-1 mb-2"><i class="bi bi-fork-knife"></i> 주문 메뉴</h5>
-	    <ul id="orderList" class="list-group my-3"></ul>
-	    <div id="orderSummary" class="text-end mb-3 fw-bold text-dark"></div>
-	    <div class="text-center">
-	    	<button class="btn btn-sm btn-success" style="font-size: 16px; " onclick="orderBtn()">결제하기</button>
-	    	&nbsp;
-	        <button class="btn btn-sm btn-danger" style="font-size: 16px; " onclick="clearOrder()">전체삭제</button>
-	    </div>
-	</div>
+  <!-- 주문 목록 -->
+  <div id="orderPanel" class="bg-white border rounded p-3" style="width: 35%; min-width: 300px;">
+    <h5 class="mt-1 mb-2"><i class="bi bi-fork-knife"></i> 주문 메뉴</h5>
+    <ul id="orderList" class="list-group my-3"></ul>
+    <div id="orderSummary" class="text-end mb-3 fw-bold text-dark"></div>
+    <div class="text-center">
+      <button class="btn btn-sm btn-success fs-5" onclick="orderBtn()">결제하기</button>
+      &nbsp;
+      <button class="btn btn-sm btn-danger fs-5" onclick="clearOrder()">전체삭제</button>
+    </div>
+  </div>
 </div>
 
 <!-- 자바스크립트 영역 -->

@@ -85,7 +85,7 @@
   top: 60px;             /* 메뉴 바로 아래 적당한 위치 지정, 필요에 따라 조절 */
   left: 50%;             /* 화면 가로 중앙 */
   transform: translateX(-50%);
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.85);
   border: none;
   border-radius: 10px;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
@@ -199,7 +199,9 @@
       display: none; /* 기본적으로 숨김 */
     }
     .form.active {
-      display: block; /* 활성화된 폼 표시 */
+      display: flex; /* 활성화된 폼 표시 */
+      flex-direction: column;
+      align-items: center;
     }
     input {
       display: block; /* 블록 요소로 설정 */
@@ -220,14 +222,15 @@
       border-radius: 5px; /* 모서리 둥글게 */
       font-size: 16px; /* 글자 크기 */
       cursor: pointer; /* 커서 포인터로 변경 */
+      text-align: center; /* 입력창 내부 텍스트 정렬 */
     }
     /* 소셜 로그인 버튼 스타일 */
     .social-login {
-      margin-top: 20px; /* 상단 여백 */
+      margin-top: 10px; /* 상단 여백 */
     }
     .social-login button {
       width: 100%; /* 전체 너비 */
-      max-width: 280px; /* 최대 너비 */
+      max-width: 250px; /* 최대 너비 */
       margin: 5px auto; /* 상단 하단 여백 및 중앙 정렬 */
       padding: 10px; /* 패딩 */
       border: none; /* 테두리 제거 */
@@ -235,6 +238,13 @@
       font-weight: bold; /* 글자 두께 */
       cursor: pointer; /* 커서 포인터로 변경 */
     }
+    .top-links {
+  width: 320px; /* 적당히 넉넉한 너비 설정 */
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-shrink: 0;
+}
     .kakao {
       background: #FEE500; /* 카카오 버튼 배경색 */
       color: #3C1E1E; /* 카카오 버튼 글자색 */
@@ -371,73 +381,90 @@
 <!-- JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> <!-- Bootstrap JS 링크 -->
 <script>
-  // 로그인 모달
-  const modal = document.getElementById("loginModal"); // 모달 요소
-  const openBtn = document.getElementById("openModalBtn"); // 로그인 버튼
-  const closeBtn = document.getElementById("closeModalBtn"); // 모달 닫기 버튼
-  openBtn.onclick = () => modal.style.display = "block"; // 모달 열기
-  closeBtn.onclick = () => modal.style.display = "none"; // 모달 닫기
+  // 로그인 모달 관련
+  const modal = document.getElementById("loginModal");
+  const openBtn = document.getElementById("openModalBtn");
+  const closeBtn = document.getElementById("closeModalBtn");
+
+  openBtn.onclick = () => modal.style.display = "block";
+  closeBtn.onclick = () => modal.style.display = "none";
+
   window.onclick = e => {
-    if (e.target === modal) modal.style.display = "none"; // 모달 외부 클릭 시 닫기
+    if (e.target === modal) modal.style.display = "none";
   };
-  const loginTab = document.getElementById("loginTab"); // 로그인 탭
-  const signupTab = document.getElementById("signupTab"); // 회원가입 탭
-  const loginForm = document.getElementById("loginForm"); // 로그인 폼
-  const signupForm = document.getElementById("signupForm"); // 회원가입 폼
+
+  const loginTab = document.getElementById("loginTab");
+  const signupTab = document.getElementById("signupTab");
+  const loginForm = document.getElementById("loginForm");
+  const signupForm = document.getElementById("signupForm");
+
   loginTab.onclick = () => {
-    loginTab.classList.add("active"); // 로그인 탭 활성화
-    signupTab.classList.remove("active"); // 회원가입 탭 비활성화
-    loginForm.classList.add("active"); // 로그인 폼 활성화
-    signupForm.classList.remove("active"); // 회원가입 폼 비활성화
+    loginTab.classList.add("active");
+    signupTab.classList.remove("active");
+    loginForm.classList.add("active");
+    signupForm.classList.remove("active");
   };
+
   signupTab.onclick = () => {
-    signupTab.classList.add("active"); // 회원가입 탭 활성화
-    loginTab.classList.remove("active"); // 로그인 탭 비활성화
-    signupForm.classList.add("active"); // 회원가입 폼 활성화
-    loginForm.classList.remove("active"); // 로그인 폼 비활성화
+    signupTab.classList.add("active");
+    loginTab.classList.remove("active");
+    signupForm.classList.add("active");
+    loginForm.classList.remove("active");
   };
+
   // 비밀번호 확인
   function check(form) {
-    const password = form.querySelector("input[name='password']").value; // 비밀번호
-    const passwordConfirm = form.querySelector("input[name='passwordConfirm']").value; // 비밀번호 확인
+    const password = form.querySelector("input[name='password']").value;
+    const passwordConfirm = form.querySelector("input[name='passwordConfirm']").value;
     if (password !== passwordConfirm) {
-      alert("비밀번호가 일치하지 않습니다."); // 비밀번호 불일치 경고
-      return false; // 폼 제출 중지
+      alert("비밀번호가 일치하지 않습니다.");
+      return false;
     }
-    return true; // 폼 제출 허용
+    return true;
   }
+
+  // 드롭다운 메뉴 관련
   document.addEventListener("DOMContentLoaded", function () {
-    // 모든 드롭다운 초기화
-    const dropdowns = document.querySelectorAll(".dropdown"); // 드롭다운 요소들
+    const dropdowns = document.querySelectorAll(".dropdown");
+
     dropdowns.forEach(dropdown => {
-      const toggle = dropdown.querySelector(".dropdown-toggle"); // 드롭다운 토글
-      const menu = dropdown.querySelector(".dropdown-menu"); // 드롭다운 메뉴
+      const toggle = dropdown.querySelector(".dropdown-toggle");
+      const menu = dropdown.querySelector(".dropdown-menu");
+
       toggle.addEventListener("click", function (e) {
-        e.preventDefault(); // 기본 클릭 동작 방지
-        // 열려있는 모든 드롭다운 닫기
+        e.preventDefault();
+
         dropdowns.forEach(d => {
           if (d !== dropdown) {
-            d.querySelector(".dropdown-menu").style.display = "none"; // 다른 드롭다운 숨김
-            d.querySelector(".dropdown-menu").style.opacity = "0"; // 다른 드롭다운 투명도 변경
+            const dMenu = d.querySelector(".dropdown-menu");
+            dMenu.style.display = "none";
+            dMenu.style.opacity = "0";
           }
         });
-        // 현재 드롭다운 토글
+
         if (menu.style.display === "flex") {
-          menu.style.display = "none"; // 드롭다운 숨김
-          menu.style.opacity = "0"; // 드롭다운 투명도 변경
+          menu.style.display = "none";
+          menu.style.opacity = "0";
         } else {
-          menu.style.display = "flex"; // 드롭다운 표시
-          menu.style.opacity = "1"; // 드롭다운 투명도 변경
+          menu.style.display = "flex";
+          menu.style.opacity = "1";
+
+          // ✅ 드롭다운 중앙 위치 고정
+          menu.style.position = "fixed";
+          menu.style.left = "50%";
+          menu.style.top = "60px";
+          menu.style.transform = "translateX(-50%)";
         }
       });
     });
-    // 다른 곳 클릭 시 모두 닫기
+
+    // 드롭다운 외부 클릭 시 모두 닫기
     window.addEventListener("click", function (e) {
-      if (!e.target.closest(".dropdown")) { // 드롭다운 외부 클릭 시
+      if (!e.target.closest(".dropdown")) {
         dropdowns.forEach(d => {
           const menu = d.querySelector(".dropdown-menu");
-          menu.style.display = "none"; // 드롭다운 숨김
-          menu.style.opacity = "0"; // 드롭다운 투명도 변경
+          menu.style.display = "none";
+          menu.style.opacity = "1";
         });
       }
     });

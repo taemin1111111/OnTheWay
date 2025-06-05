@@ -3,7 +3,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>세미프로젝트</title>	
+<title>OnTheWay</title>	
 
 <!-- 구글 폰트: Noto Sans KR -->
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
