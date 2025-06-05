@@ -1,185 +1,339 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%
+String root = request.getContextPath();
+%>
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-<meta charset="UTF-8">
-<title>세미프로젝트</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>고속도로 메인 페이지</title>
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+	rel="stylesheet" />
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
+<link
+	href="https://fonts.googleapis.com/css2?family=Krona+One&display=swap"
+	rel="stylesheet">
 <style>
-/* 공지사항, 이벤트 박스 크기 조절은 이걸로 조절해! */
-.info-box {
-	width: 40%; /* 이거 수정해! → 각각 박스 너비 */
-	padding: 20px; /* 이거 수정해! → 박스 안 여백 */
-	margin-right: 10%; /* 이거 수정해! → 박스 간격 */
-	min-height: 250px; /* 이거 수정해! → 최소 높이 */
-	max-height: 550x; /* 이거 수정해! → 최대 높이 */
-	overflow-y: auto; /* 이거 수정해! → 내용 넘칠 때 세로 스크롤 */
-	box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
-	background-color: white;
+body {
+	font-family: 'Noto Sans KR', Arial, sans-serif; /* 해피니스 산스 대체 폰트 */
+	background: #f5f6f5;
+	margin: 0;
+	padding-top: 0px;
+	position: relative;
+}
+
+.container {
+	width: 80%;
+	margin: 0 auto;
+	padding: 20px 0;
+}
+
+.main-title {
+	text-align: center;
+	margin-bottom: 40px;
+}
+
+.main-title h1 {
+	font-size: 28px;
+	font-weight: 700;
+	color: #333;
+}
+
+.main-title p {
+	font-size: 16px;
+	color: #666;
+}
+
+.event-section, .notice-section {
+	background: #fff;
 	border-radius: 8px;
-	display: inline-block;
-	vertical-align: top;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+	padding: 20px;
+	margin-bottom: 30px;
+	margin-top: 100px
 }
 
-.info-box:last-child {
-	margin-right: 0;
+.notice-section {
+	max-width: 600px;
+	width: 90%;
+	margin: 0 auto 30px;
 }
 
-.info-box h6 {
-	text-align: center;
-	margin-bottom: 15px;
-	font-size: 30px; /* 이거 수정해! → 제목 글씨 크기 */
+.section-title {
+	font-size: 24px;
 	font-weight: 700;
-	color: #222; /* 이거 수정해! → 제목 색상 */
+	color: #333;
+	margin-bottom: 20px;
+	text-align: center;
 }
 
-.info-box table {
+.event-list {
+	display: flex;
+	justify-content: space-between;
+	flex-wrap: wrap;
+}
+
+.event-card {
+	width: 32%;
+	border: 1px solid #eee;
+	border-radius: 8px;
+	overflow: hidden;
+	text-align: center;
+	transition: transform 0.2s;
+}
+
+.event-card:hover {
+	transform: translateY(-5px);
+}
+
+.event-card img {
 	width: 100%;
-	border-collapse: collapse;
-	margin-bottom: 0;
+	height: 200px;
+	object-fit: cover;
 }
 
-.info-box table thead th {
-	font-size: 15px; /* 이거 수정해! → 테이블 헤더 글씨 크기 */
-	font-weight: 700;
-	color: #444; /* 이거 수정해! → 테이블 헤더 색상 */
-	border-bottom: 1px solid #ddd;
-	padding: 8px 0;
-	text-align: left;
+.event-card .event-info {
+	padding: 15px;
 }
 
-.info-box table thead th:nth-child(2) {
+.event-card .event-info h5 {
+	font-size: 16px;
+	font-weight: 600;
+	color: #333;
+	margin-bottom: 10px;
+}
+
+.event-card .event-info p {
+	font-size: 14px;
+	color: #666;
+	margin: 0;
+}
+
+.more-btn {
+	display: block;
 	text-align: center;
+	margin-top: 20px;
 }
 
-.info-box table tbody tr td a {
-	font-size: 15px; /* 이거 수정해! → 링크 글씨 크기 */
-	font-weight: 500;
-	color: #333; /* 이거 수정해! → 링크 색상 */
-	text-decoration: none;
-}
-
-.info-box table tbody tr td {
-	vertical-align: middle;
-	font-size: 18px; /* 이거 수정해! → 본문 글씨 크기 */
-	color: #666; /* 이거 수정해! → 본문 글자 색 */
-	padding: 7px 0;
-	border-bottom: 1px solid #f1f1f1;
-	text-align: left;
-}
-
-.info-box table tbody tr:hover {
-	background-color: #f9f9f9;
-}
-
-.center-btn-wrap {
-	text-align: center;
-	margin-top: 15px;
-}
-
-.all-notice-btn {
+.more-btn a {
 	display: inline-flex;
 	align-items: center;
 	gap: 5px;
-	font-size: 20px; /* 이거 수정해! → 버튼 글씨 크기 */
+	font-size: 16px;
 	color: #2c7a2c;
-	cursor: pointer;
 	text-decoration: none;
-	background: none;
-	border: none;
 }
 
-.all-notice-btn:hover {
+.more-btn a:hover {
 	color: #1b4d1b;
 	text-decoration: underline;
 }
 
-.all-notice-btn i {
-	font-size: 24px;
+.notice-table {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.notice-table th, .notice-table td {
+	padding: 12px;
+	text-align: left;
+	border-bottom: 1px solid #eee;
+}
+
+.notice-table th {
+	font-size: 14px;
+	font-weight: 700;
+	color: #444;
+}
+
+.notice-table td {
+	font-size: 14px;
+	color: #666;
+}
+
+.notice-table td a {
+	color: #333;
+	text-decoration: none;
+}
+
+.notice-table td a:hover {
+	text-decoration: underline;
 }
 
 .footer {
-	margin-top: 50px;
+	background: #eee;
 	padding: 20px;
-	background-color: #eee;
 	text-align: center;
+	margin-top: 50px;
 }
 
-.main-wrap {
+.hero-section {
+	position: relative;
+	width: 100%;
+	height: 400px;
+	overflow: hidden;
+}
+
+.hero-section img {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	animation: zoomIn 15s ease-in-out forwards;
+	z-index: 1;
+}
+
+.hero-text {
+	position: absolute;
+	top: 20%;
 	width: 100%;
 	text-align: center;
-	margin-top: 40px;
+	z-index: 2;
+	color: white;
+	text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+.hero-text h1 {
+	font-family: 'Krona One', sans-serif;
+	font-size: 48px;
+	font-weight: 800;
+	margin: 0;
+}
+
+.hero-text p {
+	font-size: 20px;
+	margin-top: 10px;
+}
+
+@
+keyframes zoomIn { 0% {
+	transform: scale(1);
+}
+100
+
+
+
+
+%
+{
+transform
+
+
+
+
+:
+
+
+
+
+scale
+
+
+(
+
+
+
+
+1
+
+
+.1
+
+
+
+
+)
+
+
+;
+}
 }
 </style>
-
-
 </head>
 <body>
-<jsp:include page="photo.jsp" />
-	<div style="margin: 30px 0 10px 0; text-align: center;">
-		<h5 style="font-size: 28px; font-weight: 700;">세미프로젝트</h5>
-		<p style="font-size: 17px;">프로젝트 메인 화면 구성중입니다</p>
+	<!-- 메인 히어로 섹션 -->
+	<div class="hero-section">
+		<img src="<%=root%>/imgway/wayway.jpg" alt="고속도로 이미지">
+		<div class="hero-text">
+			<h1>OnTheWay</h1>
+			<p>전국 고속도로 정보.</p>
+		</div>
 	</div>
-	<div class="main-wrap">
-		<div class="info-box">
-			<h6>공지사항</h6>
-			<table>
-				<thead>
-					<tr>
-						<th>제목</th>
-						<th>날짜</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td><a href="#">공지사항 제목 1</a></td>
-						<td style="text-align: center;">2024-05-22</td>
-					</tr>
-					<tr>
-						<td><a href="#">공지사항 제목 2</a></td>
-						<td style="text-align: center;">2024-05-21</td>
-					</tr>
-					<tr>
-						<td><a href="#">공지사항 제목 3</a></td>
-						<td style="text-align: center;">2024-05-20</td>
-					</tr>
-				</tbody>
-			</table>
-			<div class="center-btn-wrap">
-				<a href="#" class="all-notice-btn"> <i class="bi bi-plus-circle"></i>
-					전체 공지사항 보기
-				</a>
+
+	<!-- 이벤트 섹션 -->
+	<div class="event-section">
+		<div class="section-title">이벤트</div>
+		<div class="event-list">
+			<div class="event-card">
+				<img src="<%=root%>/imgway/ye.jpg" alt="이벤트 1">
+				<div class="event-info">
+					<h5>시흥 연꽃 축제</h5>
+					<p>2025.07.22(화) ~ 2025.07.23(수)</p>
+				</div>
+			</div>
+			<div class="event-card">
+				<img src="<%=root%>/imgway/ma.jpg" alt="이벤트 2">
+				<div class="event-info">
+					<h5>논산 딸기 축제</h5>
+					<p>2025.03.27(목) ~ 2025.03.30(일)</p>
+				</div>
+			</div>
+			<div class="event-card">
+				<img src="<%=root%>/imgway/su.png" alt="이벤트 3"
+					style="width: 300px; height: 300px;">
+				<div class="event-info">
+					<h5>여수 밤 바다 축제</h5>
+					<p>2025.08.22(금) ~ 2025.08.24(일)</p>
+				</div>
 			</div>
 		</div>
-		<div class="info-box">
-			<h6>이벤트</h6>
-			<table>
-				<thead>
-					<tr>
-						<th>제목</th>
-						<th>날짜</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td><a href="#">이벤트 제목 1</a></td>
-						<td style="text-align: center;">2025-06-01</td>
-					</tr>
-					<tr>
-						<td><a href="#">이벤트 제목 2</a></td>
-						<td style="text-align: center;">2025-05-28</td>
-					</tr>
-					<tr>
-						<td><a href="#">이벤트 제목 3</a></td>
-						<td style="text-align: center;">2025-05-20</td>
-					</tr>
-				</tbody>
-			</table>
-			<div class="center-btn-wrap">
-				<a href="#" class="all-notice-btn"> <i class="bi bi-plus-circle"></i>
-					전체 이벤트 보기
-				</a>
-			</div>
+		<div class="more-btn">
+			<a href="<%=root%>/eventList.jsp"><i
+				class="bi bi-arrow-right-circle"></i> 더 보기</a>
 		</div>
+	</div>
+
+	<!-- 공지사항 섹션 -->
+	<div class="notice-section">
+		<div class="section-title">공지사항</div>
+		<table class="notice-table">
+			<thead>
+				<tr>
+					<th>제목</th>
+					<th>등록일</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td><a href="#">TLS 1.0, TLS 1.1 비활성화 관련 공지</a></td>
+					<td>2025.04.18</td>
+				</tr>
+				<tr>
+					<td><a href="#">고속도로 공공데이터포털 파일 저장장치 서비스 전환 관련 알림</a></td>
+					<td>2025.04.10</td>
+				</tr>
+				<tr>
+					<td><a href="#">고속도로 공공데이터 포털 순연(서비스 일부) 알림</a></td>
+					<td>2025.04.05</td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="more-btn">
+			<a href="<%=root%>/noticeList.jsp"><i class="bi bi-plus-circle"></i>
+				전체 공지사항 보기</a>
+		</div>
+	</div>
+	</div>
+
+	<!-- 푸터 -->
+	<div class="footer">
+		<p>© 2025 현대백화점. All Rights Reserved.</p>
 	</div>
 </body>
 </html>

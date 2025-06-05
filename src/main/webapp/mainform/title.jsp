@@ -79,30 +79,25 @@
     .main-nav .dropdown-toggle::after {
       display: none !important; /* 드롭다운 화살표 제거 */
     }
-    .main-nav .dropdown-menu {
-      display: none; /* 기본적으로 드롭다운 숨김 */
-      position: fixed; /* 고정 위치 */
-      top: 80px; /* 위치 조정 */
-      left: 50%;
-      transform: translateX(-50%); /* 중앙 정렬 */
-      background: rgba(255, 255, 255, 0.9); /* 배경색 */
-      border: none;
-      border-radius: 10px; /* 모서리 둥글게 */
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15); /* 그림자 효과 */
-      padding: 20px; /* 패딩 */
-      min-width: 800px; /* 최소 너비 */
-      overflow-x: auto; /* 수평 스크롤 가능 */
-      display: flex; /* 플렉스박스 레이아웃 사용 */
-      align-items: center; /* 수직 중앙 정렬 */
-      justify-content: space-between; /* 요소 간격 조정 */
-      transition: opacity 0.3s ease; /* 투명도 변화 효과 */
-      opacity: 0; /* 초기 투명도 */
-      z-index: 1000; /* 최상위 레이어 */
-    }
-    .main-nav .dropdown:hover .dropdown-menu {
-      display: flex; /* 호버 시 드롭다운 표시 */
-      opacity: 1; /* 호버 시 투명도 변경 */
-    }
+.main-nav .dropdown-menu {
+  display: none;
+  position: fixed;        /* 화면 기준 고정 */
+  top: 60px;             /* 메뉴 바로 아래 적당한 위치 지정, 필요에 따라 조절 */
+  left: 50%;             /* 화면 가로 중앙 */
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.95);
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  padding: 20px;
+  min-width: 600px;
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+.dropdown:hover .dropdown-menu {
+  display: flex !important;
+}
     /* 드롭다운 메뉴 내용 스타일 */
     .dropdown-menu .menu-content {
       display: flex; /* 플렉스박스 레이아웃 사용 */
@@ -282,7 +277,6 @@
           <li class="menu-content">
             <div class="menu-text">
               <h4>휴게소 소개</h4>
-              <p><a class="dropdown-item" href="#">휴게소 역사</a></p>
               <p><a class="dropdown-item" href="#">휴게소 특징</a></p>
             </div>
             <div class="menu-image" style="background-image: url('https://via.placeholder.com/300x200');"></div>
