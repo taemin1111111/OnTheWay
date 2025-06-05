@@ -300,6 +300,35 @@ public class GpaDao {
             db.dbClose(pstmt1, conn);
         }
     }
+    public void manusRecommendation(String userId, String renum) {
+        Connection conn = db.getConnection();
+        PreparedStatement pstmt1 = null;
+        PreparedStatement pstmt2 = null;
+
+        String sql1 = "UPDATE review SET good = good - 1 WHERE num = ?";
+        String sql2 = "INSERT INTO good (renum, user_id) VALUES (?, ?)";
+
+        try {
+            conn.setAutoCommit(false); // 트랜잭션 처리
+
+            pstmt1 = conn.prepareStatement(sql1);
+            pstmt1.setString(1, renum);
+            pstmt1.executeUpdate();
+
+            pstmt2 = conn.prepareStatement(sql2);
+            pstmt2.setString(1, renum);
+            pstmt2.setString(2, userId);
+            pstmt2.executeUpdate();
+
+            conn.commit();
+        } catch (SQLException e) {
+            try { conn.rollback(); } catch (SQLException ex) { ex.printStackTrace(); }
+            e.printStackTrace();
+        } finally {
+            db.dbClose(pstmt2, null);
+            db.dbClose(pstmt1, conn);
+        }
+    }
  // 평점 소유자인지 확인
     public boolean isOwnerOfReview(String num, String userid) {
         boolean result = false;
