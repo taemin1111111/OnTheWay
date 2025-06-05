@@ -1,3 +1,7 @@
+<%@page import="hg.HgDataDao"%>
+<%@page import="event.EventDao"%>
+<%@page import="java.util.List"%>
+<%@page import="event.EventDto"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%
@@ -220,9 +224,13 @@ keyframes zoomIn { 0% {
 
 
 
+
+
 %
 {
 transform
+
+
 
 
 
@@ -232,7 +240,11 @@ transform
 
 
 
+
+
 scale
+
+
 
 
 (
@@ -240,7 +252,11 @@ scale
 
 
 
+
+
 1
+
+
 
 
 .1
@@ -248,7 +264,11 @@ scale
 
 
 
+
+
 )
+
+
 
 
 ;
@@ -270,31 +290,45 @@ scale
 	<div class="event-section">
 		<div class="section-title">이벤트</div>
 		<div class="event-list">
-			<div class="event-card">
-				<img src="<%=root%>/imgway/ye.jpg" alt="이벤트 1">
-				<div class="event-info">
-					<h5>시흥 연꽃 축제</h5>
-					<p>2025.07.22(화) ~ 2025.07.23(수)</p>
-				</div>
+			<%
+			EventDao dao = new EventDao();
+			List<EventDto> list = dao.getAllEvents();
+			HgDataDao hgDao = new HgDataDao();
+
+			int count = Math.min(3, list.size()); // 최대 3개까지만 반복
+			for (int i = 0; i < count; i++) {
+				EventDto dto = list.get(i);
+				String restName = "";
+				try {
+					restName = hgDao.getRestNameById(Integer.parseInt(dto.getHgId()));
+				} catch (Exception e) {
+					restName = "알 수 없음";
+				}
+			%>
+			<div class="col-md-4 d-flex mb-4">
+				<a href="index.jsp?main=event/eventDetail.jsp?id=<%=dto.getId()%>"
+					class="event-card w-100"> <%
+ if (dto.getPhoto() != null && !dto.getPhoto().isEmpty()) {
+ %>
+					<img src="eventImage/<%=dto.getPhoto()%>" class="event-photo"
+					alt="이벤트 이미지"> <%
+ }
+ %>
+					<div class="event-title"><%=dto.getTitle()%></div>
+					<div class="event-info">
+						휴게소: <strong><%=restName%></strong>
+					</div>
+					<div class="event-info">
+						기간:
+						<%=dto.getStartday()%>
+						~
+						<%=dto.getEndday()%></div>
+				</a>
 			</div>
-			<div class="event-card">
-				<img src="<%=root%>/imgway/ma.jpg" alt="이벤트 2">
-				<div class="event-info">
-					<h5>논산 딸기 축제</h5>
-					<p>2025.03.27(목) ~ 2025.03.30(일)</p>
-				</div>
-			</div>
-			<div class="event-card">
-				<img src="<%=root%>/imgway/su.png" alt="이벤트 3"
-					style="width: 300px; height: 300px;">
-				<div class="event-info">
-					<h5>여수 밤 바다 축제</h5>
-					<p>2025.08.22(금) ~ 2025.08.24(일)</p>
-				</div>
-			</div>
-		</div>
-		<div class="more-btn">
-			<a href="<%=root%>/eventList.jsp"><i
+			<%
+			}
+			%>
+			<a href="<%=root%>/index.jsp?main=event/eventList.jsp"><i
 				class="bi bi-arrow-right-circle"></i> 더 보기</a>
 		</div>
 	</div>
