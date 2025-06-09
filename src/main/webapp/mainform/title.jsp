@@ -199,10 +199,9 @@
   <nav class="main-nav">
   <ul>
     <li><a href="https://www.roadplus.co.kr/main/main.do" target="_blank">교통정보</a></li>
-    <li><a href="#">휴게소 소개</a></li>
     <li><a href="<%=root%>/index.jsp?main=hg/hgRestInfo.jsp">휴게소 찾기</a></li>
     <li><a href="<%=root%>/index.jsp?main=restFoodMenu.jsp">푸드코트 정보</a></li>
-    <li><a href="#">고객센터</a></li>
+    <li><a href="<%=root%>/index.jsp?main=Question/QuestionForm.jsp">고객센터</a></li>
   </ul>
 </nav>
   <%
@@ -232,6 +231,7 @@
     <form id="loginForm" action="<%=root %>/login/loginaction.jsp" method="post" class="form active"> <!-- 로그인 폼 -->
       <input type="text" name="id" placeholder="아이디" required /> <!-- 아이디 입력 필드 -->
       <input type="password" name="password" placeholder="비밀번호" required /> <!-- 비밀번호 입력 필드 -->
+      <input type="hidden" name="redirect" id="redirectInput" />
       <button type="submit">로그인</button> <!-- 로그인 버튼 -->
       <div class="social-login"> <!-- 소셜 로그인 버튼들 -->
         <button class="kakao">카카오로 로그인</button>
@@ -241,10 +241,12 @@
     </form>
     <form id="signupForm" action="<%=root %>/login/REGaction.jsp" method="post" class="form" onsubmit="return check(this)"> <!-- 회원가입 폼 -->
       <input type="text" name="name" placeholder="이름" required /> <!-- 이름 입력 필드 -->
-      <input type="text" name="id" placeholder="아이디" required /> <!-- 아이디 입력 필드 -->
+      <input type="text" name="id" placeholder="아이디" required onblur="checkDuplicateId(this.value)" />
+	  <span id="idCheckMessage" style="color:red;"></span>
       <input type="email" name="email" placeholder="이메일" required /> <!-- 이메일 입력 필드 -->
       <input type="password" name="password" placeholder="비밀번호" required /> <!-- 비밀번호 입력 필드 -->
       <input type="password" name="passwordConfirm" placeholder="비밀번호 확인" required /> <!-- 비밀번호 확인 필드 -->
+      <input type="hidden" name="redirect" id="redirectInput" />
       <button type="submit">회원가입</button> <!-- 회원가입 버튼 -->
     </form>
   </div>
@@ -293,6 +295,29 @@
     }
     return true;
   }
+  document.addEventListener("DOMContentLoaded", () => {
+	  const redirectUrl = window.location.href;
+	  const redirectInputs = document.querySelectorAll("input[name='redirect']");
+	  redirectInputs.forEach(input => input.value = redirectUrl);
+	});
+
+  function checkDuplicateId(userId) {
+	  if (!userId) return;
+	  fetch(`<%=request.getContextPath()%>/login/checkId.jsp?userId=` + encodeURIComponent(userId))
+	    .then(res => res.json())
+	    .then(data => {
+	      const message = document.getElementById("idCheckMessage");
+	      if (data.exists) {
+	        message.textContent = "이미 사용 중인 아이디입니다.";
+	      } else {
+	        message.textContent = "사용 가능한 아이디입니다.";
+	        message.style.color = "green";
+	      }
+	    })
+	    .catch(err => {
+	      console.error("ID 중복 확인 중 오류 발생:", err);
+	    });
+	}
 </script>
 </body>
 </html>
