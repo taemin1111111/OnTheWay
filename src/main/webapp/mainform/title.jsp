@@ -233,11 +233,6 @@
       <input type="password" name="password" placeholder="비밀번호" required /> <!-- 비밀번호 입력 필드 -->
       <input type="hidden" name="redirect" id="redirectInput" />
       <button type="submit">로그인</button> <!-- 로그인 버튼 -->
-      <div class="social-login"> <!-- 소셜 로그인 버튼들 -->
-        <button class="kakao">카카오로 로그인</button>
-        <button class="naver">네이버로 로그인</button>
-        <button class="google">Google로 로그인</button>
-      </div>
     </form>
     <form id="signupForm" action="<%=root %>/login/REGaction.jsp" method="post" class="form" onsubmit="return check(this)"> <!-- 회원가입 폼 -->
       <input type="text" name="name" placeholder="이름" required /> <!-- 이름 입력 필드 -->

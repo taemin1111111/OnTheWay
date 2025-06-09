@@ -374,18 +374,22 @@ body {
 	</div>
 	
 	<div class="search-bar-container">
-	  <form action="<%=root%>/searchResults.jsp" method="get" class="d-flex justify-content-center align-items-center">
-	    <input 
-	      type="text" 
-	      name="query" 
-	      class="form-control search-input" 
-	      placeholder="검색어를 입력하세요" 
-	      aria-label="검색어" 
-	      required />
-	    <button type="submit" class="btn btn-success ms-2">
-	      <i class="bi bi-search"></i> 검색
-	    </button>
-	  </form>
+	<form action="<%=root%>/index.jsp" method="get" class="d-flex justify-content-center align-items-center">
+	  <input type="hidden" name="main" value="hg/hgRestInfo.jsp" />
+	  
+	  <input 
+	    type="text" 
+	    name="searchName" 
+	    class="form-control search-input" 
+	    placeholder="검색어를 입력하세요" 
+	    aria-label="검색어" 
+	    required 
+	  />
+	  
+	  <button type="submit" class="btn btn-success ms-2">
+	    <i class="bi bi-search"></i> 검색
+	  </button>
+	</form>
 	</div>
 
 	<div class="container"> <%-- 이 `div` 태그가 이제 메인 컨텐츠를 감싸줍니다. --%>
