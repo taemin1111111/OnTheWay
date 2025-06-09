@@ -516,8 +516,8 @@ document.addEventListener("DOMContentLoaded", function () { showToast("이미 �
                     </div>
 
                     <div class="modal-footer">
+                    	<button type="submit" class="btn btn-submit">등록하기</button>
                         <button type="button" class="btn btn-cancel" data-bs-dismiss="modal">취소</button>
-                        <button type="submit" class="btn btn-submit">등록하기</button>
                     </div>
                 </form>
             </div>
