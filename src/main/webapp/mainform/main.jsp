@@ -230,8 +230,8 @@ body {
 
 .hero-section {
 	position: relative;
-	width: 100%; /* 너비를 100%로 설정하여 화면 전체 차지 */
-	height: 400px;
+	width: 1920px; /* 너비를 100%로 설정하여 화면 전체 차지 */
+	height: 500px;
 	overflow: hidden;
 }
 
@@ -242,7 +242,7 @@ body {
 	width: 100%;
 	height: 100%;
 	object-fit: cover;
-	animation: zoomIn 15s ease-in-out forwards;
+	 animation: zoomIn 5s ease-in-out infinite alternate;
 	z-index: 1;
 }
 
@@ -350,7 +350,7 @@ body {
         font-size: 36px; /* 모바일에서 제목 크기 조정 */
     }
     .hero-text p {
-        font-size: 16px; /* 모바일에서 부제목 크기 조정 */
+        font-size: 20px; /* 모바일에서 부제목 크기 조정 */
     }
     .search-input {
         max-width: 80vw; /* 모바일에서 검색창 너비 조정 */
@@ -366,30 +366,26 @@ body {
 </head>
 <body>
 	<div class="hero-section">
-		<img src="<%=root%>/imgway/wayway.jpg" alt="고속도로 이미지">
+		<img src="<%=root%>/imgway/highway.jpg" alt="고속도로 이미지">
 		<div class="hero-text">
 			<h1>OnTheWay</h1>
-			<p>전국 고속도로 정보.</p>
+			<p>전국 고속도로 정보</p>
 		</div>
 	</div>
 	
 	<div class="search-bar-container">
-	<form action="<%=root%>/index.jsp" method="get" class="d-flex justify-content-center align-items-center">
-	  <input type="hidden" name="main" value="hg/hgRestInfo.jsp" />
-	  
-	  <input 
-	    type="text" 
-	    name="searchName" 
-	    class="form-control search-input" 
-	    placeholder="검색어를 입력하세요" 
-	    aria-label="검색어" 
-	    required 
-	  />
-	  
-	  <button type="submit" class="btn btn-success ms-2">
-	    <i class="bi bi-search"></i> 검색
-	  </button>
-	</form>
+	  <form action="<%=root%>/searchResults.jsp" method="get" class="d-flex justify-content-center align-items-center">
+	    <input 
+	      type="text" 
+	      name="query" 
+	      class="form-control search-input" 
+	      placeholder="검색어를 입력하세요" 
+	      aria-label="검색어" 
+	      required />
+	    <button type="submit" class="btn btn-success ms-2">
+	      <i class="bi bi-search"></i> 검색
+	    </button>
+	  </form>
 	</div>
 
 	<div class="container"> <%-- 이 `div` 태그가 이제 메인 컨텐츠를 감싸줍니다. --%>
