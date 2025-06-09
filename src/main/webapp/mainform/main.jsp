@@ -332,7 +332,7 @@ scale
 				class="bi bi-arrow-right-circle"></i> 더 보기</a>
 		</div>
 	</div>
-
+<h3>지금</h3>
 	<!-- 공지사항 섹션 -->
 	<div class="notice-section">
 		<div class="section-title">공지사항</div>
