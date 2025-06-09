@@ -19,32 +19,172 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 
     <style>
-        body { background-color: #f8f9fa; }
-        .card-header { font-weight: bold; }
-        .facility-icon { font-size: 1.2rem; margin-right: 8px; }
-        .brand-logo { max-height: 60px; object-fit: contain; }
-        .info-item { display: flex; align-items: center; margin-bottom: 0.5rem; }
-        .info-item .bi { min-width: 25px; }
-        .custom-card-header {
-			    background-color: #ffc107;
-			    color: #212529;
-			    display: flex;
-			    justify-content: space-between;
-			    align-items: center;
-			}
-			
-		.custom-card-header .header-action a {
-			    color: #212529; 
-			    text-decoration: none;
-		}
-			
-		.custom-card-header .header-action a:hover {
-			    text-decoration: underline; 
-		}
-        .review-stars .bi-star-fill, .review-stars .bi-star-half, .review-stars .bi-star {
-            color: #ffc107; 
-        }
-    </style>
+         body {
+    background-color: #fefefe;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #222;
+    line-height: 1.6;
+  }
+
+  h1, h4, h5, h6 {
+    font-weight: 600;
+    color: #212529;
+  }
+
+  /* 카드 스타일 */
+  .card {
+    border-radius: 1rem;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+    transition: box-shadow 0.3s ease;
+  }
+
+  .card:hover {
+    box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+  }
+
+  .card-header {
+    font-weight: 700;
+    background-color: #fff;
+    border-bottom: none;
+    padding: 1rem 1.5rem;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: #343a40;
+  }
+
+  /* 각 카드 헤더별 컬러 */
+  .card-header.bg-primary {
+    background-color: #4f46e5 !important; /* Indigo */
+    color: white !important;
+    border-radius: 1rem 1rem 0 0;
+  }
+
+  .card-header.bg-info {
+    background-color: #0ea5e9 !important; /* Sky blue */
+    color: white !important;
+    border-radius: 1rem 1rem 0 0;
+  }
+
+  .card-header.bg-secondary {
+    background-color: #6b7280 !important; /* Gray 500 */
+    color: white !important;
+    border-radius: 1rem 1rem 0 0;
+  }
+
+  .card-header.bg-success {
+    background-color: #16a34a !important; /* Green */
+    color: white !important;
+    border-radius: 1rem 1rem 0 0;
+  }
+
+  .card-header.bg-dark {
+    background-color: #111827 !important; /* Dark */
+    color: white !important;
+    border-radius: 1rem 1rem 0 0;
+  }
+
+  .custom-card-header {
+    background-color: #f59e0b;
+    color: #1e293b;
+    justify-content: space-between;
+    border-radius: 1rem 1rem 0 0;
+  }
+
+  .custom-card-header .header-action a {
+    color: #1e293b;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .custom-card-header .header-action a:hover {
+    text-decoration: underline;
+  }
+
+  /* 아이콘 스타일 */
+  .facility-icon {
+    font-size: 1.4rem;
+    color: #2563eb;
+  }
+
+  /* 브랜드 로고 */
+  .brand-logo {
+    max-height: 50px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 2px rgba(0,0,0,0.1));
+    transition: transform 0.3s ease;
+  }
+  .brand-logo:hover {
+    transform: scale(1.1);
+  }
+
+  /* 정보 항목 */
+  .info-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 0.7rem;
+    font-size: 0.95rem;
+    color: #374151;
+  }
+  .info-item .bi {
+    min-width: 28px;
+    font-size: 1.3rem;
+    color: #3b82f6;
+  }
+
+  /* 리스트 그룹 아이템 */
+  .list-group-item {
+    border: none;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .list-group-item.info-item i.bi {
+    font-size: 1.3rem;
+  }
+
+  /* 별점 */
+  .review-stars .bi-star-fill, 
+  .review-stars .bi-star-half, 
+  .review-stars .bi-star {
+    color: #facc15;
+    font-size: 1.2rem;
+  }
+
+  /* 리뷰 아이템 */
+  .list-group-item.px-0 {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  .review-stars small {
+    font-size: 0.85rem;
+    color: #6b7280;
+  }
+
+  /* 링크 버튼 */
+  a.btn-outline-primary {
+    border-radius: 30px;
+    font-weight: 600;
+    padding: 0.4rem 1.2rem;
+    transition: all 0.3s ease;
+  }
+  a.btn-outline-primary:hover {
+    background-color: #2563eb;
+    color: white !important;
+    border-color: #2563eb;
+  }
+
+  /* 반응형 브랜드 리스트 */
+  @media (max-width: 575px) {
+    .brand-logo {
+      max-height: 40px;
+    }
+  }
+</style>
 </head>
 <body>
 <%

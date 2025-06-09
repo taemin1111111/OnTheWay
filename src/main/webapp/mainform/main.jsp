@@ -23,7 +23,7 @@ String root = request.getContextPath();
 	rel="stylesheet">
 <style>
 body {
-	font-family: 'Noto Sans KR', Arial, sans-serif; /* 해피니스 산스 대체 폰트 */
+	font-family: 'Noto Sans KR', Arial, sans-serif;
 	background: #f5f6f5;
 	margin: 0;
 	padding-top: 0px;
@@ -45,6 +45,7 @@ body {
 	font-size: 28px;
 	font-weight: 700;
 	color: #333;
+	text-shadow: -1px -1px 0 #000;
 }
 
 .main-title p {
@@ -215,64 +216,45 @@ body {
 	margin-top: 10px;
 }
 
-@
-keyframes zoomIn { 0% {
-	transform: scale(1);
+@keyframes zoomIn {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(1.1);
+  }
 }
-100
 
-
-
-
-
-
-%
-{
-transform
-
-
-
-
-
-
-:
-
-
-
-
-
-
-scale
-
-
-
-
-(
-
-
-
-
-
-
-1
-
-
-
-
-.1
-
-
-
-
-
-
-)
-
-
-
-
-;
+.search-bar-container {
+  background: #fff;
+  padding: 10px 0;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  z-index: 1000;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
+
+.search-input {
+  width: 400px;
+  max-width: 90vw;
+  font-size: 16px;
+  border-radius: 30px;
+  padding-left: 20px;
+  transition: box-shadow 0.3s ease;
+}
+
+.search-input:focus {
+  box-shadow: 0 0 8px rgba(40, 167, 69, 0.6);
+  border-color: #28a745;
+  outline: none;
+
+}
+
+.btn-success {
+  border-radius: 30px;
+  padding: 8px 20px;
+  font-weight: 600;
 }
 </style>
 </head>
@@ -285,50 +267,53 @@ scale
 			<p>전국 고속도로 정보.</p>
 		</div>
 	</div>
+	
+	<!-- 검색창 섹션 -->
+<div class="search-bar-container">
+  <form action="<%=root%>/searchResults.jsp" method="get" class="d-flex justify-content-center">
+    <input 
+      type="text" 
+      name="query" 
+      class="form-control search-input" 
+      placeholder="검색어를 입력하세요" 
+      aria-label="검색어" 
+      required />
+    <button type="submit" class="btn btn-success ms-2">
+      <i class="bi bi-search"></i> 검색
+    </button>
+  </form>
+</div>
 
 	<!-- 이벤트 섹션 -->
 	<div class="event-section">
 		<div class="section-title">이벤트</div>
 		<div class="event-list">
-			<%
-			EventDao dao = new EventDao();
-			List<EventDto> list = dao.getAllEvents();
-			HgDataDao hgDao = new HgDataDao();
-
-			int count = Math.min(3, list.size()); //3개 띄우기
-			for (int i = 0; i < count; i++) {
-				EventDto dto = list.get(i);
-				String restName = "";
-				try {
-					restName = hgDao.getRestNameById(Integer.parseInt(dto.getHgId()));
-				} catch (Exception e) {
-					restName = "알 수 없음";
-				}
-			%>
-			<div class="col-md-4 d-flex mb-4">
-				<a href="index.jsp?main=event/eventDetail.jsp?id=<%=dto.getId()%>"
-					class="event-card w-100"> <%
- if (dto.getPhoto() != null && !dto.getPhoto().isEmpty()) {
- %>
-					<img src="eventImage/<%=dto.getPhoto()%>" class="event-photo"
-					alt="이벤트 이미지"> <%
- }
- %>
-					<div class="event-title"><%=dto.getTitle()%></div>
-					<div class="event-info">
-						휴게소: <strong><%=restName%></strong>
-					</div>
-					<div class="event-info">
-						기간:
-						<%=dto.getStartday()%>
-						~
-						<%=dto.getEndday()%></div>
-				</a>
+			<div class="event-card">
+				<img src="<%=root%>/imgway/ye.jpg" alt="이벤트 1">
+				<div class="event-info">
+					<h5>시흥 연꽃 축제</h5>
+					<p>2025.07.22(화) ~ 2025.07.23(수)</p>
+				</div>
 			</div>
-			<%
-			}
-			%>
-			<a href="<%=root%>/index.jsp?main=event/eventList.jsp"><i
+			<div class="event-card">
+				<img src="<%=root%>/imgway/ma.jpg" alt="이벤트 2" style="height: 300px;">
+				<div class="event-info">
+					<h5>논산 딸기 축제</h5>
+					<p>2025.03.27(목) ~ 2025.03.30(일)</p>
+				</div>
+			</div>
+			<div class="event-card">
+				<img src="<%=root%>/imgway/su.png" alt="이벤트 3"
+					style="width: 300px; height: 300px;">
+				<div class="event-info">
+					<h5>여수 밤 바다 축제</h5>
+					<p>2025.08.22(금) ~ 2025.08.24(일)</p>
+				</div>
+			</div>
+		</div>
+		<div class="more-btn">
+			<a href="<%=root%>/event/eventList.jsp"><i
+
 				class="bi bi-arrow-right-circle"></i> 더 보기</a>
 		</div>
 	</div>
@@ -360,14 +345,9 @@ scale
 		</table>
 		<div class="more-btn">
 			<a href="<%=root%>/noticeList.jsp"><i class="bi bi-plus-circle"></i>
-				전체 공지사항 보기</a>
+			전체 공지사항 보기</a>
 		</div>
 	</div>
-	</div>
-
-	<!-- 푸터 -->
-	<div class="footer">
-		<p>© 2025 현대백화점. All Rights Reserved.</p>
 	</div>
 </body>
 </html>
