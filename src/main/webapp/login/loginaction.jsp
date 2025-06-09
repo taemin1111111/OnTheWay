@@ -7,6 +7,10 @@
 
     String userId = request.getParameter("id");
     String password = request.getParameter("password");
+    String redirect = request.getParameter("redirect");
+    if (redirect == null || redirect.equals("")) {
+        redirect = "../index.jsp"; // fallback
+    }
 
     Connection conn = null;
     PreparedStatement pstmt = null;
@@ -45,8 +49,7 @@
             session.setAttribute("email", rs.getString("email"));
             session.setAttribute("role", rs.getInt("role"));
 
-            // 메인 페이지로 이동
-            response.sendRedirect("../index.jsp");
+            response.sendRedirect(redirect);
         } else {
 %>
             <script>
