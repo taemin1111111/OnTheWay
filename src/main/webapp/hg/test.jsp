@@ -8,6 +8,11 @@
   String lpg = request.getParameter("lpg");
   String ev = request.getParameter("ev");
   String pharm = request.getParameter("pharm");
+  
+	System.out.println(searchName);
+	System.out.println(lpg);
+	System.out.println(ev);
+	System.out.println(pharm);
 
   hgRestDao dao = new hgRestDao();
   List<hgRestDto> list;
