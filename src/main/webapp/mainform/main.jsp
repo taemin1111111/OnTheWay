@@ -1,3 +1,6 @@
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="hgDto.infoDto"%>
+<%@page import="hgDao.infoDao"%>
 <%@page import="hg.HgDataDao"%>
 <%@page import="event.EventDao"%>
 <%@page import="java.util.List"%>
@@ -267,87 +270,95 @@ body {
 			<p>전국 고속도로 정보.</p>
 		</div>
 	</div>
-	
-	<!-- 검색창 섹션 -->
-<div class="search-bar-container">
-  <form action="<%=root%>/searchResults.jsp" method="get" class="d-flex justify-content-center">
-    <input 
-      type="text" 
-      name="query" 
-      class="form-control search-input" 
-      placeholder="검색어를 입력하세요" 
-      aria-label="검색어" 
-      required />
-    <button type="submit" class="btn btn-success ms-2">
-      <i class="bi bi-search"></i> 검색
-    </button>
-  </form>
-</div>
 
 	<!-- 이벤트 섹션 -->
 	<div class="event-section">
 		<div class="section-title">이벤트</div>
 		<div class="event-list">
-			<div class="event-card">
-				<img src="<%=root%>/imgway/ye.jpg" alt="이벤트 1">
-				<div class="event-info">
-					<h5>시흥 연꽃 축제</h5>
-					<p>2025.07.22(화) ~ 2025.07.23(수)</p>
-				</div>
-			</div>
-			<div class="event-card">
-				<img src="<%=root%>/imgway/ma.jpg" alt="이벤트 2" style="height: 300px;">
-				<div class="event-info">
-					<h5>논산 딸기 축제</h5>
-					<p>2025.03.27(목) ~ 2025.03.30(일)</p>
-				</div>
-			</div>
-			<div class="event-card">
-				<img src="<%=root%>/imgway/su.png" alt="이벤트 3"
-					style="width: 300px; height: 300px;">
-				<div class="event-info">
-					<h5>여수 밤 바다 축제</h5>
-					<p>2025.08.22(금) ~ 2025.08.24(일)</p>
-				</div>
-			</div>
-		</div>
-		<div class="more-btn">
-			<a href="<%=root%>/event/eventList.jsp"><i
+			<%
+			EventDao dao = new EventDao();
+			List<EventDto> list = dao.getAllEvents();
+			HgDataDao hgDao = new HgDataDao();
 
+			int count = Math.min(3, list.size()); //3개 띄우기
+			for (int i = 0; i < count; i++) {
+				EventDto dto = list.get(i);
+				String restName = "";
+				try {
+					restName = hgDao.getRestNameById(Integer.parseInt(dto.getHgId()));
+				} catch (Exception e) {
+					restName = "알 수 없음";
+				}
+			%>
+			<div class="col-md-4 d-flex mb-4">
+				<a href="index.jsp?main=event/eventDetail.jsp?id=<%=dto.getId()%>"
+					class="event-card w-100"> <%
+ if (dto.getPhoto() != null && !dto.getPhoto().isEmpty()) {
+ %>
+					<img src="eventImage/<%=dto.getPhoto()%>" class="event-photo"
+					alt="이벤트 이미지"> <%
+ }
+ %>
+					<div class="event-title"><%=dto.getTitle()%></div>
+					<div class="event-info">
+						휴게소: <strong><%=restName%></strong>
+					</div>
+					<div class="event-info">
+						기간:
+						<%=dto.getStartday()%>
+						~
+						<%=dto.getEndday()%></div>
+				</a>
+			</div>
+			<%
+			}
+			%>
+			<a href="<%=root%>/index.jsp?main=event/eventList.jsp"><i
 				class="bi bi-arrow-right-circle"></i> 더 보기</a>
 		</div>
 	</div>
-<h3>지금</h3>
-	<!-- 공지사항 섹션 -->
-	<div class="notice-section">
-		<div class="section-title">공지사항</div>
-		<table class="notice-table">
-			<thead>
-				<tr>
-					<th>제목</th>
-					<th>등록일</th>
-				</tr>
-			</thead>
-			<tbody>
-				<tr>
-					<td><a href="#">TLS 1.0, TLS 1.1 비활성화 관련 공지</a></td>
-					<td>2025.04.18</td>
-				</tr>
-				<tr>
-					<td><a href="#">고속도로 공공데이터포털 파일 저장장치 서비스 전환 관련 알림</a></td>
-					<td>2025.04.10</td>
-				</tr>
-				<tr>
-					<td><a href="#">고속도로 공공데이터 포털 순연(서비스 일부) 알림</a></td>
-					<td>2025.04.05</td>
-				</tr>
-			</tbody>
-		</table>
-		<div class="more-btn">
-			<a href="<%=root%>/index.jsp?main=infoList/infoList.jsp"><i class="bi bi-plus-circle"></i>
 
-		</div>
-	</div>
-	</div>
+	<!-- 공지사항 섹션 -->
+<div class="notice-section">
+    <div class="section-title">공지사항</div>
+    <table class="notice-table">
+        <thead>
+            <tr>
+                <th>제목</th>
+                <th>등록일</th>
+            </tr>
+        </thead>
+        <tbody>
+            <%
+                // 공지사항 Dao 불러오기
+                infoDao inDao=new infoDao();
+                List<infoDto> iList = inDao.getBoardList(); // 전체 불러오기
+              String  restName = "";//일단 list랑 맞춰서 만들었는데 제목에는 실제로 실행 해보니 필요없을거 같아서 그냥 만들어만 두었음.
+                int nCount = Math.min(3, iList.size()); // 최대 3개만 출력
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                for (int i = 0; i < nCount; i++) {
+                     infoDto iDto= iList.get(i);
+                     restName = hgDao.getRestNameById(Integer.parseInt(iDto.getHgId()));
+            %>
+            <tr>
+                <td>
+                    <a href="index.jsp?main=infoList/detail.jsp?id=<%=iDto.getId()%>">
+                        <%=iDto.getTitle()%>
+                    </a>
+                </td>
+                <td><%=sdf.format(iDto.getWriteday())%></td>
+            </tr>
+            <%
+                }
+            %>
+        </tbody>
+    </table>
+    <div class="more-btn">
+        <a href="<%=root%>/index.jsp?main=infoList/infoList.jsp">
+            <i class="bi bi-plus-circle"></i> 더 보기
+        </a>
+    </div>
+</div>
 </body>
+</html>
 </html>
