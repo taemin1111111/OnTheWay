@@ -50,8 +50,8 @@
   body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background-color: #f5f7fa;
-    padding: 3rem 1rem;
-    margin: 0;
+    padding: 0;
+    margin: 0; 
   }
 
   h3 {
