@@ -22,6 +22,10 @@
    String name=request.getParameter("name");
    String pass=request.getParameter("password");
    String email=request.getParameter("email");
+   String redirect = request.getParameter("redirect");
+   if (redirect == null || redirect.equals("")) {
+       redirect = "../index.jsp"; // fallback
+   }
    int role=0;
    
    dto.setId(id);
@@ -35,7 +39,7 @@
    dao.insertUser(id, name, pass, email, role);
    
    //가입성공페이지로 이동
-   response.sendRedirect("../index.jsp?main=member/gaipsuccess.jsp?id="+id);
+   response.sendRedirect(redirect);
 %>
 <body>
 
