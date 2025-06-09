@@ -5,7 +5,7 @@ public class hgRestDto {
 	
 	private String name;
 	private String tel_no;
-	private String addr;
+	private String address;
 	private int	truck;
 	private int	maintenance;
 	private double latitude;
@@ -69,10 +69,10 @@ public class hgRestDto {
 		this.tel_no = tel_no;
 	}
 	public String getAddr() {
-		return addr;
+		return address;
 	}
-	public void setAddr(String addr) {
-		this.addr = addr;
+	public void setAddr(String address) {
+		this.address = address;
 	}
 	public int getTruck() {
 		return truck;

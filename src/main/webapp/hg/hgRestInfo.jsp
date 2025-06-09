@@ -28,15 +28,23 @@ $(function(){
 		var hg_num=$(this).attr("id"); // 클릭한 링크의 ID를 가져옴
 		location.href="<%=request.getContextPath()%>/index.jsp?main=details/info.jsp?hg_id="+hg_num; // 상세 페이지로 이동
 	})
-	<%-- 체크박스 상태 변경 시 Ajax 요청을 통해 데이터를 갱신하는 부분 (주석 처리됨)
+	<%--  //체크박스 상태 변경 시 Ajax 요청을 통해 데이터를 갱신하는 부분 (주석 처리됨)
 	$("input.a").change(function() {
+		
+		  console.log("체크박스 변경됨");
 	    // 체크박스 상태 읽기
 	    let lpg = $("input[name='lpg']").is(":checked") ? "Y" : "";
 	    let ev = $("input[name='ev']").is(":checked") ? "Y" : "";
 	    let pharm = $("input[name='pharm']").is(":checked") ? "Y" : "";
 	    let searchName = $("#sName").val();
+	    
+	    console.log(lpg);
+	    console.log(ev);
+	    console.log(pharm);
+	    console.log(searchName);
+	    
 		$.ajax({
-		    url: '<%=request.getContextPath()%>/hg/test2.jsp', /* 부분 데이터만 반환 */
+		    url: '<%=request.getContextPath()%>/hg/test2.jsp', //* 부분 데이터만 반환 */
 		    method: 'GET',
 		    data: {
 		        searchName: searchName,
@@ -54,7 +62,7 @@ $(function(){
 		        alert("데이터 로딩 실패");
 		    }
 		});
-	}) --%>
+	})  --%>
 })
 </script>
 <style>
@@ -237,10 +245,11 @@ if (searchName != null && !searchName.trim().equals("")) {
 }
 %>
 <body>
-	<div style="margin: 100px 100px;" class="container mt-3"> <!-- 컨테이너 설정 -->
+
+	<div style="margin: 100px 100px;" class="container mt-3" > <!-- 컨테이너 설정 -->
 		<h3>고속도로 휴게소</h3> <!-- 제목 -->
 		<br>
-		<form method="get" action="<%=request.getContextPath()%>/index.jsp"> <!-- 검색 폼 -->
+		<form method="get" action="<%=request.getContextPath()%>/index.jsp" id="ckbox">
 		<div class="checkbox-group-horizontal"> <!-- 체크박스 그룹 -->
 				<label><input type="checkbox" name="lpg" value="Y"
 					<%="Y".equals(lpg) ? "checked" : ""%> class="a"> LPG충전소</label> <!-- LPG 체크박스 -->
@@ -260,7 +269,7 @@ if (searchName != null && !searchName.trim().equals("")) {
 		<div id="map"></div> <!-- 지도 표시 영역 -->
 		<br>
 		<br>
-		<div style="overflow-y: auto; max-height: 400px; width: 1180px;"> <!-- 테이블 영역 -->
+		<div style="overflow-y: auto; max-height: 400px; width: 1180px;" > <!-- 테이블 영역 -->
 			<table class="table table-bordered" style="width: 1200px;"> <!-- 테이블 설정 -->
 				<tr class="table-success" align="center"> <!-- 테이블 헤더 -->
 					<th style="width: 50; align: center;">번호</th>
@@ -273,6 +282,8 @@ if (searchName != null && !searchName.trim().equals("")) {
 				int n = 1; // 번호 카운터
 				int i = 0; // 인덱스 카운터
 				for (hgRestDto dto : list) { // 리스트를 순회
+				
+				
 				%>
 				<tr>
 					<td style="text-align: center"><%=n++%></td> <!-- 번호 출력 -->
@@ -290,6 +301,25 @@ if (searchName != null && !searchName.trim().equals("")) {
 		</div>
 		<br>
 		<script>
+		
+		 document.querySelectorAll(".a").forEach(cb => {
+		       cb.addEventListener('change', () => {
+		           document.querySelector('#ckbox').submit();
+		       });
+		   });   
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		// JSP에서 전달된 검색어를 가져옴
 		var searchName = "<%=searchName != null ? searchName.trim() : ""%>";
 		var map = new kakao.maps.Map(document.getElementById('map'), { // 카카오 맵 초기화
@@ -359,6 +389,7 @@ if (searchName != null && !searchName.trim().equals("")) {
 		}
 	</script>
 	</div>
+	
 </body>
 </html>
   
