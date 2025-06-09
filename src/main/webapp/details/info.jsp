@@ -28,11 +28,11 @@
         :root {
             --primary-color: #007aff; /* iOS 스타일 블루 */
             --background-color: #f7f9fc;
-            --card-background-color: #ffffff;
+            --card-background-color: rgba(255, 255, 255, 0.9); /* 약간의 투명도 추가 */
             --text-primary: #212529;
             --text-secondary: #5a6573;
             --text-muted: #8a95a3;
-            --border-color: #e9ecef;
+            --border-color: #e0e4e8; /* 테두리 색상 좀 더 부드럽게 */
             --star-color: #ffcc00;
             --success-color: #34c759;
             --danger-color: #ff3b30;
@@ -40,8 +40,8 @@
             --font-family-main: 'Noto Sans KR', sans-serif;
             --border-radius-md: 12px;
             --border-radius-lg: 16px;
-            --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.06);
-            --shadow-medium: 0 8px 25px rgba(0, 0, 0, 0.09);
+            --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.05); /* 그림자 좀 더 은은하게 */
+            --shadow-medium: 0 8px 25px rgba(0, 0, 0, 0.08); /* 그림자 좀 더 은은하게 */
         }
 
         body {
@@ -52,13 +52,24 @@
 
         /* --- 페이지 헤더 (Hero) --- */
         .page-hero {
-            padding: 2.5rem 0;
+            /* 기존 패딩은 삭제하고 아래 패딩을 사용 */
             text-align: center;
+            max-width: 1200px;
+            margin: 0 auto 3rem auto; /* 중앙 정렬 및 하단 여백 */
+
+            /* 새로 추가되거나 수정된 스타일 */
+            background-color: var(--card-background-color); /* 카드 배경색 적용 */
+            border-radius: var(--border-radius-lg); /* info-card와 동일하게 둥근 모서리 적용 */
+            box-shadow: var(--shadow-soft); /* 부드러운 그림자 적용 */
+            padding: 2.5rem 1.5rem; /* 카드 내부 패딩 조정 */
+            backdrop-filter: blur(8px); /* Glassmorphism 효과 */
+            -webkit-backdrop-filter: blur(8px); /* Safari 지원 */
         }
         .page-hero h1 {
             font-weight: 700;
             font-size: 2.5rem;
             margin-bottom: 0.5rem;
+            /* 기존 padding-left: 130px; 삭제 */
         }
         .page-hero .route-info {
             font-size: 1.1rem;
@@ -76,6 +87,8 @@
             background-color: var(--card-background-color);
             box-shadow: var(--shadow-soft);
             transition: transform 0.2s, box-shadow 0.2s;
+            backdrop-filter: blur(5px); /* Glassmorphism 효과 */
+            -webkit-backdrop-filter: blur(5px); /* Safari 지원 */
         }
         .page-hero .rating-summary-link:hover {
             transform: translateY(-3px);
@@ -93,6 +106,8 @@
             box-shadow: var(--shadow-soft);
             margin-bottom: 2rem;
             overflow: hidden; /* For header radius */
+            backdrop-filter: blur(8px); /* Glassmorphism 효과 추가 */
+            -webkit-backdrop-filter: blur(8px); /* Safari 지원 */
         }
         .info-card-header {
             display: flex;
@@ -108,19 +123,32 @@
         .info-card .list-group-item {
             padding: 1rem 1.5rem;
             border-bottom: 1px solid var(--border-color);
+            transition: background-color 0.2s ease-in-out; /* 호버 효과 추가 */
         }
         .info-card .list-group-item:last-child { border-bottom: none; }
+        .info-card .list-group-item:hover {
+            background-color: #f0f4f7; /* 호버 시 약간 밝아지는 효과 */
+            cursor: pointer; /* 클릭 가능함을 시각적으로 나타냄 */
+        }
 
         /* --- 정보 항목 스타일 --- */
         .info-entry {
             display: flex;
-            align-items: center;
+            align-items: flex-start; /* 아이콘이 위쪽으로 정렬되도록 */
             gap: 1rem;
             margin-bottom: 1.2rem;
             font-size: 0.95rem;
         }
         .info-entry:last-child { margin-bottom: 0; }
-        .info-entry .bi { font-size: 1.5rem; color: var(--primary-color); min-width: 24px; }
+        .info-entry .bi {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            min-width: 24px;
+            height: 24px; /* 아이콘 높이 고정 */
+            display: flex;
+            align-items: center;
+            justify-content: center; /* 아이콘 중앙 정렬 */
+        }
         .info-entry strong { color: var(--text-primary); margin-right: 0.5rem; }
         .info-entry span { color: var(--text-secondary); }
 
@@ -133,6 +161,10 @@
         .facility-status .icon-box {
             font-size: 1.5rem;
             min-width: 24px;
+            height: 24px; /* 아이콘 높이 고정 */
+            display: flex;
+            align-items: center;
+            justify-content: center; /* 아이콘 중앙 정렬 */
         }
         .facility-status .is-available { color: var(--success-color); }
         .facility-status .is-unavailable { color: var(--text-muted); }
@@ -180,6 +212,33 @@
             font-size: 0.9rem;
             font-weight: 500;
             color: var(--primary-color);
+        }
+
+        /* 버튼 스타일 강화 (예: 후기 작성하기 버튼) */
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3; /* 기본 Bootstrap hover 색상보다 조금 더 어둡게 */
+            border-color: #0056b3;
+            transform: translateY(-2px); /* 살짝 위로 올라오는 효과 */
+            box-shadow: var(--shadow-soft);
+        }
+        .btn-primary:active {
+            transform: translateY(0); /* 클릭 시 원상 복귀 */
+            box-shadow: none;
+        }
+
+        /* 모바일 환경 고려 (page-hero h1 padding 조정) */
+        @media (max-width: 768px) {
+            .page-hero h1 {
+                font-size: 2rem; /* 모바일에서 글자 크기 조정 */
+            }
+            .page-hero {
+                padding: 2rem 1rem; /* 모바일에서 패딩 약간 줄임 */
+            }
         }
     </style>
 </head>

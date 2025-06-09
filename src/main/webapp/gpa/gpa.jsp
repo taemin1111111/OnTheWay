@@ -3,6 +3,7 @@
 <%@page import="GpaData.GpaDto"%>
 <%@page import="java.util.List"%>
 <%@page import="GpaData.GpaDao"%>
+<%@page import="java.net.URLEncoder"%> <%-- URL 인코딩을 위해 추가 --%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -11,12 +12,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>고객 후기 페이지</title>
-<%-- Google Fonts: Noto Sans KR --%>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
-
-<%-- Bootstrap 5 & Icons --%>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -47,7 +45,7 @@ body {
     background-color: var(--background-color);
     color: var(--text-color-primary);
     padding: 2rem 0;
-    padding-top: 0px;
+    padding-top: 0px; /* 불필요한 중복 방지 */
 }
 
 .review-container {
@@ -66,8 +64,8 @@ body {
     justify-content: space-between;
     align-items: center;
     margin-bottom: 2.5rem;
-    flex-wrap: wrap;
-    gap: 1rem;
+    flex-wrap: wrap; /* 반응형을 위해 추가 */
+    gap: 1rem; /* 요소 간 간격 추가 */
 }
 
 .summary-rating .rating-value {
@@ -128,6 +126,8 @@ body {
 .review-list {
     display: grid;
     gap: 1.5rem;
+    /* 모바일에서는 1열, 태블릿 이상에서는 2열 (필요시) */
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
 }
 
 .review-card {
@@ -189,6 +189,7 @@ body {
     color: var(--text-color-secondary);
     cursor: pointer;
     transition: all 0.2s;
+    text-decoration: none; /* <a> 태그의 밑줄 제거 */
 }
 .thumb-btn:hover {
     color: var(--text-color-primary);
@@ -207,11 +208,12 @@ body {
     border: none;
     color: var(--text-color-secondary);
     cursor: pointer;
-    opacity: 0;
+    opacity: 0; /* 기본적으로 숨김 */
     transition: opacity 0.2s;
     padding: 0.5rem;
+    font-size: 1.1rem; /* 아이콘 크기 조정 */
 }
-.review-card:hover .delete-btn { opacity: 1; }
+.review-card:hover .delete-btn { opacity: 1; } /* 호버 시 보이도록 */
 .delete-btn:hover { color: var(--danger-color); }
 
 
@@ -269,10 +271,16 @@ body {
     transform-origin: center;
     transition: color 0.2s ease, transform 0.2s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
+/* 호버 시 별점 모두 활성화 */
 .interactive-star-rating:hover .bi { color: var(--star-color); }
+/* 선택된 별점 이후의 별점은 비활성화 */
 .interactive-star-rating .bi:hover ~ .bi { color: var(--star-inactive-color); }
+/* 선택된 별점 */
 .interactive-star-rating .bi.selected { color: var(--star-color); }
+/* 선택된 별점 이후의 별점은 비활성화 (선택된 상태에서도) */
+.interactive-star-rating .bi.selected ~ .bi { color: var(--star-inactive-color); }
 .interactive-star-rating .bi:hover { transform: scale(1.2); }
+
 
 .rating-feedback {
     min-height: 24px;
@@ -338,56 +346,48 @@ body {
    font-weight: 500;
    box-shadow: var(--shadow-medium);
    opacity: 0;
-   transition: opacity 0.5s, top 0.5s;
+   transition: opacity 0.5s, top 0.5s; /* 부드러운 애니메이션 */
 }
 
 #toast.show {
    visibility: visible;
    opacity: 1;
-   top: 40px;
+   top: 40px; /* 약간 아래로 내려오면서 나타나도록 */
 }
 #toast.error { background-color: var(--danger-color); }
 
+/* 모바일 반응형 (선택 사항) */
+@media (max-width: 576px) {
+    .review-summary {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .sort-and-write {
+        width: 100%;
+        justify-content: center;
+    }
+    .sort-btn, .review-write-btn {
+        flex-grow: 1;
+    }
+}
 </style>
 </head>
 
 <body>
 
 <%
-// --- 기존 Java 로직은 그대로 유지 ---
+// --- Java 로직 (기존 유지) ---
 String already = request.getParameter("already");
-if ("1".equals(already)) {
-%>
-<script>
-document.addEventListener("DOMContentLoaded", function () { showToast("추천/비추천은 1번만 가능합니다.", "error"); });
-</script>
-<% } %>
-
-<%
 String success = request.getParameter("success");
-if ("1".equals(success)) {
-%>
-<script>
-document.addEventListener("DOMContentLoaded", function () { showToast("후기 등록이 완료되었습니다."); });
-</script>
-<% } %>
-
-<%
 String duplicate = request.getParameter("duplicate");
-if ("1".equals(duplicate)) {
-%>
-<script>
-document.addEventListener("DOMContentLoaded", function () { showToast("이미 평점을 등록하셨습니다.", "error"); });
-</script>
-<% } %>
 
-<%
 String pageParam = request.getParameter("page");
 String order = request.getParameter("order");
 if (order == null || order.isEmpty()) order = "추천순";
 
 int currentPage = (pageParam == null || pageParam.isEmpty()) ? 1 : Integer.parseInt(pageParam);
-int perPage = 10; // 페이지당 카드 개수 조정
+int perPage = 10; // 페이지당 카드 개수
 int start = (currentPage - 1) * perPage;
 
 String hg_id = request.getParameter("hg_id");
@@ -400,6 +400,28 @@ SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
 
 String userid = (String) session.getAttribute("userId");
 %>
+
+<%-- 토스트 메시지 출력 (JS 로직보다 상단에 위치) --%>
+<div id="toast"></div>
+
+<% if ("1".equals(already)) { %>
+<script>
+document.addEventListener("DOMContentLoaded", function () { showToast("추천/비추천은 한 번만 가능합니다.", "error"); });
+</script>
+<% } %>
+
+<% if ("1".equals(success)) { %>
+<script>
+document.addEventListener("DOMContentLoaded", function () { showToast("후기 등록이 완료되었습니다."); });
+</script>
+<% } %>
+
+<% if ("1".equals(duplicate)) { %>
+<script>
+document.addEventListener("DOMContentLoaded", function () { showToast("이미 평점을 등록하셨습니다.", "error"); });
+</script>
+<% } %>
+
 
 <div class="review-container">
     <header class="review-summary">
@@ -424,37 +446,44 @@ String userid = (String) session.getAttribute("userId");
     </header>
 
     <main class="review-list">
-        <% for (GpaDto dto : list) { %>
-        <article class="review-card">
-            <div class="review-card-header">
-                <div class="review-author">
-                    <div class="author-id"><%=dto.getUserid()%></div>
-                    <div class="write-date"><%=sdf.format(dto.getWriteday())%></div>
+        <% if (list.isEmpty()) { %>
+            <div class="col-12 text-center text-muted py-5">
+                <p class="fs-5"><i class="bi bi-exclamation-circle me-2"></i>아직 등록된 후기가 없습니다.</p>
+                <p>첫 후기를 작성하고 <%= hgName %>에 대한 경험을 공유해 보세요!</p>
+            </div>
+        <% } else { %>
+            <% for (GpaDto dto : list) { %>
+            <article class="review-card">
+                <div class="review-card-header">
+                    <div class="review-author">
+                        <div class="author-id"><%=dto.getUserid()%></div>
+                        <div class="write-date"><%=sdf.format(dto.getWriteday())%></div>
+                    </div>
+                    <div class="card-star-rating">
+                        <% for(int i=1; i<=5; i++){ %>
+                            <i class="bi <%= (dto.getStars() >= i) ? "bi-star-fill" : "bi-star" %>"></i>
+                        <% } %>
+                    </div>
                 </div>
-                <div class="card-star-rating">
-                    <% for(int i=1; i<=5; i++){ %>
-                        <i class="bi <%= (dto.getStars() >= i) ? "bi-star-fill" : "bi-star" %>"></i>
+                <div class="review-card-body">
+                    <p><%=dto.getContent()%></p>
+                </div>
+                <div class="review-card-footer">
+                    <% if (userid != null && userid.equals(dto.getUserid())) { %>
+                        <button class="delete-btn" onclick="confirmDelete('<%=dto.getNum()%>', '<%=URLEncoder.encode(hg_id, "UTF-8")%>', '<%=URLEncoder.encode(order, "UTF-8")%>')">
+                            <i class="bi bi-trash3"></i>
+                        </button>
                     <% } %>
+                    <a href="<%= (userid == null) ? "javascript:alert('로그인 후 이용 가능합니다.');" : request.getContextPath()+"/gpa/goodUpdate.jsp?num="+dto.getNum()+"&type=up&hg_id="+URLEncoder.encode(hg_id, "UTF-8")+"&order="+URLEncoder.encode(order, "UTF-8") %>" class="thumb-btn up">
+                        <i class="bi bi-hand-thumbs-up"></i>
+                        <span class="count"><%=dto.getGood()%></span>
+                    </a>
+                    <a href="<%= (userid == null) ? "javascript:alert('로그인 후 이용 가능합니다.');" : request.getContextPath()+"/gpa/goodUpdate.jsp?num="+dto.getNum()+"&type=down&hg_id="+URLEncoder.encode(hg_id, "UTF-8")+"&order="+URLEncoder.encode(order, "UTF-8") %>" class="thumb-btn down">
+                        <i class="bi bi-hand-thumbs-down"></i>
+                    </a>
                 </div>
-            </div>
-            <div class="review-card-body">
-                <p><%=dto.getContent()%></p>
-            </div>
-            <div class="review-card-footer">
-                <% if (userid != null && userid.equals(dto.getUserid())) { %>
-                    <button class="delete-btn" onclick="confirmDelete('<%=dto.getNum()%>', '<%=hg_id%>', '<%=order%>')">
-                        <i class="bi bi-trash3"></i>
-                    </button>
-                <% } %>
-                <a href="<%= (userid == null) ? "javascript:alert('로그인 후 이용 가능합니다.');" : request.getContextPath()+"/gpa/goodUpdate.jsp?num="+dto.getNum()+"&type=up&hg_id="+hg_id+"&order="+order %>" class="thumb-btn up">
-                    <i class="bi bi-hand-thumbs-up"></i>
-                    <span class="count"><%=dto.getGood()%></span>
-                </a>
-                 <a href="<%= (userid == null) ? "javascript:alert('로그인 후 이용 가능합니다.');" : request.getContextPath()+"/gpa/goodUpdate.jsp?num="+dto.getNum()+"&type=down&hg_id="+hg_id+"&order="+order %>" class="thumb-btn down">
-                    <i class="bi bi-hand-thumbs-down"></i>
-                </a>
-            </div>
-        </article>
+            </article>
+            <% } %>
         <% } %>
     </main>
 
@@ -495,8 +524,6 @@ String userid = (String) session.getAttribute("userId");
         </div>
     </div>
 
-    <div id="toast"></div>
-
     <%
     int totalPage = (int) Math.ceil(totalCount / (double) perPage);
     if(totalPage > 1) {
@@ -505,7 +532,7 @@ String userid = (String) session.getAttribute("userId");
       <ul class="pagination justify-content-center">
          <% for (int i = 1; i <= totalPage; i++) { %>
          <li class="page-item <%=(i == currentPage) ? "active" : ""%>">
-            <a class="page-link" href="<%=request.getContextPath()%>/index.jsp?main=gpa/gpa.jsp&hg_id=<%=hg_id%>&page=<%=i%>&order=<%=order%>"><%=i%></a>
+            <a class="page-link" href="<%=request.getContextPath()%>/index.jsp?main=gpa/gpa.jsp&hg_id=<%=URLEncoder.encode(hg_id, "UTF-8")%>&page=<%=i%>&order=<%=URLEncoder.encode(order, "UTF-8")%>"><%=i%></a>
          </li>
          <% } %>
       </ul>
@@ -515,7 +542,7 @@ String userid = (String) session.getAttribute("userId");
 </div> <%-- /.review-container --%>
 
 <script>
-// --- 최신 트렌드가 적용된 스크립트 ---
+// --- 스크립트 ---
 
 // 모달 인터랙티브 별점 시스템
 document.addEventListener("DOMContentLoaded", function () {
@@ -565,6 +592,18 @@ document.addEventListener("DOMContentLoaded", function () {
             star.classList.toggle("bi-star-fill", star.dataset.value <= selectedValue && star.classList.contains("selected"));
             star.classList.toggle("bi-star", !(star.dataset.value <= selectedValue && star.classList.contains("selected")));
         });
+        // 별점 선택 후 마우스가 벗어났을 때, 선택된 별점만 채워진 상태를 유지
+        if (selectedValue > 0) {
+            stars.forEach(star => {
+                if (star.dataset.value <= selectedValue) {
+                    star.classList.add("bi-star-fill");
+                    star.classList.remove("bi-star");
+                } else {
+                    star.classList.add("bi-star");
+                    star.classList.remove("bi-star-fill");
+                }
+            });
+        }
     }
     
     // 모달이 닫힐 때 별점 초기화
@@ -573,7 +612,7 @@ document.addEventListener("DOMContentLoaded", function () {
         ratingInput.value = 0;
         feedbackText.innerHTML = ratingFeedbacks[0];
         stars.forEach(star => {
-            star.className = 'bi bi-star'; // 클래스 전체 초기화
+            star.className = 'bi bi-star'; // 클래스 전체 초기화 (bi-star-fill 제거)
         });
     });
 });
@@ -596,14 +635,14 @@ function toggleOrder() {
    let currentOrderIndex = orderModes.indexOf("<%=order%>");
    currentOrderIndex = (currentOrderIndex + 1) % orderModes.length;
    const selectedOrder = orderModes[currentOrderIndex];
-   location.href = "<%=request.getContextPath()%>/index.jsp?main=gpa/gpa.jsp&hg_id=<%=hg_id%>&order=" + selectedOrder + "&page=1";
+   // hg_id와 order, page를 모두 넘겨야 합니다.
+   location.href = "<%=request.getContextPath()%>/index.jsp?main=gpa/gpa.jsp&hg_id=<%=URLEncoder.encode(hg_id, "UTF-8")%>&order=" + encodeURIComponent(selectedOrder) + "&page=1";
 }
 
 // 삭제 확인
 function confirmDelete(num, hg_id, order) {
     if (confirm("이 후기를 정말 삭제하시겠습니까?")) {
-        const encodedOrder = encodeURIComponent(order);
-        location.href = "<%=request.getContextPath()%>/gpa/deleteGpa.jsp?num=" + num + "&hg_id=" + hg_id + "&order=" + encodedOrder;
+        location.href = "<%=request.getContextPath()%>/gpa/deleteGpa.jsp?num=" + num + "&hg_id=" + hg_id + "&order=" + order;
     }
 }
 </script>

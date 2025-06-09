@@ -1,3 +1,7 @@
+<%@page import="hg.HgDataDao"%>
+<%@page import="event.EventDao"%>
+<%@page import="java.util.List"%>
+<%@page import="event.EventDto"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%
@@ -244,6 +248,7 @@ body {
   box-shadow: 0 0 8px rgba(40, 167, 69, 0.6);
   border-color: #28a745;
   outline: none;
+
 }
 
 .btn-success {
@@ -308,10 +313,10 @@ body {
 		</div>
 		<div class="more-btn">
 			<a href="<%=root%>/event/eventList.jsp"><i
+
 				class="bi bi-arrow-right-circle"></i> 더 보기</a>
 		</div>
 	</div>
-
 	<!-- 공지사항 섹션 -->
 	<div class="notice-section">
 		<div class="section-title">공지사항</div>
@@ -338,8 +343,8 @@ body {
 			</tbody>
 		</table>
 		<div class="more-btn">
-			<a href="<%=root%>/noticeList.jsp"><i class="bi bi-plus-circle"></i>
-			전체 공지사항 보기</a>
+			<a href="<%=root%>/index.jsp?main=infoList/infoList.jsp"><i class="bi bi-plus-circle"></i>
+
 		</div>
 	</div>
 	</div>
