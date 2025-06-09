@@ -246,11 +246,16 @@ if (searchName != null && !searchName.trim().equals("")) {
 %>
 <body>
 
-	<div style="margin: 100px 100px;" class="container mt-3" > <!-- 컨테이너 설정 -->
+	<div style="margin: 100px auto;" class="container mt-3" > <!-- 컨테이너 설정 -->
 		<h3>고속도로 휴게소</h3> <!-- 제목 -->
 		<br>
 		<form method="get" action="<%=request.getContextPath()%>/index.jsp" id="ckbox">
-		<div class="checkbox-group-horizontal"> <!-- 체크박스 그룹 -->
+			<br>
+			<input type="hidden" name="main" value="hg/hgRestInfo.jsp"> <!-- 숨겨진 필드: 메인 페이지 설정 -->
+			<input type="text" name="searchName" placeholder="검색할 휴게소 이름을 입력하세요."
+				style="width: 500px;" id="sName"
+				value="<%=(searchName == null || searchName.trim().equals("")) ? "" : searchName%>"> <!-- 검색어 입력 필드 -->
+				<div class="checkbox-group-horizontal"> <!-- 체크박스 그룹 -->
 				<label><input type="checkbox" name="lpg" value="Y"
 					<%="Y".equals(lpg) ? "checked" : ""%> class="a"> LPG충전소</label> <!-- LPG 체크박스 -->
 				<label><input type="checkbox" name="ev" value="Y"
@@ -258,11 +263,6 @@ if (searchName != null && !searchName.trim().equals("")) {
 				<label><input type="checkbox" name="pharm" value="Y"
 					<%="Y".equals(pharm) ? "checked" : ""%> class="a"> 약국</label> <!-- 약국 체크박스 -->
 			</div>
-			<br>
-			<input type="hidden" name="main" value="hg/hgRestInfo.jsp"> <!-- 숨겨진 필드: 메인 페이지 설정 -->
-			<input type="text" name="searchName" placeholder="검색할 휴게소 이름을 입력하세요."
-				style="width: 500px;" id="sName"
-				value="<%=(searchName == null || searchName.trim().equals("")) ? "" : searchName%>"> <!-- 검색어 입력 필드 -->
 			<button type="submit" class="btn btn-success" id="search">검색</button> <!-- 검색 버튼 -->
 		</form>
 		<br>
