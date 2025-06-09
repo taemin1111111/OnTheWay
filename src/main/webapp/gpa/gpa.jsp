@@ -29,7 +29,7 @@
     --card-background-color: #ffffff;
     --border-color: #e9ecef;
     --star-color: #FFD700; /* 골드 */
-    --star-inactive-color: #e0e0e0;
+    --star-inactive-color: #FFD700;
     --success-color: #28a745;
     --danger-color: #dc3545;
     
@@ -566,6 +566,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById('modalStarRating').addEventListener('mouseleave', handleMouseLeave);
 
     function handleMouseOver(e) {
+        // 호버 시 별 채우기: 마우스가 별점 영역에 들어오면 해당 별과 그 앞의 별들을 채웁니다.
         const hoverValue = e.target.dataset.value;
         stars.forEach(star => {
             star.classList.toggle("bi-star-fill", star.dataset.value <= hoverValue);
@@ -578,30 +579,34 @@ document.addEventListener("DOMContentLoaded", function () {
         ratingInput.value = selectedValue;
         feedbackText.textContent = ratingFeedbacks[selectedValue];
         
+        // 클릭 시 모든 별점의 'selected' 클래스를 제거하고
+        // 선택된 값까지 'selected'와 'bi-star-fill' 클래스를 추가합니다.
         stars.forEach(star => {
-            star.classList.remove("selected");
+            star.classList.remove("selected", "bi-star-fill", "bi-star"); // 모든 클래스 초기화
             if (star.dataset.value <= selectedValue) {
-                star.classList.add("selected");
+                star.classList.add("selected", "bi-star-fill"); // 선택된 별은 채우고 selected 표시
+            } else {
+                star.classList.add("bi-star"); // 선택되지 않은 별은 비웁니다.
             }
         });
     }
 
     function handleMouseLeave() {
         const selectedValue = ratingInput.value;
-        stars.forEach(star => {
-            star.classList.toggle("bi-star-fill", star.dataset.value <= selectedValue && star.classList.contains("selected"));
-            star.classList.toggle("bi-star", !(star.dataset.value <= selectedValue && star.classList.contains("selected")));
-        });
-        // 별점 선택 후 마우스가 벗어났을 때, 선택된 별점만 채워진 상태를 유지
+        // 선택된 별점이 있을 경우: 마우스가 별점 영역을 벗어나도 선택된 별점은 유지합니다.
         if (selectedValue > 0) {
             stars.forEach(star => {
+                star.classList.remove("bi-star-fill", "bi-star"); // 현재 상태 초기화
                 if (star.dataset.value <= selectedValue) {
-                    star.classList.add("bi-star-fill");
-                    star.classList.remove("bi-star");
+                    star.classList.add("bi-star-fill"); // 선택된 별점까지는 항상 채워진 상태 유지
                 } else {
-                    star.classList.add("bi-star");
-                    star.classList.remove("bi-star-fill");
+                    star.classList.add("bi-star"); // 그 이후는 비어있는 상태 유지
                 }
+            });
+        } else { // 선택된 별점이 없을 경우 (초기 상태): 모든 별을 비어있는 상태로 유지합니다.
+            stars.forEach(star => {
+                star.classList.remove("bi-star-fill", "bi-star");
+                star.classList.add("bi-star"); 
             });
         }
     }
@@ -610,9 +615,10 @@ document.addEventListener("DOMContentLoaded", function () {
     const reviewModal = document.getElementById('reviewModal');
     reviewModal.addEventListener('hidden.bs.modal', function () {
         ratingInput.value = 0;
-        feedbackText.innerHTML = ratingFeedbacks[0];
+        feedbackText.innerHTML = ratingFeedbacks[0]; // 피드백 텍스트 초기화
         stars.forEach(star => {
-            star.className = 'bi bi-star'; // 클래스 전체 초기화 (bi-star-fill 제거)
+            star.className = 'bi bi-star'; // 모든 별을 비어있는 상태로 초기화
+            star.classList.remove("selected"); // selected 클래스도 제거
         });
     });
 });
