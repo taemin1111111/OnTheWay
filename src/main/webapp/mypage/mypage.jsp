@@ -36,7 +36,7 @@
   <style>
     body {
       margin: 0;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Noto Sans KR', sans-serif; /* 기본 폰트 설정 */
       background-color: #f4f7f6;
       color: #333;
       line-height: 1.6;
