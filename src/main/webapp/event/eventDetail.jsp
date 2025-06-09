@@ -19,7 +19,7 @@
 	<style>
 		body {
 			font-family: 'Noto Sans KR', sans-serif;
-			padding: 50px 30px;
+			padding: 0;
 			background-color: #f8f9fa;
 		}
 		
