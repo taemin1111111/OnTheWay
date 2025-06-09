@@ -5,28 +5,34 @@ import java.sql.Timestamp;
 public class infoDto {
 	
 	
-	private String id;
+	private int id;
 	private String name;
 	private String title;
 	private String content;
 	private String photoName;
 	private Timestamp writeday;
 	private int readcount;
+	private String hgId;
 	
 	
 	
 	
-	
+	public String getHgId() {
+		return hgId;
+	}
+	public void setHgId(String hgId) {
+		this.hgId = hgId;
+	}
 	public int getReadcount() {
 		return readcount;
 	}
 	public void setReadcount(int readcount) {
 		this.readcount = readcount;
 	}
-	public String getId() {
+	public int getId() {
 		return id;
 	}
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 	public String getPhotoName() {

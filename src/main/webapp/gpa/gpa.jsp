@@ -263,109 +263,112 @@ document.addEventListener("DOMContentLoaded", function () {
       showToast("후기 등록이 완료되었습니다.");
    });
 </script>
-   <%
-   }
-   %>
+	<%
+	}
+	%>
 
-   <%
-   //아이디1개당 1번 평점 등록
-   String duplicate = request.getParameter("duplicate");
-   if ("1".equals(duplicate)) {
-   %>
-   <script>
-   document.addEventListener("DOMContentLoaded", function () {
-      showToast("이미 평점을 등록하셨습니다.", "error");
-   });
-   </script>
-   <%
-   }
-   ////
-   String pageParam = request.getParameter("page");
-   String order = request.getParameter("order");
-   if (order == null || order.equals(""))
-   order = "추천순";
+	<%
+	//아이디1개당 1번 평점 등록
+	String duplicate = request.getParameter("duplicate");
+	if ("1".equals(duplicate)) {
+	%>
+	<script>
+	document.addEventListener("DOMContentLoaded", function () {
+		showToast("이미 평점을 등록하셨습니다.", "error");
+	});
+	</script>
+	<%
+	}
+	////
+	String pageParam = request.getParameter("page");
+	String order = request.getParameter("order");
+	if (order == null || order.equals(""))
+	order = "추천순";
 
-   int currentPage = (pageParam == null || pageParam.equals("")) ? 1 : Integer.parseInt(pageParam);
-   int perPage = 12;
-   int start = (currentPage - 1) * perPage;
+	int currentPage = (pageParam == null || pageParam.equals("")) ? 1 : Integer.parseInt(pageParam);
+	int perPage = 12;
+	int start = (currentPage - 1) * perPage;
 
-   String hg_id = request.getParameter("hg_id");
-   GpaDao dao = new GpaDao();
-   double avgStars = dao.getAverageStarsByHgId(hg_id);
-   int totalCount = dao.getCountByHgId(hg_id);
-   String hgName = dao.getHgName(hg_id);
-   List<GpaDto> list = dao.getReviewsByHgIdPaging(hg_id, start, perPage, order);
-   SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+	String hg_id = request.getParameter("hg_id");
+	GpaDao dao = new GpaDao();
+	double avgStars = dao.getAverageStarsByHgId(hg_id);
+	int totalCount = dao.getCountByHgId(hg_id);
+	String hgName = dao.getHgName(hg_id);
+	List<GpaDto> list = dao.getReviewsByHgIdPaging(hg_id, start, perPage, order);
+	SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-   String userid = (String) session.getAttribute("userId");
-   %>
+	String userid = (String) session.getAttribute("userId");
+	%>
 
-   <div class="custom-content-wrapper">
-      <div class="summary">
-         <div>
-            <strong><%=hgName%> 평균 평점</strong> <span class="star">★</span> <strong><%=String.format("%.1f", avgStars)%></strong>
-            <small>(5점만점)</small> <br> <strong><%=totalCount%>개의
-               평점</strong>
-         </div>
-         <div>
-            <button class="order-btn" onclick="toggleOrder()">
-               <i class="bi bi-arrow-down-up"></i> <span id="orderText"><%=order%></span>
-            </button>
-         </div>
-      </div>
+	<div class="custom-content-wrapper">
+		<div class="summary">
+			<div>
+				<strong><%=hgName%> 평균 평점</strong> <span class="star">★</span> <strong><%=String.format("%.1f", avgStars)%></strong>
+				<small>(5점만점)</small> <br> <strong><%=totalCount%>개의
+					평점</strong>
+			</div>
+			<div>
+				<button class="order-btn" onclick="toggleOrder()">
+					<i class="bi bi-arrow-down-up"></i> <span id="orderText"><%=order%></span>
+				</button>
+			</div>
+		</div>
 
-      <!-- 후기 테이블 -->
-      <table class="review-table">
-         <thead>
-            <tr>
-               <th>평점</th>
-               <th>아이디</th>
-               <th>방문객 후기</th>
-               <th>후기 작성일</th>
-               <th>후기 추천수</th>
-               <th>평점 추천</th>
-            </tr>
-         </thead>
-         <tbody>
-            <%
-            for (GpaDto dto : list) {
-            %>
-            <tr style="position: relative;">
-   <td><%=dto.getStars()%></td>
-   <td><%=dto.getUserid()%></td>
-   <td><%=dto.getContent()%></td>
-   <td><%=sdf.format(dto.getWriteday())%></td>
-   <td><%=dto.getGood()%></td>
-   <td class="thumb-buttons">
-   <% if (userid == null) { %>
-      <button class="btn btn-sm btn-outline-success" onclick="alert('로그인 후 이용 가능합니다.'); return false;">
-         <i class="bi bi-hand-thumbs-up"></i>
-      </button>
-      <button class="btn btn-sm btn-outline-danger" onclick="alert('로그인 후 이용 가능합니다.'); return false;">
-         <i class="bi bi-hand-thumbs-down"></i>
-      </button>
-   <% } else { %>
-      <a href="<%=request.getContextPath()%>/gpa/goodUpdate.jsp?num=<%=dto.getNum()%>&type=up&hg_id=<%=hg_id%>&order=<%=order%>"
-         class="btn btn-sm btn-outline-success me-1">
-         <i class="bi bi-hand-thumbs-up"></i>
-      </a>
-      <a href="<%=request.getContextPath()%>/gpa/goodUpdate.jsp?num=<%=dto.getNum()%>&type=down&hg_id=<%=hg_id%>&order=<%=order%>"
-         class="btn btn-sm btn-outline-danger">
-         <i class="bi bi-hand-thumbs-down"></i>
-      </a>
-   <% } %>
+		<!-- 후기 테이블 -->
+		<table class="review-table">
+			<thead>
+				<tr>
+					<th>평점</th>
+					<th>아이디</th>
+					<th>방문객 후기</th>
+					<th>후기 작성일</th>
+					<th>후기 추천수</th>
+					<th>평점 추천</th>
+				</tr>
+			</thead>
+			<tbody>
+				<%
+				for (GpaDto dto : list) {
+				%>
+				<tr style="position: relative;">
+	<td><%=dto.getStars()%></td>
+	<td><%=dto.getUserid()%></td>
+	<td><%=dto.getContent()%></td>
+	<td><%=sdf.format(dto.getWriteday())%></td>
+	<td><%=dto.getGood()%></td>
+	<td class="thumb-buttons">
+	<% if (userid == null) { %>
+		<button class="btn btn-sm btn-outline-success" onclick="alert('로그인 후 이용 가능합니다.'); return false;">
+			<i class="bi bi-hand-thumbs-up"></i>
+		</button>
+		<button class="btn btn-sm btn-outline-danger" onclick="alert('로그인 후 이용 가능합니다.'); return false;">
+			<i class="bi bi-hand-thumbs-down"></i>
+		</button>
+	<% } else { %>
+		<a href="<%=request.getContextPath()%>/gpa/goodUpdate.jsp?num=<%=dto.getNum()%>&type=up&hg_id=<%=hg_id%>&order=<%=order%>"
+		   class="btn btn-sm btn-outline-success me-1">
+			<i class="bi bi-hand-thumbs-up"></i>
+		</a>
+		<a href="<%=request.getContextPath()%>/gpa/goodUpdate.jsp?num=<%=dto.getNum()%>&type=down&hg_id=<%=hg_id%>&order=<%=order%>"
+		   class="btn btn-sm btn-outline-danger">
+			<i class="bi bi-hand-thumbs-down"></i>
+		</a>
+	<% } %>
 
-   <%-- ✅ 삭제 버튼을 td 밖에, 오른쪽 띄워서 배치 (작성자일 경우만, confirm 포함) --%>
-   <% if (userid != null && userid.equals(dto.getUserid())) { %>
-   <span style="position: absolute; top: 50%; left: 100%; transform: translate(10px, -50%);">
-      <button onclick="confirmDelete('<%=dto.getNum()%>', '<%=hg_id%>', '<%=order%>')"
-         style="background-color: #dc3545; color: white; border: none;
-               padding: 4px 12px; border-radius: 5px; font-weight: bold; cursor: pointer; white-space: nowrap;">
-         삭제
-      </button>
-   </span>
-<% } %>
-
+	<%-- ✅ 삭제 버튼 조건부 삽입 --%>
+	<% if (userid != null && userid.equals(dto.getUserid())) { %>
+	
+	<span style="position: absolute; top: 50%; left: 100%; transform: translate(10px, -50%);">
+		<button
+			class="btn btn-danger"
+			data-num="<%=dto.getNum()%>"
+			data-hg="<%=hg_id%>"
+			data-order="<%=order%>"
+			onclick="confirmDeleteBtn(this)">
+			삭제
+		</button>
+	</span>
+	<% } %>
 </td>
 
 </tr>
@@ -457,38 +460,75 @@ document.addEventListener("DOMContentLoaded", function () {
 
    <!-- 별점 JS -->
    <script>
-document.addEventListener("DOMContentLoaded", function () {
-  const modalStars = document.querySelectorAll(".modal-star");
-  const input = document.getElementById("modalRatingValue");
 
-  modalStars.forEach((star, idx) => {
-    const half = star.querySelector(".half-hover");
-    const full = star.querySelector(".full-hover");
-    half.addEventListener("mouseenter", () => updateStars(idx + 0.5));
-    full.addEventListener("mouseenter", () => updateStars(idx + 1));
-    half.addEventListener("click", () => selectStars(idx + 0.5));
-    full.addEventListener("click", () => selectStars(idx + 1));
-  });
+   document.addEventListener("DOMContentLoaded", function () {
+	   const modalStars = document.querySelectorAll(".modal-star");
+	   const input = document.getElementById("modalRatingValue");
 
-  function updateStars(value) {
-    modalStars.forEach((c, i) => {
-      const overlay = c.querySelector(".star-overlay");
-      overlay.style.width = "0";
-      if (value >= i + 1) {
-        overlay.style.width = "100%";
-      } else if (value > i) {
-        overlay.style.width = "50%";
-      }
-    });
-  }
+	   let locked = false;
+	   let currentValue = 0;
 
-  function selectStars(value) {
-    input.value = value;
-    updateStars(value);
-  }
+	   modalStars.forEach((star, idx) => {
+	     const half = star.querySelector(".half-hover");
+	     const full = star.querySelector(".full-hover");
 
-  updateStars(0); // 초기 상태
-});
+	     // Hover
+	     half.addEventListener("mouseenter", () => {
+	       if (!locked) paintStars(idx + 0.5);
+	     });
+
+	     full.addEventListener("mouseenter", () => {
+	       if (!locked) paintStars(idx + 1);
+	     });
+
+	     // Click
+	     half.addEventListener("click", () => {
+	       if (!locked) {
+	         lockStars(idx + 0.5);
+	       } else {
+	         resetStars();
+	       }
+	     });
+
+	     full.addEventListener("click", () => {
+	       if (!locked) {
+	         lockStars(idx + 1);
+	       } else {
+	         resetStars();
+	       }
+	     });
+	   });
+
+	   function paintStars(value) {
+	     modalStars.forEach((star, i) => {
+	       const overlay = star.querySelector(".star-overlay");
+	       if (value >= i + 1) {
+	         overlay.style.width = "100%";
+	       } else if (value >= i + 0.5) {
+	         overlay.style.width = "50%";
+	       } else {
+	         overlay.style.width = "0";
+	       }
+	     });
+	   }
+
+	   function lockStars(value) {
+	     locked = true;
+	     currentValue = value;
+	     input.value = value.toFixed(1); // 💥 핵심: 소수점 포함해서 정확히 넘김
+	     paintStars(value);
+	   }
+
+	   function resetStars() {
+	     locked = false;
+	     currentValue = 0;
+	     input.value = "";
+	     paintStars(0);
+	   }
+
+	   // 초기 별 상태
+	   paintStars(0);
+	 });
 
 function showToast(message, type = "success") {
    const toast = document.getElementById("toast");
@@ -505,23 +545,30 @@ function showToast(message, type = "success") {
 
 //원하는 툴로 나열
 function toggleOrder() {
-   let orderModes = ["최신순", "추천순", "평점 높은순", "평점 낮은순"];
-   let currentOrderIndex = orderModes.indexOf("<%=order%>");
-   currentOrderIndex = (currentOrderIndex + 1) % orderModes.length;
-   const selectedOrder = orderModes[currentOrderIndex];
-   const urlParams = new URLSearchParams(window.location.search);
-   urlParams.set("order", selectedOrder);
-   urlParams.set("page", "1");
-   location.href = "<%=request.getContextPath()%>/index.jsp?main=gpa/gpa.jsp&hg_id=" + "<%=hg_id%>" + "&" + urlParams.toString();
+	let orderModes = ["최신순", "추천순", "평점 높은순", "평점 낮은순"];
+	let currentOrderIndex = orderModes.indexOf("<%=order%>");
+	currentOrderIndex = (currentOrderIndex + 1) % orderModes.length;
+	const selectedOrder = orderModes[currentOrderIndex];
+	const urlParams = new URLSearchParams(window.location.search);
+	urlParams.set("order", selectedOrder);
+	urlParams.set("page", "1");
+	location.href = "<%=request.getContextPath()%>/index.jsp?main=gpa/gpa.jsp&hg_id=" + "<%=hg_id%>" + "&" + urlParams.toString();
 }
 
-function confirmDelete(num, hg_id, order) {
-    const context = "<%=request.getContextPath()%>";
-    if (confirm("삭제하시겠습니까?")) {
-        const encodedOrder = encodeURIComponent(order);
-        location.href = `${context}/gpa/deleteGpa.jsp?num=${num}&hg_id=${hg_id}&order=${encodedOrder}`;
-    }
+function confirmDeleteBtn(btn) {
+	const num = btn.getAttribute("data-num");
+	const hg_id = btn.getAttribute("data-hg");
+	const order = btn.getAttribute("data-order");
+
+	const context = "<%=request.getContextPath()%>"; // 여길 따로 분리!
+	if (confirm("삭제하시겠습니까?")) {
+		const encodedOrder = encodeURIComponent(order);
+		// 🔥 이건 백틱 쓰면 안 됨! 문자열 더하기로 해야 안전함
+		location.href = context + "/gpa/deleteGpa.jsp?num=" + num + "&hg_id=" + hg_id + "&order=" + encodedOrder;
+	}
 }
+
+
 
 
 </script>

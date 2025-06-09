@@ -12,9 +12,6 @@
 
     String userid = (String) session.getAttribute("userId");
     
-    System.out.println(num);
-    System.out.println(hg_id);
-    System.out.println(order);
     GpaDao dao = new GpaDao();
 
     // 유효성 확인: 로그인 상태 + 자기 글만 삭제
@@ -25,5 +22,5 @@
     String root = request.getContextPath();
     order = URLEncoder.encode(order, "UTF-8");
 
-    // response.sendRedirect(root + "/index.jsp?main=gpa/gpa.jsp&hg_id=" + hg_id + "&order=" + order);
+     response.sendRedirect(root + "/index.jsp?main=gpa/gpa.jsp&hg_id=" + hg_id + "&order=" + order);
 %>
