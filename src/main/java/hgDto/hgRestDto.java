@@ -5,7 +5,7 @@ public class hgRestDto {
 	
 	private String name;
 	private String tel_no;
-	private String address;
+	private String addr;
 	private int	truck;
 	private int	maintenance;
 	private double latitude;
@@ -14,12 +14,18 @@ public class hgRestDto {
 	private String lpg;
 	private String ev;
 	private String pharm;
+	private String address;
 	
 	
 	
 	
 	
-	
+	public String getAddress() {
+		return address;
+	}
+	public void setAddress(String address) {
+		this.address = address;
+	}
 	public String getLpg() {
 		return lpg;
 	}
@@ -68,12 +74,15 @@ public class hgRestDto {
 	public void setTel_no(String tel_no) {
 		this.tel_no = tel_no;
 	}
-	public String getAddr() {
-		return address;
-	}
-	public void setAddr(String address) {
-		this.address = address;
-	}
+
+	
+	  public String getAddr() {
+		  return addr; 
+	  } 
+	  public void setAddr(String address) { 
+		  this.addr = addr; 
+	  }
+	 
 	public int getTruck() {
 		return truck;
 	}

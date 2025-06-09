@@ -1,3 +1,4 @@
+<%@page import="GpaData.GpaDao"%>
 <%@page import="hg.HgDataDto"%>
 <%@page import="hg.HgDataDao"%>
 <%@page import="java.util.List"%>
@@ -282,7 +283,7 @@ if (searchName != null && !searchName.trim().equals("")) {
 				int n = 1; // 번호 카운터
 				int i = 0; // 인덱스 카운터
 				for (hgRestDto dto : list) { // 리스트를 순회
-				
+				GpaDao gdao=new GpaDao();
 				
 				%>
 				<tr>
@@ -290,8 +291,8 @@ if (searchName != null && !searchName.trim().equals("")) {
 					<td><a class="hg_num"
 						href="<%=request.getContextPath()%>/index.jsp?main=details/info.jsp?hg_id=<%=dto.getId2()%>"><%=dto.getName()%></a></td> <!-- 이름 링크 -->
 					<td><%=dto.getTel_no()%></td> <!-- 전화번호 출력 -->
-					<td><%=dao.getReview()%></td> <!-- 평점 출력 -->
-					<td class="addr-cell" data-index="<%=i%>"></td> <!-- 주소 셀 -->
+					<td><%=gdao.getAverageStarsByHgId(String.valueOf(dto.getId2()))%></td>
+					<td><%=dto.getAddress() %></td>
 				</tr>
 				<%
 				i++; // 인덱스 증가
