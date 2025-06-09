@@ -8,547 +8,494 @@
 <%@ page import="GpaData.GpaDao, GpaData.GpaDto" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="java.net.URLEncoder" %>
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>휴게소 상세 정보</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+
+    <%-- Google Fonts: Noto Sans KR --%>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 
     <style>
-         body {
-    background-color: #fefefe;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: #222;
-    line-height: 1.6;
-  }
+        /* --- 🎨 2024-2025 통합 디자인 시스템 --- */
+        :root {
+            --primary-color: #007aff; /* iOS 스타일 블루 */
+            --background-color: #f7f9fc;
+            --card-background-color: rgba(255, 255, 255, 0.9); /* 약간의 투명도 추가 */
+            --text-primary: #212529;
+            --text-secondary: #5a6573;
+            --text-muted: #8a95a3;
+            --border-color: #e0e4e8; /* 테두리 색상 좀 더 부드럽게 */
+            --star-color: #ffcc00;
+            --success-color: #34c759;
+            --danger-color: #ff3b30;
 
-  h1, h4, h5, h6 {
-    font-weight: 600;
-    color: #212529;
-  }
+            --font-family-main: 'Noto Sans KR', sans-serif;
+            --border-radius-md: 12px;
+            --border-radius-lg: 16px;
+            --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.05); /* 그림자 좀 더 은은하게 */
+            --shadow-medium: 0 8px 25px rgba(0, 0, 0, 0.08); /* 그림자 좀 더 은은하게 */
+        }
 
-  /* 카드 스타일 */
-  .card {
-    border-radius: 1rem;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
-    transition: box-shadow 0.3s ease;
-  }
+        body {
+            font-family: var(--font-family-main);
+            background-color: var(--background-color);
+            color: var(--text-primary);
+        }
 
-  .card:hover {
-    box-shadow: 0 12px 30px rgba(0,0,0,0.12);
-  }
+        /* --- 페이지 헤더 (Hero) --- */
+        .page-hero {
+            /* 기존 패딩은 삭제하고 아래 패딩을 사용 */
+            text-align: center;
+            max-width: 1200px;
+            margin: 0 auto 3rem auto; /* 중앙 정렬 및 하단 여백 */
 
-  .card-header {
-    font-weight: 700;
-    background-color: #fff;
-    border-bottom: none;
-    padding: 1rem 1.5rem;
-    font-size: 1.1rem;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    color: #343a40;
-  }
+            /* 새로 추가되거나 수정된 스타일 */
+            background-color: var(--card-background-color); /* 카드 배경색 적용 */
+            border-radius: var(--border-radius-lg); /* info-card와 동일하게 둥근 모서리 적용 */
+            box-shadow: var(--shadow-soft); /* 부드러운 그림자 적용 */
+            padding: 2.5rem 1.5rem; /* 카드 내부 패딩 조정 */
+            backdrop-filter: blur(8px); /* Glassmorphism 효과 */
+            -webkit-backdrop-filter: blur(8px); /* Safari 지원 */
+        }
+        .page-hero h1 {
+            font-weight: 700;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            /* 기존 padding-left: 130px; 삭제 */
+        }
+        .page-hero .route-info {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+        .page-hero .rating-summary-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            color: var(--text-primary);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            background-color: var(--card-background-color);
+            box-shadow: var(--shadow-soft);
+            transition: transform 0.2s, box-shadow 0.2s;
+            backdrop-filter: blur(5px); /* Glassmorphism 효과 */
+            -webkit-backdrop-filter: blur(5px); /* Safari 지원 */
+        }
+        .page-hero .rating-summary-link:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-medium);
+        }
+        .page-hero .stars .bi { color: var(--star-color); }
+        .page-hero .rating-score { font-weight: 700; font-size: 1.1rem; }
+        .page-hero .review-count { font-size: 1rem; color: var(--text-secondary); }
 
-  /* 각 카드 헤더별 컬러 */
-  .card-header.bg-primary {
-    background-color: #4f46e5 !important; /* Indigo */
-    color: white !important;
-    border-radius: 1rem 1rem 0 0;
-  }
+        /* --- 공통 카드 스타일 --- */
+        .info-card {
+            background-color: var(--card-background-color);
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--shadow-soft);
+            margin-bottom: 2rem;
+            overflow: hidden; /* For header radius */
+            backdrop-filter: blur(8px); /* Glassmorphism 효과 추가 */
+            -webkit-backdrop-filter: blur(8px); /* Safari 지원 */
+        }
+        .info-card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem 1.5rem;
+            font-size: 1.2rem;
+            font-weight: 700;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .info-card-header .bi { color: var(--primary-color); }
+        .info-card-body { padding: 1.5rem; }
+        .info-card .list-group-item {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            transition: background-color 0.2s ease-in-out; /* 호버 효과 추가 */
+        }
+        .info-card .list-group-item:last-child { border-bottom: none; }
+        .info-card .list-group-item:hover {
+            background-color: #f0f4f7; /* 호버 시 약간 밝아지는 효과 */
+            cursor: pointer; /* 클릭 가능함을 시각적으로 나타냄 */
+        }
 
-  .card-header.bg-info {
-    background-color: #0ea5e9 !important; /* Sky blue */
-    color: white !important;
-    border-radius: 1rem 1rem 0 0;
-  }
+        /* --- 정보 항목 스타일 --- */
+        .info-entry {
+            display: flex;
+            align-items: flex-start; /* 아이콘이 위쪽으로 정렬되도록 */
+            gap: 1rem;
+            margin-bottom: 1.2rem;
+            font-size: 0.95rem;
+        }
+        .info-entry:last-child { margin-bottom: 0; }
+        .info-entry .bi {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            min-width: 24px;
+            height: 24px; /* 아이콘 높이 고정 */
+            display: flex;
+            align-items: center;
+            justify-content: center; /* 아이콘 중앙 정렬 */
+        }
+        .info-entry strong { color: var(--text-primary); margin-right: 0.5rem; }
+        .info-entry span { color: var(--text-secondary); }
 
-  .card-header.bg-secondary {
-    background-color: #6b7280 !important; /* Gray 500 */
-    color: white !important;
-    border-radius: 1rem 1rem 0 0;
-  }
+        /* --- 시설 유무 표시 스타일 --- */
+        .facility-status {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .facility-status .icon-box {
+            font-size: 1.5rem;
+            min-width: 24px;
+            height: 24px; /* 아이콘 높이 고정 */
+            display: flex;
+            align-items: center;
+            justify-content: center; /* 아이콘 중앙 정렬 */
+        }
+        .facility-status .is-available { color: var(--success-color); }
+        .facility-status .is-unavailable { color: var(--text-muted); }
+        .facility-status span { font-weight: 500; }
 
-  .card-header.bg-success {
-    background-color: #16a34a !important; /* Green */
-    color: white !important;
-    border-radius: 1rem 1rem 0 0;
-  }
+        /* --- 브랜드, 리뷰 등 특정 섹션 스타일 --- */
+        .brand-logo-wrapper {
+            background-color: #f8f9fa;
+            border-radius: var(--border-radius-md);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            text-align: center;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .brand-logo-wrapper:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-soft);
+        }
+        .brand-logo { max-height: 40px; margin-bottom: 0.5rem; }
+        
+        .review-item {
+            border-bottom: 1px solid var(--border-color);
+            padding: 1.25rem 0;
+        }
+        .review-item:first-child { padding-top: 0; }
+        .review-item:last-child { border-bottom: none; padding-bottom: 0;}
+        .review-item .user-info { font-weight: 700; }
+        .review-item .date-info { font-size: 0.85rem; color: var(--text-muted); }
+        .review-item .stars .bi { color: var(--star-color); }
+        .review-item .content { color: var(--text-secondary); margin: 0.5rem 0; }
+        .review-item .recommend { font-size: 0.9rem; color: var(--primary-color); }
 
-  .card-header.bg-dark {
-    background-color: #111827 !important; /* Dark */
-    color: white !important;
-    border-radius: 1rem 1rem 0 0;
-  }
+        #map {
+            width: 100%;
+            height: 450px;
+            border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg);
+        }
+        
+        .header-action-link {
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--primary-color);
+        }
 
-  .custom-card-header {
-    background-color: #f59e0b;
-    color: #1e293b;
-    justify-content: space-between;
-    border-radius: 1rem 1rem 0 0;
-  }
+        /* 버튼 스타일 강화 (예: 후기 작성하기 버튼) */
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3; /* 기본 Bootstrap hover 색상보다 조금 더 어둡게 */
+            border-color: #0056b3;
+            transform: translateY(-2px); /* 살짝 위로 올라오는 효과 */
+            box-shadow: var(--shadow-soft);
+        }
+        .btn-primary:active {
+            transform: translateY(0); /* 클릭 시 원상 복귀 */
+            box-shadow: none;
+        }
 
-  .custom-card-header .header-action a {
-    color: #1e293b;
-    text-decoration: none;
-    font-weight: 600;
-  }
-
-  .custom-card-header .header-action a:hover {
-    text-decoration: underline;
-  }
-
-  /* 아이콘 스타일 */
-  .facility-icon {
-    font-size: 1.4rem;
-    color: #2563eb;
-  }
-
-  /* 브랜드 로고 */
-  .brand-logo {
-    max-height: 50px;
-    object-fit: contain;
-    filter: drop-shadow(0 0 2px rgba(0,0,0,0.1));
-    transition: transform 0.3s ease;
-  }
-  .brand-logo:hover {
-    transform: scale(1.1);
-  }
-
-  /* 정보 항목 */
-  .info-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-bottom: 0.7rem;
-    font-size: 0.95rem;
-    color: #374151;
-  }
-  .info-item .bi {
-    min-width: 28px;
-    font-size: 1.3rem;
-    color: #3b82f6;
-  }
-
-  /* 리스트 그룹 아이템 */
-  .list-group-item {
-    border: none;
-    padding-left: 0;
-    padding-right: 0;
-  }
-
-  .list-group-item.info-item i.bi {
-    font-size: 1.3rem;
-  }
-
-  /* 별점 */
-  .review-stars .bi-star-fill, 
-  .review-stars .bi-star-half, 
-  .review-stars .bi-star {
-    color: #facc15;
-    font-size: 1.2rem;
-  }
-
-  /* 리뷰 아이템 */
-  .list-group-item.px-0 {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-    border-bottom: 1px solid #e5e7eb;
-  }
-
-  .review-stars small {
-    font-size: 0.85rem;
-    color: #6b7280;
-  }
-
-  /* 링크 버튼 */
-  a.btn-outline-primary {
-    border-radius: 30px;
-    font-weight: 600;
-    padding: 0.4rem 1.2rem;
-    transition: all 0.3s ease;
-  }
-  a.btn-outline-primary:hover {
-    background-color: #2563eb;
-    color: white !important;
-    border-color: #2563eb;
-  }
-
-  /* 반응형 브랜드 리스트 */
-  @media (max-width: 575px) {
-    .brand-logo {
-      max-height: 40px;
-    }
-  }
-</style>
+        /* 모바일 환경 고려 (page-hero h1 padding 조정) */
+        @media (max-width: 768px) {
+            .page-hero h1 {
+                font-size: 2rem; /* 모바일에서 글자 크기 조정 */
+            }
+            .page-hero {
+                padding: 2rem 1rem; /* 모바일에서 패딩 약간 줄임 */
+            }
+        }
+    </style>
 </head>
 <body>
-<%
-    // ... (Properties and Kakao map key scriptlet - REMAINS THE SAME) ...
-    Properties prop = new Properties();
-    InputStream input = application.getResourceAsStream("/WEB-INF/classes/config.properties");
-    prop.load(input);
 
-    String mapKey = prop.getProperty("kakao.api");
-%>
-    <script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=<%=mapKey%>&libraries=services">
-    </script>
-    
 <%
-    // ... (Data fetching scriptlet - REMAINS THE SAME) ...
-    String hgIdFromUrl = request.getParameter("hg_id");
-    if (hgIdFromUrl == null || hgIdFromUrl.trim().isEmpty()) {
-        hgIdFromUrl = "1"; 
+    // --- 기존 Java 로직은 그대로 유지 ---
+    Properties prop = new Properties();
+    try (InputStream input = application.getResourceAsStream("/WEB-INF/classes/config.properties")) {
+        if (input != null) {
+            prop.load(input);
+        }
     }
+    String mapKey = prop.getProperty("kakao.api");
+
+    String hgIdFromUrl = request.getParameter("hg_id");
+    if (hgIdFromUrl == null || hgIdFromUrl.trim().isEmpty()) hgIdFromUrl = "1";
 
     HgDataDto hgDetails = null;
     List<BrandDto> brandStoresList = new ArrayList<>();
-    String errorMessage = null;
-    double latitude = 37.566826; 
-    double longitude = 126.9786567;
-
     List<GpaDto> topReviewsList = new ArrayList<>();
+    String errorMessage = null;
+    double latitude = 37.566826, longitude = 126.9786567;
     double averageStars = 0;
     int reviewCount = 0;
-    String hgNameForUrl = "";
 
     try {
         HgDataDao hgDao = new HgDataDao();
-        BrandDao brandDao = new BrandDao();
-        GpaDao gpaDao = new GpaDao();
-
-        hgDetails = hgDao.getHgDataById(hgIdFromUrl); 
+        hgDetails = hgDao.getHgDataById(hgIdFromUrl);
 
         if (hgDetails != null) {
             latitude = hgDetails.getLatitude();
             longitude = hgDetails.getLongitude();
+
+            BrandDao brandDao = new BrandDao();
             brandStoresList = brandDao.getBrandsByName(hgDetails.getRest_name());
-            
-            if (hgDetails.getRest_name() != null) {
-                 hgNameForUrl = URLEncoder.encode(hgDetails.getRest_name(), "UTF-8");
-            }
 
-            try {
-                topReviewsList = gpaDao.getReviewsByHgIdPaging(hgIdFromUrl, 0, 3, "good DESC"); 
-                averageStars = gpaDao.getAverageStarsByHgId(hgIdFromUrl);
-                reviewCount = gpaDao.getCountByHgId(hgIdFromUrl);
-            } catch (Exception re) {
-                System.err.println("Error fetching reviews for hg_id " + hgIdFromUrl + ": " + re.getMessage());
-            }
-
+            GpaDao gpaDao = new GpaDao();
+            topReviewsList = gpaDao.getReviewsByHgIdPaging(hgIdFromUrl, 0, 3, "추천순"); 
+            averageStars = gpaDao.getAverageStarsByHgId(hgIdFromUrl);
+            reviewCount = gpaDao.getCountByHgId(hgIdFromUrl);
         } else {
             errorMessage = "ID '" + hgIdFromUrl + "'에 해당하는 휴게소 정보를 찾을 수 없습니다.";
         }
-    } catch (NumberFormatException e) {
-        errorMessage = "유효하지 않은 휴게소 ID 형식입니다: '" + hgIdFromUrl + "'. 숫자 형식이어야 합니다.";
-    } catch (SQLException e) {
-        errorMessage = "데이터베이스 오류 발생: " + e.getMessage();
-        e.printStackTrace(); 
     } catch (Exception e) {
-        errorMessage = "알 수 없는 오류 발생: " + e.getMessage();
+        errorMessage = "데이터를 불러오는 중 오류가 발생했습니다: " + e.getMessage();
         e.printStackTrace();
     }
 %>
 
-<div class="container py-4">
+<div class="container my-4 my-lg-5">
     <% if (errorMessage != null) { %>
         <div class="alert alert-danger text-center mt-4">
             <h4 class="alert-heading"><i class="bi bi-exclamation-triangle-fill"></i> 오류 발생</h4>
             <p><%= errorMessage %></p>
-            <hr>
-            <p class="mb-0">문제가 지속되면 관리자에게 문의해주세요.</p>
         </div>
     <% } else if (hgDetails != null) { %>
-        <div class="text-center mb-4 pt-3">
-            <h1 class="display-5 fw-bold"><%= hgDetails.getRest_name() %></h1>
+    
+        <header class="page-hero">
+            <h1><%= hgDetails.getRest_name() %></h1>
+            <p class="route-info"><%= hgDetails.getRoute_name() %> (<%= hgDetails.getRoad_type() %>) - <%= hgDetails.getRoute_direction() %> 방면</p>
+            
             <% if (reviewCount > 0) { %>
-    <p class="mb-2">
-        <a href="<%=request.getContextPath()%>/index.jsp?main=/gpa/gpa.jsp&hg_id=<%= hgIdFromUrl %>" class="text-decoration-none text-dark">
-            <span class="review-stars" style="font-size: 1.4rem; vertical-align: middle;">
-                <%
-                double avgDisplayStars = averageStars;
-                for(int starIter = 1; starIter <= 5; starIter++) {
-                    if (avgDisplayStars >= starIter) {
-                %>
-                    <i class="bi bi-star-fill"></i>
-                <%
-                    } else if (avgDisplayStars >= (starIter - 0.5)) {
-                %>
-                    <i class="bi bi-star-half"></i>
-                <%
-                    } else {
-                %>
-                    <i class="bi bi-star"></i>
-                <%
-                    }
-                }
-                %>
-            </span>
-            <span class="ms-2 fw-bold" style="font-size: 1.2rem; vertical-align: middle;">
-                <%= String.format("%.1f", averageStars) %>
-            </span>
-        </a>
-    </p>
-<% } else { %>
-    <p class="mb-2 text-muted" style="font-size: 1rem;">
-        <i class="bi bi-chat-square-dots"></i> 아직 등록된 후기가 없습니다.
-    </p>
-<% } %>
-            <%-- END: Average Stars and Review Count Display --%>
-
-            <p class="lead text-muted">
-                <%= hgDetails.getRoute_name() %> (<%= hgDetails.getRoad_type() %>) - <%= hgDetails.getRoute_direction() %> 방면
-            </p>
-        </div>
+                <a href="<%=request.getContextPath()%>/index.jsp?main=gpa/gpa.jsp&hg_id=<%= hgIdFromUrl %>" class="rating-summary-link">
+                    <span class="stars">
+                    <% for(int i=1; i<=5; i++) { %>
+                        <i class="bi <%= (averageStars >= i) ? "bi-star-fill" : (averageStars >= i - 0.5 ? "bi-star-half" : "bi-star") %>"></i>
+                    <% } %>
+                    </span>
+                    <span class="rating-score"><%= String.format("%.1f", averageStars) %></span>
+                    <span class="review-count">(<%= reviewCount %>개 후기)</span>
+                </a>
+            <% } else { %>
+                <p class="text-muted"><i class="bi bi-chat-square-dots"></i> 아직 등록된 후기가 없습니다.</p>
+            <% } %>
+        </header>
 
         <div class="row g-4">
-            <!-- Left Column: Information -->
             <div class="col-lg-5">
-                <div class="card shadow-sm mb-4">
-                    <div class="card-header bg-primary text-white">
-                        <i class="bi bi-info-circle-fill facility-icon"></i> 기본 정보
+                <section class="info-card">
+                    <h2 class="info-card-header"><i class="bi bi-info-circle-fill"></i> 기본 정보</h2>
+                    <div class="info-card-body">
+                        <div class="info-entry">
+                            <i class="bi bi-telephone-fill"></i>
+                            <div><strong>전화번호:</strong> <span><%= hgDetails.getPhone_number() != null && !hgDetails.getPhone_number().isEmpty() ? hgDetails.getPhone_number() : "정보 없음" %></span></div>
+                        </div>
+                        <div class="info-entry">
+                            <i class="bi bi-clock-fill"></i>
+                            <div><strong>운영시간:</strong> <span><%= hgDetails.getOpen_time() != null && !hgDetails.getOpen_time().isEmpty() ? hgDetails.getOpen_time() : "정보 없음" %></span></div>
+                        </div>
+                        <div class="info-entry">
+                            <i class="bi bi-p-circle-fill"></i>
+                            <div><strong>주차:</strong> <span><%= hgDetails.getParking_count() > 0 ? hgDetails.getParking_count() + "대 가능" : "정보 없음" %></span></div>
+                        </div>
                     </div>
-                    <div class="card-body">
-                        <p class="info-item"><i class="bi bi-telephone-fill text-primary"></i> <strong>전화번호:</strong> <%= hgDetails.getPhone_number() != null && !hgDetails.getPhone_number().isEmpty() ? hgDetails.getPhone_number() : "정보 없음" %></p>
-                        <p class="info-item"><i class="bi bi-clock-fill text-primary"></i> <strong>운영시간:</strong> <%= hgDetails.getOpen_time() != null && !hgDetails.getOpen_time().isEmpty() ? hgDetails.getOpen_time() : "정보 없음" %> - <%= hgDetails.getClose_time() != null && !hgDetails.getClose_time().isEmpty() ? hgDetails.getClose_time() : "정보 없음" %></p>
-                        <p class="info-item"><i class="bi bi-p-circle-fill text-primary"></i> <strong>주차 가능 대수:</strong> <%= hgDetails.getParking_count() > 0 ? hgDetails.getParking_count() + "대" : "정보 없음" %></p>
-                        <p class="info-item"><i class="bi bi-building text-primary"></i> <strong>휴게소 유형:</strong> <%= hgDetails.getRest_type() != null && !hgDetails.getRest_type().isEmpty() ? hgDetails.getRest_type() : "정보 없음" %></p>
-                        <% if (hgDetails.getRoad_area() > 0) { %>
-                             <p class="info-item"><i class="bi bi-rulers text-primary"></i> <strong>부지 면적:</strong> <%= String.format("%,d", hgDetails.getRoad_area()) %> ㎡</p>
-                        <% } %>
-                    </div>
-                </div>
+                </section>
 
-                <div class="card shadow-sm mb-4">
-                    <div class="card-header bg-info text-dark">
-                        <i class="bi bi-tools facility-icon"></i> 차량 서비스
-                    </div>
+                <section class="info-card">
+                    <h2 class="info-card-header"><i class="bi bi-tools"></i> 차량 서비스</h2>
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item info-item">
-                            <i class="bi bi-fuel-pump-fill <%= "Y".equals(hgDetails.getHas_gas_station()) ? "text-success" : "text-muted" %>"></i> 주유소: <%= "Y".equals(hgDetails.getHas_gas_station()) ? "있음" : "없음" %>
+                        <li class="list-group-item facility-status">
+                            <i class="icon-box bi bi-fuel-pump-fill <%= "Y".equals(hgDetails.getHas_gas_station()) ? "is-available" : "is-unavailable" %>"></i>
+                            <span>주유소</span>
                         </li>
-                        <li class="list-group-item info-item">
-                            <i class="bi bi-fuel-pump-diesel-fill <%= "Y".equals(hgDetails.getHas_lpg_station()) ? "text-success" : "text-muted" %>"></i> LPG 충전소: <%= "Y".equals(hgDetails.getHas_lpg_station()) ? "있음" : "없음" %>
+                        <li class="list-group-item facility-status">
+                            <i class="icon-box bi bi-fuel-pump-diesel-fill <%= "Y".equals(hgDetails.getHas_lpg_station()) ? "is-available" : "is-unavailable" %>"></i>
+                            <span>LPG 충전소</span>
                         </li>
-                        <li class="list-group-item info-item">
-                            <i class="bi bi-ev-station-fill <%= "Y".equals(hgDetails.getHas_ev_station()) ? "text-success" : "text-muted" %>"></i> 전기차 충전소: <%= "Y".equals(hgDetails.getHas_ev_station()) ? "있음" : "없음" %>
-                        </li>
-                        <li class="list-group-item info-item">
-                            <i class="bi bi-wrench-adjustable-circle-fill <%= "Y".equals(hgDetails.getRepair_available()) ? "text-success" : "text-muted" %>"></i> 경정비 가능: <%= "Y".equals(hgDetails.getRepair_available()) ? "가능" : "불가능" %>
+                        <li class="list-group-item facility-status">
+                             <i class="icon-box bi bi-ev-station-fill <%= "Y".equals(hgDetails.getHas_ev_station()) ? "is-available" : "is-unavailable" %>"></i>
+                            <span>전기차 충전소</span>
                         </li>
                     </ul>
-                </div>
+                </section>
                 
-                <div class="card shadow-sm mb-4">
-                    <div class="card-header bg-secondary text-white">
-                       <i class="bi bi-people-fill facility-icon"></i> 편의 시설
-                    </div>
-                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item info-item"><i class="bi bi-person-standing-dress <%= "Y".equals(hgDetails.getHas_toilet()) ? "text-success" : "text-muted" %>"></i> 화장실: <%= "Y".equals(hgDetails.getHas_toilet()) ? "있음" : "정보 없음" %></li>
-                        <li class="list-group-item info-item"><i class="bi bi-capsule-pill <%= "Y".equals(hgDetails.getHas_pharmacy()) ? "text-success" : "text-muted" %>"></i> 약국: <%= "Y".equals(hgDetails.getHas_pharmacy()) ? "있음" : "없음" %></li>
-                        <li class="list-group-item info-item"><i class="bi bi-person-arms-up <%= "Y".equals(hgDetails.getHas_nursing_room()) ? "text-success" : "text-muted" %>"></i> 수유실: <%= "Y".equals(hgDetails.getHas_nursing_room()) ? "있음" : "없음" %></li>
-                        <li class="list-group-item info-item"><i class="bi bi-shop <%= "Y".equals(hgDetails.getHas_store()) ? "text-success" : "text-muted" %>"></i> 편의점/매점: <%= "Y".equals(hgDetails.getHas_store()) ? "있음" : "없음" %></li>
-                        <li class="list-group-item info-item"><i class="bi bi-egg-fried <%= "Y".equals(hgDetails.getHas_restaurant()) ? "text-success" : "text-muted" %>"></i> 식당: <%= "Y".equals(hgDetails.getHas_restaurant()) ? "있음" : "없음" %></li>
-                        <li class="list-group-item info-item"><i class="bi bi-bus-front-fill <%= "Y".equals(hgDetails.getBus_transfer_available()) ? "text-success" : "text-muted" %>"></i> 버스 환승: <%= "Y".equals(hgDetails.getBus_transfer_available()) ? "가능" : "불가능" %></li>
+                <section class="info-card">
+                    <h2 class="info-card-header"><i class="bi bi-people-fill"></i> 편의 시설</h2>
+                    <ul class="list-group list-group-flush">
+                         <li class="list-group-item facility-status">
+                            <i class="icon-box bi bi-shop <%= "Y".equals(hgDetails.getHas_store()) ? "is-available" : "is-unavailable" %>"></i>
+                            <span>편의점/매점</span>
+                        </li>
+                        <li class="list-group-item facility-status">
+                             <i class="icon-box bi bi-egg-fried <%= "Y".equals(hgDetails.getHas_restaurant()) ? "is-available" : "is-unavailable" %>"></i>
+                            <span>식당</span>
+                        </li>
+                         <li class="list-group-item facility-status">
+                            <i class="icon-box bi bi-person-arms-up <%= "Y".equals(hgDetails.getHas_nursing_room()) ? "is-available" : "is-unavailable" %>"></i>
+                            <span>수유실</span>
+                        </li>
+                        <li class="list-group-item facility-status">
+                            <i class="icon-box bi bi-capsule-pill <%= "Y".equals(hgDetails.getHas_pharmacy()) ? "is-available" : "is-unavailable" %>"></i>
+                            <span>약국</span>
+                        </li>
                     </ul>
-                </div>
+                </section>
 
                 <% if (hgDetails.getSignature_menu() != null && !hgDetails.getSignature_menu().trim().isEmpty()) { %>
-                <div class="card shadow-sm mb-4">
-                    <div class="card-header custom-card-header">
-					    <div class="header-title">
-					        <i class="bi bi-star-fill facility-icon"></i> 대표 메뉴
-					    </div>
-					    <div class="header-action">
-					        <a href="<%=request.getContextPath()%>/index.jsp?main=restFoodMenu.jsp&stdRestNm=<%= hgDetails.getRest_name() %>휴게소">모든 메뉴 보기</a>
-					    </div>
-					</div>
-                    <div class="card-body">
-                        <p class="mb-0"><%= hgDetails.getSignature_menu() %></p>
+                <section class="info-card">
+                    <h2 class="info-card-header">
+                        <i class="bi bi-star-fill" style="color:var(--star-color)"></i> 대표 메뉴
+                    </h2>
+                    <div class="info-card-body">
+                        <p class="fs-5 fw-bold mb-0"><%= hgDetails.getSignature_menu() %></p>
+                        <a href="<%=request.getContextPath()%>/index.jsp?main=restFoodMenu.jsp&stdRestNm=<%= URLEncoder.encode(hgDetails.getRest_name(), "UTF-8") %>휴게소" class="header-action-link">모든 메뉴 보기 <i class="bi bi-arrow-right-short"></i></a>
                     </div>
-                </div>
+                </section>
                 <% } %>
-
-                <% if (hgDetails.getExtra_facilities() != null && !hgDetails.getExtra_facilities().trim().isEmpty()) { %>
-                <div class="card shadow-sm"> <%-- Removed mb-4 as it's the last item in this column now --%>
-                    <div class="card-header" style="background-color: #6f42c1; color: white;">
-                        <i class="bi bi-plus-circle-fill facility-icon"></i> 추가 시설 정보
-                    </div>
-                    <div class="card-body">
-                        <p class="mb-0"><%= hgDetails.getExtra_facilities().replace("\n", "<br>") %></p>
-                    </div>
-                </div>
-                <% } %>
-
-                <%-- REVIEW SECTION HAS BEEN MOVED FROM HERE --%>
-
             </div>
 
-            <!-- Right Column: Map and Brands -->
             <div class="col-lg-7">
-                <div class="card shadow-sm mb-4">
-                    <div class="card-header bg-success text-white">
-                        <i class="bi bi-geo-alt-fill facility-icon"></i> 지도 위치
-                    </div>
+                <section class="info-card">
+                    <h2 class="info-card-header"><i class="bi bi-geo-alt-fill"></i> 지도 위치</h2>
                     <div class="card-body p-0">
-                        <div id="map" style="width:100%; height:450px;"></div>
+                        <div id="map"></div>
                     </div>
-                </div>
-
-                <div class="card shadow-sm mb-4"> <%-- Added mb-4 to the Brands card for spacing before reviews --%>
-                    <div class="card-header bg-dark text-white">
-                        <i class="bi bi-tags-fill facility-icon"></i> 입점 브랜드
-                    </div>
-                    <div class="card-body">
-                        <% if (brandStoresList.isEmpty()) { %>
-                            <p class="text-muted text-center">등록된 브랜드 매장이 없습니다.</p>
-                        <% } else { %>
-                            <div class="row row-cols-2 row-cols-md-3 row-cols-lg-4 g-3 justify-content-center">
-                                <% for (BrandDto store : brandStoresList) { %>
-                                    <div class="col text-center">
-                                        <div class="p-2 border rounded bg-light h-100 d-flex flex-column justify-content-center align-items-center">
-                                            <img src="<%=request.getContextPath()%>/BrandLogoImage/<%= store.getBrand_name() %>.png"
-                                                 alt="<%= store.getBrand_name() %> 로고"
-                                                 class="img-fluid brand-logo mb-2"
-                                                 onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='block'; this.nextElementSibling.nextElementSibling.style.display='block';">
-                                            <span class="small fw-bold d-block"><%= store.getBrand_name() %></span>
-                                            <small class="text-muted d-none">이미지 없음</small> 
-                                        </div>
+                </section>
+                
+                <% if (!brandStoresList.isEmpty()) { %>
+                <section class="info-card">
+                    <h2 class="info-card-header"><i class="bi bi-tags-fill"></i> 입점 브랜드</h2>
+                    <div class="info-card-body">
+                        <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 g-3">
+                            <% for (BrandDto store : brandStoresList) { %>
+                                <div class="col">
+                                    <div class="brand-logo-wrapper">
+                                        <img src="<%=request.getContextPath()%>/BrandLogoImage/<%= store.getBrand_name() %>.png"
+                                             alt="<%= store.getBrand_name() %> 로고" class="brand-logo"
+                                             onerror="this.style.display='none'; this.nextElementSibling.classList.remove('d-none');">
+                                        <span class="small fw-bold d-none"><%= store.getBrand_name() %></span>
                                     </div>
-                                <% } %>
-                            </div>
-                        <% } %>
-                    </div>
-                </div>
-
-                <%-- START: Reviews Section (MOVED HERE) --%>
-<div class="card shadow-sm mb-4">
-                    <div class="card-header custom-card-header" style="background-color: #17a2b8; color: white;"> 
-                        <div class="header-title">
-                            <i class="bi bi-chat-left-text-fill facility-icon"></i> 방문자 후기
-                            <% if (reviewCount > 0) { %>
-                                <small style="font-weight: normal;">(총 <%= reviewCount %>개 | 평균 <%= String.format("%.1f", averageStars) %> <i class="bi bi-star-fill" style="color: #ffc107;"></i>)</small>
+                                </div>
                             <% } %>
                         </div>
-                        <div class="header-action">
-                            <a href="<%=request.getContextPath()%>/index.jsp?main=/gpa/gpa.jsp?hg_id=<%= hgIdFromUrl %>" style="color: white;">모든 후기 보기</a>
-                        </div>
                     </div>
-                    <div class="card-body">
-                        <% if (topReviewsList.isEmpty()) { %>
-                            <p class="text-muted text-center">아직 등록된 후기가 없습니다.</p>
+                </section>
+                <% } %>
+                
+                <section class="info-card">
+                    <div class="info-card-header d-flex justify-content-between align-items-center">
+                        <h2 class="mb-0 fs-5 fw-bold"><i class="bi bi-chat-left-text-fill"></i> 방문자 후기</h2>
+                        <a href="<%=request.getContextPath()%>/index.jsp?main=gpa/gpa.jsp&hg_id=<%= hgIdFromUrl %>" class="header-action-link">모두 보기</a>
+                    </div>
+                    <div class="info-card-body">
+                         <% if (topReviewsList.isEmpty()) { %>
+                            <p class="text-center text-muted py-3">아직 등록된 후기가 없습니다.<br>첫 후기를 작성해주세요!</p>
                         <% } else { %>
-                            <ul class="list-group list-group-flush">
-                                <% 
-                                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
-                                    for (GpaDto review : topReviewsList) { 
-                                        String userId = review.getUserid();
-                                        String maskedUserId = userId.length() > 3 ? userId.substring(0, 3) + "***" : userId + "***";
-                                        String formattedDate = review.getWriteday() != null ? sdf.format(review.getWriteday()) : "날짜 없음";
-                                %>
-                                    <li class="list-group-item px-0">
-                                        <div class="d-flex w-100 justify-content-between align-items-baseline">
-                                            <h6 class="mb-1"><%= maskedUserId %></h6>
-                                            <small class="text-muted"><%= formattedDate %></small>
-                                        </div>
-                                        <div class="mb-1 review-stars">
-                                            <% for(int i = 1; i <= 5; i++) { %>
-                                                <% if (i <= review.getStars()) { %>
-                                                    <i class="bi bi-star-fill"></i>
-                                                <% } else if (i - 0.5 == review.getStars()) { %>
-                                                    <i class="bi bi-star-half"></i>
-                                                <% } else { %>
-                                                    <i class="bi bi-star"></i>
-                                                <% } %>
-                                            <% } %>
-                                            <span class="ms-1 text-muted">(<%= String.format("%.1f", review.getStars()) %>)</span>
-                                            <small class="text-muted"><i class="bi bi-hand-thumbs-up-fill text-primary"></i> <%= review.getGood() %>명이 추천</small>
-                                        </div>
-                                        <p class="mb-1"><%= review.getContent() %></p>
-                                    </li>
-                                <% } %>
-                            </ul>
+                            <% 
+                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
+                                for (GpaDto review : topReviewsList) { 
+                                    String userId = review.getUserid();
+                                    String maskedUserId = userId.length() > 3 ? userId.substring(0, 3) + "***" : userId + "***";
+                            %>
+                            <div class="review-item">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="user-info"><%= maskedUserId %></span>
+                                    <span class="date-info"><%= sdf.format(review.getWriteday()) %></span>
+                                </div>
+                                <div class="stars my-1">
+                                    <% for(int i=1; i<=5; i++) { %>
+                                        <i class="bi <%= (review.getStars() >= i) ? "bi-star-fill" : "bi-star" %>"></i>
+                                    <% } %>
+                                </div>
+                                <p class="content"><%= review.getContent() %></p>
+                                <div class="recommend fw-bold">
+                                    <i class="bi bi-hand-thumbs-up-fill"></i> <%= review.getGood() %>
+                                </div>
+                            </div>
+                            <% } %>
                         <% } %>
-                        <div class="text-center mt-3">
-                            <a href="<%=request.getContextPath()%>/index.jsp?main=/gpa/gpa.jsp?hg_id=<%= hgIdFromUrl %>" class="btn btn-outline-primary btn-sm">
+                        <div class="text-center mt-4">
+                            <a href="<%=request.getContextPath()%>/index.jsp?main=gpa/gpa.jsp&hg_id=<%= hgIdFromUrl %>" class="btn btn-primary rounded-pill px-4">
                                 <i class="bi bi-pencil-square"></i> 후기 작성하기
                             </a>
                         </div>
                     </div>
-                </div>
-                <%-- END: Reviews Section --%>
+                </section>
             </div>
         </div>
-    <% } else if (errorMessage == null) { 
-    %>
+
+    <% } else { %>
         <div class="alert alert-warning text-center mt-4">
-            <p>휴게소 정보를 불러올 수 없습니다. ID를 확인해주세요 (<%= hgIdFromUrl %>).</p>
+            <p>휴게소 정보를 불러올 수 없습니다. ID(<%= hgIdFromUrl %>)를 확인해주세요.</p>
         </div>
     <% } %>
 
-    <footer class="text-center text-muted py-4 mt-4">
-        <p>© <%= new java.text.SimpleDateFormat("yyyy").format(new java.util.Date()) %> 휴게소 정보 서비스. All rights reserved.</p>
+    <footer class="text-center text-muted py-4 mt-4 border-top">
+        <p class="mb-0">© <%= new java.text.SimpleDateFormat("yyyy").format(new java.util.Date()) %> 휴게소 정보 서비스. All rights reserved.</p>
     </footer>
 </div>
 
+<script src="//dapi.kakao.com/v2/maps/sdk.js?appkey=<%=mapKey%>&libraries=services"></script>
 <script>
-    // ... (JavaScript for Kakao Map - REMAINS THE SAME) ...
     document.addEventListener("DOMContentLoaded", function() {
-        const mapContainer = document.getElementById('map');
-        
         <% if (hgDetails != null) { %>
+            const mapContainer = document.getElementById('map');
             if (mapContainer) {
                 const lat = <%= latitude %>;
                 const lng = <%= longitude %>;
-                const restName = "<%= hgDetails.getRest_name() != null ? hgDetails.getRest_name().replace("\\", "\\\\").replace("\"", "\\\"") : "휴게소 정보" %>";
-
-                const mapOption = {
+                const restName = "<%= hgDetails.getRest_name().replace("\"", "\\\"") %>";
+                const map = new kakao.maps.Map(mapContainer, {
                     center: new kakao.maps.LatLng(lat, lng),
-                    level: 5 
-                };
-
-                const map = new kakao.maps.Map(mapContainer, mapOption);
-                map.setDraggable(true);
-                map.setZoomable(true);
-
-                const markerPosition  = new kakao.maps.LatLng(lat, lng);
-                const marker = new kakao.maps.Marker({
-                    position: markerPosition
+                    level: 5
                 });
+                const marker = new kakao.maps.Marker({ position: new kakao.maps.LatLng(lat, lng) });
                 marker.setMap(map);
-
-                const iwContent = '<div style="padding:5px; text-align:center; min-width:150px;">' + restName + '<br><a href="https://map.kakao.com/link/map/' + encodeURIComponent(restName) + ',' + lat + ',' + lng + '" style="color:blue" target="_blank">큰지도보기</a> <a href="https://map.kakao.com/link/to/' + encodeURIComponent(restName) + ',' + lat + ',' + lng + '" style="color:blue" target="_blank">길찾기</a></div>';
-                const iwPosition = new kakao.maps.LatLng(lat, lng);
                 const infowindow = new kakao.maps.InfoWindow({
-                    position : iwPosition,
-                    content : iwContent,
-                    disableAutoPan: true 
+                    content: `<div style="padding:5px;font-size:14px;text-align:center;">${restName}<br><a href="https://map.kakao.com/link/to/${restName},${lat},${lng}" style="color:blue" target="_blank">길찾기</a></div>`,
+                    disableAutoPan: true
                 });
-                 kakao.maps.event.addListener(marker, 'click', function() {
-                      infowindow.open(map, marker);
-                 });
-
-            } else {
-                console.error("Map container not found.");
-            }
-        <% } else { %>
-            if (mapContainer) {
-                 const defaultLat = 36.5; 
-                 const defaultLng = 127.5;
-                 const mapOption = {
-                    center: new kakao.maps.LatLng(defaultLat, defaultLng),
-                    level: 10
-                };
-                const map = new kakao.maps.Map(mapContainer, mapOption);
-                mapContainer.innerHTML = '<div class="d-flex justify-content-center align-items-center h-100 text-muted">지도 정보를 불러올 수 없습니다.</div>';
+                kakao.maps.event.addListener(marker, 'click', function() {
+                    infowindow.open(map, marker);
+                });
             }
         <% } %>
     });
 </script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
