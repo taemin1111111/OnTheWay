@@ -214,7 +214,7 @@
     </div>
   <% } else { %> <!-- 사용자 이름이 있을 때 -->
     <div class="top-links d-flex align-items-center">
-      <a href="<%=root%>/mypage/mypage.jsp" class="me-3 text-decoration-none fw-bold text-dark" style="white-space: nowrap;">
+      <a href="<%=root%>/index.jsp?main=mypage/mypage.jsp" class="me-3 text-decoration-none fw-bold text-dark" style="white-space: nowrap;">
         <%= userName %>님 환영합니다 <!-- 사용자 이름 표시 -->
       </a>
       <a href="<%=root%>/login/logout.jsp" class="btn btn-outline-secondary">로그아웃</a> <!-- 로그아웃 버튼 -->

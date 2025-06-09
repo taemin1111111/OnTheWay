@@ -226,17 +226,6 @@
 </head>
 <body>
 
-<header class="page-header">
-  <a href="<%= root %>/" class="logo">MyApplication</a>
-  <div class="user-actions">
-    <% if (username != null && !username.equals("GuestUser")) { %>
-      <span>안녕하세요, <%= user.getUsername() %>님</span>
-      <a href="<%= root %>/logout.jsp">로그아웃</a>
-    <% } else { %>
-      <a href="<%= root %>/login.jsp">로그인</a>
-    <% } %>
-  </div>
-</header>
 
 <div class="container">
   <div class="tab-menu">
