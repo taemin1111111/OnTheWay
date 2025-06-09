@@ -116,7 +116,7 @@ List<hgRestDto> list;
     <br> 
     <!--<%=request.getContextPath()%>/index  -->
     
-    <form method="get" action="<%=request.getContextPath()%>/index.jsp">
+    <form method="get" action="<%=request.getContextPath()%>/index.jsp" id="ckbox">
     <input type="hidden" name="main" value="hg/hgRestInfo.jsp">
     <input type="text" name="searchName" placeholder="검색할 휴게소 이름을 입력하세요." style="width:500px;" id="sName" value="<%= (searchName == null || searchName.trim().equals("")) ? "" : searchName %>">
     <button type="submit" class="btn btn-success" id="search">검색</button>
@@ -168,12 +168,12 @@ List<hgRestDto> list;
 
  <script>
  
-  /* document.querySelectorAll(".a").forEach(cb => {
+ document.querySelectorAll(".a").forEach(cb => {
 	    cb.addEventListener('change', () => {
-	        document.querySelector('form').submit();
+	        document.querySelector('#ckbox').submit();
 	    });
-	});  
- */ 
+	});   
+ 
  
  
 
