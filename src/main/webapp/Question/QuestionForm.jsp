@@ -8,7 +8,7 @@
   <style>
     body {
       font-family: 'Noto Sans KR', sans-serif;
-      padding: 40px;
+      padding: 0;
       background: linear-gradient(to bottom, #e3f2fd, #ffffff);
       color: #333;
     }

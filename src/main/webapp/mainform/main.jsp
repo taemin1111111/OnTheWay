@@ -22,19 +22,51 @@ String root = request.getContextPath();
 <link rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" />
 <link
-	href="https://fonts.googleapis.com/css2?family=Krona+One&display=swap"
+	href="https://fonts.googleapis.com/css2?family=Krona+One&family=Noto+Sans+KR:wght@400;500;700&display=swap"
 	rel="stylesheet">
 <style>
+/* --- 🎨 2024-2025 통합 디자인 시스템 (확장) --- */
+:root {
+    --primary-color: #28a745; /* 고속도로 관련: 녹색 계열 */
+    --accent-color: #ffc107; /* 강조 (노란색) */
+    --background-color: #f7f9fc; /* 전체 배경 */
+    --card-background-color: #ffffff; /* 카드 배경 */
+    --text-primary: #212529;
+    --text-secondary: #5a6573;
+    --text-muted: #8a95a3;
+    --border-color: #e0e4e8; /* 테두리 색상 좀 더 부드럽게 */
+    --success-color: #28a745;
+    --danger-color: #dc3545;
+    --button-primary-bg: #28a745;
+    --button-primary-hover-bg: #218838;
+    --button-danger-bg: #dc3545;
+    --button-danger-hover-bg: #c82333;
+
+    --font-family-main: 'Noto Sans KR', sans-serif;
+    --font-family-logo: 'Krona One', sans-serif;
+    --border-radius-sm: 8px;
+    --border-radius-md: 12px;
+    --border-radius-lg: 16px;
+    --shadow-soft: 0 4px 12px rgba(0, 0, 0, 0.05); /* 그림자 좀 더 은은하게 */
+    --shadow-medium: 0 8px 25px rgba(0, 0, 0, 0.08); /* 그림자 좀 더 은은하게 */
+
+    --gap-sm: 1rem;
+    --gap-md: 1.5rem;
+    --gap-lg: 2rem;
+}
+
 body {
-	font-family: 'Noto Sans KR', Arial, sans-serif;
-	background: #f5f6f5;
+	font-family: var(--font-family-main);
+	background: var(--background-color);
 	margin: 0;
 	padding-top: 0px;
 	position: relative;
+	color: var(--text-primary);
 }
 
 .container {
-	width: 80%;
+	width: 90%; /* 조금 더 넓게 */
+	max-width: 1200px; /* 최대 너비 설정 */
 	margin: 0 auto;
 	padding: 20px 0;
 }
@@ -47,55 +79,61 @@ body {
 .main-title h1 {
 	font-size: 28px;
 	font-weight: 700;
-	color: #333;
+	color: var(--text-primary);
 	text-shadow: -1px -1px 0 #000;
 }
 
 .main-title p {
 	font-size: 16px;
-	color: #666;
+	color: var(--text-secondary);
 }
 
 .event-section, .notice-section {
-	background: #fff;
-	border-radius: 8px;
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-	padding: 20px;
-	margin-bottom: 30px;
-	margin-top: 100px
+	background: var(--card-background-color);
+	border-radius: var(--border-radius-md);
+	box-shadow: var(--shadow-soft);
+	padding: var(--gap-md);
+	margin-bottom: var(--gap-lg);
+	margin-top: 100px; /* 기존과 동일하게 유지 */
 }
 
 .notice-section {
-	max-width: 600px;
-	width: 90%;
-	margin: 0 auto 30px;
+    margin: var(--gap-lg) 0 30px; /* 좌우 마진 0으로 설정, 상단 마진은 var(--gap-lg) */
 }
 
 .section-title {
 	font-size: 24px;
 	font-weight: 700;
-	color: #333;
+	color: var(--text-primary);
 	margin-bottom: 20px;
 	text-align: center;
 }
 
 .event-list {
 	display: flex;
-	justify-content: space-between;
 	flex-wrap: wrap;
+	gap: 2%; /* 카드 사이 간격 */
+	justify-content: flex-start; /* 카드들을 시작점부터 정렬 */
 }
 
 .event-card {
-	width: 32%;
-	border: 1px solid #eee;
-	border-radius: 8px;
+	width: 32%; /* 3개씩 한 줄에 오도록 100% / 3 = 33.33% - 간격 */
+	border: 1px solid var(--border-color);
+	border-radius: var(--border-radius-md);
 	overflow: hidden;
 	text-align: center;
-	transition: transform 0.2s;
+	transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+	display: flex; /* 내부 요소 정렬을 위해 flex 추가 */
+	flex-direction: column; /* 세로 방향으로 정렬 */
+	justify-content: space-between; /* 내용과 더보기 버튼 사이 공간 확보 */
+	margin-bottom: 20px; /* 각 카드 하단 여백 추가 */
+    text-decoration: none; /* 링크 밑줄 제거 */
+    color: inherit; /* 링크 색상 상속 */
 }
 
 .event-card:hover {
 	transform: translateY(-5px);
+    box-shadow: var(--shadow-medium);
 }
 
 .event-card img {
@@ -104,27 +142,33 @@ body {
 	object-fit: cover;
 }
 
+.event-card .event-title {
+    font-size: 1.1em;
+    font-weight: 700;
+    color: var(--text-primary);
+    padding: 10px 15px 5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .event-card .event-info {
-	padding: 15px;
+	padding: 0px 15px 15px; /* 상단 패딩 제거, 하단 유지 */
+	font-size: 0.9em;
+	color: var(--text-secondary);
 }
 
-.event-card .event-info h5 {
-	font-size: 16px;
-	font-weight: 600;
-	color: #333;
-	margin-bottom: 10px;
+.event-card .event-info strong {
+	color: var(--primary-color);
 }
 
-.event-card .event-info p {
-	font-size: 14px;
-	color: #666;
-	margin: 0;
-}
 
+/* "더 보기" 버튼 스타일 통일 및 개선 */
 .more-btn {
-	display: block;
-	text-align: center;
+	display: flex; /* flexbox 사용 */
+	justify-content: flex-end; /* 우측 정렬 */
 	margin-top: 20px;
+	padding-right: 10px; /* 우측 패딩 추가 */
 }
 
 .more-btn a {
@@ -132,12 +176,14 @@ body {
 	align-items: center;
 	gap: 5px;
 	font-size: 16px;
-	color: #2c7a2c;
+	color: var(--primary-color); /* 테마 색상으로 변경 */
 	text-decoration: none;
+	font-weight: 600; /* 글씨 굵게 */
+	transition: color 0.2s, text-decoration 0.2s;
 }
 
 .more-btn a:hover {
-	color: #1b4d1b;
+	color: var(--button-primary-hover-bg); /* 호버 색상 */
 	text-decoration: underline;
 }
 
@@ -149,26 +195,29 @@ body {
 .notice-table th, .notice-table td {
 	padding: 12px;
 	text-align: left;
-	border-bottom: 1px solid #eee;
+	border-bottom: 1px solid var(--border-color);
 }
 
 .notice-table th {
 	font-size: 14px;
 	font-weight: 700;
-	color: #444;
+	color: var(--text-secondary);
+	background-color: #f8f9fa; /* 헤더 배경색 */
 }
 
 .notice-table td {
 	font-size: 14px;
-	color: #666;
+	color: var(--text-primary);
 }
 
 .notice-table td a {
-	color: #333;
+	color: var(--text-primary);
 	text-decoration: none;
+	transition: color 0.2s;
 }
 
 .notice-table td a:hover {
+	color: var(--primary-color);
 	text-decoration: underline;
 }
 
@@ -181,7 +230,7 @@ body {
 
 .hero-section {
 	position: relative;
-	width: 100%;
+	width: 100%; /* 너비를 100%로 설정하여 화면 전체 차지 */
 	height: 400px;
 	overflow: hidden;
 }
@@ -208,7 +257,7 @@ body {
 }
 
 .hero-text h1 {
-	font-family: 'Krona One', sans-serif;
+	font-family: var(--font-family-logo);
 	font-size: 48px;
 	font-weight: 800;
 	margin: 0;
@@ -229,13 +278,14 @@ body {
 }
 
 .search-bar-container {
-  background: #fff;
+  background: var(--card-background-color);
   padding: 10px 0;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  box-shadow: var(--shadow-soft);
   z-index: 1000;
   width: 100%;
   display: flex;
   justify-content: center;
+  position: relative; /* z-index 적용을 위해 필요 */
 }
 
 .search-input {
@@ -244,12 +294,13 @@ body {
   font-size: 16px;
   border-radius: 30px;
   padding-left: 20px;
-  transition: box-shadow 0.3s ease;
+  border: 1px solid var(--border-color); /* 테두리 추가 */
+  transition: box-shadow 0.3s ease, border-color 0.3s ease;
 }
 
 .search-input:focus {
   box-shadow: 0 0 8px rgba(40, 167, 69, 0.6);
-  border-color: #28a745;
+  border-color: var(--primary-color);
   outline: none;
 
 }
@@ -258,11 +309,62 @@ body {
   border-radius: 30px;
   padding: 8px 20px;
   font-weight: 600;
+  background-color: var(--button-primary-bg);
+  border-color: var(--button-primary-bg);
+  transition: background-color 0.2s, border-color 0.2s;
+}
+
+.btn-success:hover {
+  background-color: var(--button-primary-hover-bg);
+  border-color: var(--button-primary-hover-bg);
+}
+
+/* 모바일 대응 */
+@media (max-width: 768px) {
+    .container {
+        width: 95%; /* 모바일에서 컨테이너 너비 확대 */
+        padding: 15px 0;
+    }
+    .event-section, .notice-section {
+        padding: var(--gap-sm);
+        margin-top: 50px; /* 모바일에서 마진 조정 */
+    }
+    .event-list {
+        flex-direction: column; /* 이벤트 카드 세로 정렬 */
+        align-items: center; /* 가운데 정렬 */
+        gap: var(--gap-md); /* 세로 간격 조정 */
+    }
+    .event-card {
+        width: 95%; /* 모바일에서 폭 꽉 채우기 */
+        margin-bottom: 0; /* 개별 카드 하단 여백 제거 (gap으로 대체) */
+    }
+    .notice-section {
+        width: 100%; /* 모바일에서 전체 너비 차지 (컨테이너 패딩 적용) */
+        padding: var(--gap-sm);
+    }
+    .notice-table th, .notice-table td {
+        padding: 10px;
+        font-size: 13px; /* 글꼴 크기 약간 줄임 */
+    }
+    .hero-text h1 {
+        font-size: 36px; /* 모바일에서 제목 크기 조정 */
+    }
+    .hero-text p {
+        font-size: 16px; /* 모바일에서 부제목 크기 조정 */
+    }
+    .search-input {
+        max-width: 80vw; /* 모바일에서 검색창 너비 조정 */
+        width: 100%;
+    }
+    .search-bar-container .d-flex {
+        flex-direction: column; /* 검색창과 버튼 세로 정렬 */
+        gap: 10px; /* 세로 간격 */
+        align-items: center;
+    }
 }
 </style>
 </head>
 <body>
-	<!-- 메인 히어로 섹션 -->
 	<div class="hero-section">
 		<img src="<%=root%>/imgway/wayway.jpg" alt="고속도로 이미지">
 		<div class="hero-text">
@@ -270,35 +372,52 @@ body {
 			<p>전국 고속도로 정보.</p>
 		</div>
 	</div>
+	
+	<div class="search-bar-container">
+	  <form action="<%=root%>/searchResults.jsp" method="get" class="d-flex justify-content-center align-items-center">
+	    <input 
+	      type="text" 
+	      name="query" 
+	      class="form-control search-input" 
+	      placeholder="검색어를 입력하세요" 
+	      aria-label="검색어" 
+	      required />
+	    <button type="submit" class="btn btn-success ms-2">
+	      <i class="bi bi-search"></i> 검색
+	    </button>
+	  </form>
+	</div>
 
-	<!-- 이벤트 섹션 -->
-	<div class="event-section">
-		<div class="section-title">이벤트</div>
-		<div class="event-list">
-			<%
-			EventDao dao = new EventDao();
-			List<EventDto> list = dao.getAllEvents();
-			HgDataDao hgDao = new HgDataDao();
-
-			int count = Math.min(3, list.size()); //3개 띄우기
-			for (int i = 0; i < count; i++) {
-				EventDto dto = list.get(i);
-				String restName = "";
-				try {
-					restName = hgDao.getRestNameById(Integer.parseInt(dto.getHgId()));
-				} catch (Exception e) {
-					restName = "알 수 없음";
-				}
-			%>
-			<div class="col-md-4 d-flex mb-4">
+	<div class="container"> <%-- 이 `div` 태그가 이제 메인 컨텐츠를 감싸줍니다. --%>
+		<div class="event-section">
+			<div class="section-title">이벤트</div>
+			<div class="event-list">
+				<%
+				EventDao dao = new EventDao();
+				List<EventDto> list = dao.getAllEvents();
+				HgDataDao hgDao = new HgDataDao();
+	
+				int count = Math.min(3, list.size()); //3개 띄우기
+				for (int i = 0; i < count; i++) {
+					EventDto dto = list.get(i);
+					String restName = "";
+					try {
+						restName = hgDao.getRestNameById(Integer.parseInt(dto.getHgId()));
+					} catch (Exception e) {
+						restName = "알 수 없음";
+					}
+				%>
+				<%-- col-md-4 d-flex mb-4 제거, event-card에 flex 속성 적용 --%>
 				<a href="index.jsp?main=event/eventDetail.jsp?id=<%=dto.getId()%>"
-					class="event-card w-100"> <%
- if (dto.getPhoto() != null && !dto.getPhoto().isEmpty()) {
- %>
-					<img src="eventImage/<%=dto.getPhoto()%>" class="event-photo"
-					alt="이벤트 이미지"> <%
- }
- %>
+					class="event-card"> 
+					<%
+					if (dto.getPhoto() != null && !dto.getPhoto().isEmpty()) {
+					%>
+						<img src="eventImage/<%=dto.getPhoto()%>" class="event-photo"
+						alt="이벤트 이미지"> 
+					<%
+					}
+					%>
 					<div class="event-title"><%=dto.getTitle()%></div>
 					<div class="event-info">
 						휴게소: <strong><%=restName%></strong>
@@ -309,56 +428,58 @@ body {
 						~
 						<%=dto.getEndday()%></div>
 				</a>
+				<%
+				}
+				%>
 			</div>
-			<%
-			}
-			%>
-			<a href="<%=root%>/index.jsp?main=event/eventList.jsp"><i
-				class="bi bi-arrow-right-circle"></i> 더 보기</a>
+			<%-- "더 보기" 버튼을 .more-btn div로 감싸도록 변경 --%>
+			<div class="more-btn">
+				<a href="<%=root%>/index.jsp?main=event/eventList.jsp">
+					<i class="bi bi-arrow-right-circle"></i> 더 보기
+				</a>
+			</div>
+		</div>
+	
+		<div class="notice-section">
+			<div class="section-title">공지사항</div>
+			<table class="notice-table">
+				<thead>
+					<tr>
+						<th>제목</th>
+						<th>등록일</th>
+					</tr>
+				</thead>
+				<tbody>
+					<%
+						// 공지사항 Dao 불러오기
+						infoDao inDao=new infoDao();
+						List<infoDto> iList = inDao.getBoardList(); // 전체 불러오기
+						String  restName = "";//일단 list랑 맞춰서 만들었는데 제목에는 실제로 실행 해보니 필요없을거 같아서 그냥 만들어만 두었음.
+						int nCount = Math.min(3, iList.size()); // 최대 3개만 출력
+						SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+						for (int i = 0; i < nCount; i++) {
+							infoDto iDto= iList.get(i);
+							// restName = hgDao.getRestNameById(Integer.parseInt(iDto.getHgId())); // 공지사항에 휴게소명 필요 없으므로 주석 처리
+					%>
+					<tr>
+						<td>
+							<a href="index.jsp?main=infoList/detail.jsp?id=<%=iDto.getId()%>">
+								<%=iDto.getTitle()%>
+							</a>
+						</td>
+						<td><%=sdf.format(iDto.getWriteday())%></td>
+					</tr>
+					<%
+						}
+					%>
+				</tbody>
+			</table>
+			<div class="more-btn">
+				<a href="<%=root%>/index.jsp?main=infoList/infoList.jsp">
+					<i class="bi bi-plus-circle"></i> 더 보기
+				</a>
+			</div>
 		</div>
 	</div>
-
-	<!-- 공지사항 섹션 -->
-<div class="notice-section">
-    <div class="section-title">공지사항</div>
-    <table class="notice-table">
-        <thead>
-            <tr>
-                <th>제목</th>
-                <th>등록일</th>
-            </tr>
-        </thead>
-        <tbody>
-            <%
-                // 공지사항 Dao 불러오기
-                infoDao inDao=new infoDao();
-                List<infoDto> iList = inDao.getBoardList(); // 전체 불러오기
-              String  restName = "";//일단 list랑 맞춰서 만들었는데 제목에는 실제로 실행 해보니 필요없을거 같아서 그냥 만들어만 두었음.
-                int nCount = Math.min(3, iList.size()); // 최대 3개만 출력
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                for (int i = 0; i < nCount; i++) {
-                     infoDto iDto= iList.get(i);
-                     restName = hgDao.getRestNameById(Integer.parseInt(iDto.getHgId()));
-            %>
-            <tr>
-                <td>
-                    <a href="index.jsp?main=infoList/detail.jsp?id=<%=iDto.getId()%>">
-                        <%=iDto.getTitle()%>
-                    </a>
-                </td>
-                <td><%=sdf.format(iDto.getWriteday())%></td>
-            </tr>
-            <%
-                }
-            %>
-        </tbody>
-    </table>
-    <div class="more-btn">
-        <a href="<%=root%>/index.jsp?main=infoList/infoList.jsp">
-            <i class="bi bi-plus-circle"></i> 더 보기
-        </a>
-    </div>
-</div>
 </body>
-</html>
 </html>

@@ -3,19 +3,15 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>OnTheWay</title>	
+<title>OnTheWay</title>
 
-<!-- 구글 폰트: Noto Sans KR -->
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR&display=swap" rel="stylesheet">
 
-<!-- 부트스트랩 CSS & JS -->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
-<!-- 부트스트랩 아이콘 -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
 
-<!-- ✅ Swiper.js CDN 추가 -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 
@@ -36,12 +32,18 @@ body {
 
 /* ----------- main.jsp 스타일 ----------- */
 .info-box {
-    width: 48%;
+    width: 48%; /* 기본값 (두 개 나란히 배치될 때) */
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
     padding: 20px;
     background-color: white;
     border-radius: 8px;
+    margin-bottom: 30px; /* 섹션 간 간격 추가 */
 }
+
+.info-box.full-width { /* 이벤트 섹션처럼 전체 너비를 사용할 때 */
+    width: 100%;
+}
+
 .info-box h6 {
     text-align: center;
     margin-bottom: 15px;
@@ -116,8 +118,8 @@ body {
 </style>
 </head>
 <%
-   String mainPage="mainform/main.jsp"; 
-  
+   String mainPage="mainform/main.jsp";
+
   if(request.getParameter("main")!=null)
   {
 	  mainPage=request.getParameter("main");
@@ -125,20 +127,16 @@ body {
 %>
 <body>
 
-    <!-- 전체 폭 title -->
     <jsp:include page="mainform/title.jsp" />
 
-    <!-- 중앙 정렬된 본문 -->
     <div class="centered-content">
-    <jsp:include page="<%=mainPage %>"/>
+        <jsp:include page="<%=mainPage %>"/>
     </div>
 
-    <!-- 전체 폭 footer -->
     <jsp:include page="mainform/footer.jsp" />
 
 </body>
-	<!-- 이벤트 팝업 모달 -->
-<div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
+	<div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered modal-lg">
     <div class="modal-content">
       <div class="modal-header" style="background-color: #003366;">
@@ -147,20 +145,24 @@ body {
       </div>
       <div class="modal-body text-center">
         <img src="image2/top_01.jpg" alt="이벤트 배너" style="max-width: 100%; height: auto;">
+        <div class="form-check mt-3 d-flex justify-content-center">
+            <input class="form-check-input" type="checkbox" value="" id="dismissForWeekCheckbox">
+            <label class="form-check-label ms-2" for="dismissForWeekCheckbox">
+                일주일 동안 다시 보지 않기
+            </label>
+        </div>
       </div>
-      <div class="modal-footer d-flex justify-content-between">
-        <button type="button" class="btn btn-outline-secondary" id="dismissForWeekBtn">일주일 동안 다시 보지 않기</button>
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+      <div class="modal-footer d-flex justify-content-end"> <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- 모달 자동 표시 및 일주일간 안보기 처리 스크립트 -->
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    const modal = new bootstrap.Modal(document.getElementById('eventModal'));
-    const dismissForWeekBtn = document.getElementById('dismissForWeekBtn');
+    const modalElement = document.getElementById('eventModal');
+    const modal = new bootstrap.Modal(modalElement);
+    const dismissForWeekCheckbox = document.getElementById('dismissForWeekCheckbox');
 
     // 날짜 계산 (오늘 + 7일)
     function getExpiryDate(days) {
@@ -177,13 +179,13 @@ document.addEventListener('DOMContentLoaded', function () {
       modal.show();
     }
 
-    // 일주일간 다시 보지 않기 버튼 클릭 시
-    dismissForWeekBtn.addEventListener('click', function () {
-      const expiry = getExpiryDate(7);
-      localStorage.setItem('eventModalDismissedUntil', expiry);
-      modal.hide();
+    // 모달이 닫히기 직전(hide.bs.modal)에 체크박스 상태 확인
+    modalElement.addEventListener('hide.bs.modal', function () {
+        if (dismissForWeekCheckbox.checked) {
+            const expiry = getExpiryDate(7);
+            localStorage.setItem('eventModalDismissedUntil', expiry);
+        }
     });
-  });
-
+});
 </script>
 </html>
