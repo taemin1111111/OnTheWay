@@ -72,75 +72,6 @@
       font-weight: 700; /* 호버 시 글자 두께 */
       border-radius: 6px; /* 호버 시 모서리 둥글게 */
     }
-    /* 드롭다운 메뉴 스타일 */
-    .main-nav .dropdown {
-      position: relative;
-    }
-    .main-nav .dropdown-toggle::after {
-      display: none !important; /* 드롭다운 화살표 제거 */
-    }
-.main-nav .dropdown-menu {
-  display: none;
-  position: fixed;        /* 화면 기준 고정 */
-  top: 60px;             /* 메뉴 바로 아래 적당한 위치 지정, 필요에 따라 조절 */
-  left: 50%;             /* 화면 가로 중앙 */
-  transform: translateX(-50%);
-  background: rgba(255, 255, 255, 0.85);
-  border: none;
-  border-radius: 10px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-  padding: 20px;
-  min-width: 600px;
-  z-index: 1000;
-  transition: all 0.3s ease;
-}
-
-.dropdown:hover .dropdown-menu {
-  display: flex !important;
-}
-    /* 드롭다운 메뉴 내용 스타일 */
-    .dropdown-menu .menu-content {
-      display: flex; /* 플렉스박스 레이아웃 사용 */
-      align-items: center; /* 수직 중앙 정렬 */
-      width: 100%; /* 전체 너비 */
-    }
-    .dropdown-menu .menu-text {
-      flex: 1; /* 남은 공간 차지 */
-      padding: 10px 20px; /* 패딩 */
-    }
-    .dropdown-menu .menu-text h4 {
-      margin: 0 0 10px 0; /* 제목 마진 */
-      font-size: 18px; /* 제목 크기 */
-      color: #333; /* 제목 색상 */
-    }
-    .dropdown-menu .menu-text p {
-      margin: 5px 0; /* 문단 마진 */
-      font-size: 14px; /* 문단 크기 */
-      color: #666; /* 문단 색상 */
-    }
-    .dropdown-menu .menu-image {
-      flex: 0 0 300px; /* 고정 너비 */
-      height: 200px; /* 고정 높이 */
-      background-size: cover; /* 배경 이미지 크기 조정 */
-      background-position: center; /* 배경 이미지 중앙 정렬 */
-      border-radius: 8px; /* 모서리 둥글게 */
-    }
-    .dropdown-menu .dropdown-item {
-      font-size: 16px; /* 항목 글자 크기 */
-      padding: 5px 10px; /* 패딩 */
-      color: #333; /* 항목 색상 */
-      text-align: left; /* 텍스트 왼쪽 정렬 */
-      transition: all 0.3s ease; /* 호버 시 효과 */
-      white-space: nowrap; /* 줄 바꿈 방지 */
-      text-decoration: none; /* 밑줄 제거 */
-      display: block; /* 블록 요소로 설정 */
-    }
-    .dropdown-menu .dropdown-item:hover,
-    .dropdown-menu .dropdown-item:focus {
-      background: linear-gradient(90deg, #0077cc, #005fa3); /* 호버 시 배경 그라디언트 */
-      color: #fff !important; /* 호버 시 글자 색상 */
-      border-radius: 5px; /* 호버 시 모서리 둥글게 */
-    }
     /* 로그인/로그아웃 버튼 스타일 */
     #openModalBtn, .btn-outline-secondary {
       padding: 10px 10px; /* 패딩 */
@@ -265,75 +196,15 @@
   <a href="<%=root%>/index.jsp" id="logo"> <!-- 로고 링크 -->
     <img src="<%=root%>/image/rogo1.png" alt="로고"> <!-- 로고 이미지 -->
   </a>
-  <nav class="main-nav"> <!-- 네비게이션 메뉴 -->
-    <ul>
-      <li class="dropdown"> <!-- 드롭다운 메뉴 시작 -->
-        <a class="dropdown-toggle" href="javacsript:void(0)" role="button" data-bs-toggle="dropdown">교통정보</a> <!-- 드롭다운 토글 -->
-        <ul class="dropdown-menu"> <!-- 드롭다운 메뉴 -->
-          <li class="menu-content">
-            <div class="menu-text">
-              <h4>교통정보</h4>
-              <p><a class="dropdown-item" href="https://www.roadplus.co.kr/main/main.do" target="_blank">실시간 교통정보</a></p> <!-- 링크 -->
-              <p><a class="dropdown-item" href="#">교통안내</a></p>
-            </div>
-            <div class="menu-image" style="background-image: url('https://via.placeholder.com/300x200');"></div> <!-- 이미지 -->
-          </li>
-        </ul>
-      </li>
-      <!-- 추가 드롭다운 메뉴들 -->
-      <li class="dropdown">
-        <a class="dropdown-toggle" href="javascript:void(0)" role="button" data-bs-toggle="dropdown">휴게소 소개</a>
-        <ul class="dropdown-menu">
-          <li class="menu-content">
-            <div class="menu-text">
-              <h4>휴게소 소개</h4>
-              <p><a class="dropdown-item" href="#">휴게소 특징</a></p>
-            </div>
-            <div class="menu-image" style="background-image: url('https://via.placeholder.com/300x200');"></div>
-          </li>
-        </ul>
-      </li>
-      <li class="dropdown">
-        <a class="dropdown-toggle" href="javascript:void(0)" role="button" data-bs-toggle="dropdown">휴게소 찾기</a>
-        <ul class="dropdown-menu">
-          <li class="menu-content">
-            <div class="menu-text">
-              <h4>휴게소 찾기</h4>
-              <p><a class="dropdown-item" href="<%=root%>/index.jsp?main=hg/hgRestInfo.jsp">휴게소 목록</a></p>
-              <p><a class="dropdown-item" href="#">휴게소 검색</a></p>
-            </div>
-            <div class="menu-image" style="background-image: url('https://via.placeholder.com/300x200');"></div>
-          </li>
-        </ul>
-      </li>
-      <li class="dropdown">
-        <a class="dropdown-toggle" href="javascript:void(0)" role="button" data-bs-toggle="dropdown">푸드코트 정보</a>
-        <ul class="dropdown-menu">
-          <li class="menu-content">
-            <div class="menu-text">
-              <h4>푸드코트 정보</h4>
-              <p><a class="dropdown-item" href="<%=root%>/index.jsp?main=restFoodMenu.jsp">푸드코트 메뉴</a></p>
-              <p><a class="dropdown-item" href="#">추천 메뉴</a></p>
-            </div>
-            <div class="menu-image" style="background-image: url('https://via.placeholder.com/300x200');"></div>
-          </li>
-        </ul>
-      </li>
-      <li class="dropdown">
-        <a class="dropdown-toggle" href="javascript:void(0)" role="button" data-bs-toggle="dropdown">고객센터</a>
-        <ul class="dropdown-menu">
-          <li class="menu-content">
-            <div class="menu-text">
-              <h4>고객센터</h4>
-              <p><a class="dropdown-item" href="#">고객후기</a></p>
-              <p><a class="dropdown-item" href="#">문의하기</a></p>
-            </div>
-            <div class="menu-image" style="background-image: url('https://via.placeholder.com/300x200');"></div>
-          </li>
-        </ul>
-      </li>
-    </ul>
-  </nav>
+  <nav class="main-nav">
+  <ul>
+    <li><a href="https://www.roadplus.co.kr/main/main.do" target="_blank">교통정보</a></li>
+    <li><a href="#">휴게소 소개</a></li>
+    <li><a href="<%=root%>/index.jsp?main=hg/hgRestInfo.jsp">휴게소 찾기</a></li>
+    <li><a href="<%=root%>/index.jsp?main=restFoodMenu.jsp">푸드코트 정보</a></li>
+    <li><a href="#">고객센터</a></li>
+  </ul>
+</nav>
   <%
     String userName = (String) session.getAttribute("userName"); // 세션에서 사용자 이름 가져오기
   %>
@@ -422,53 +293,6 @@
     }
     return true;
   }
-
-  // 드롭다운 메뉴 관련
-  document.addEventListener("DOMContentLoaded", function () {
-    const dropdowns = document.querySelectorAll(".dropdown");
-
-    dropdowns.forEach(dropdown => {
-      const toggle = dropdown.querySelector(".dropdown-toggle");
-      const menu = dropdown.querySelector(".dropdown-menu");
-
-      toggle.addEventListener("click", function (e) {
-        e.preventDefault();
-
-        dropdowns.forEach(d => {
-          if (d !== dropdown) {
-            const dMenu = d.querySelector(".dropdown-menu");
-            dMenu.style.display = "none";
-            dMenu.style.opacity = "0";
-          }
-        });
-
-        if (menu.style.display === "flex") {
-          menu.style.display = "none";
-          menu.style.opacity = "0";
-        } else {
-          menu.style.display = "flex";
-          menu.style.opacity = "1";
-
-          // ✅ 드롭다운 중앙 위치 고정
-          menu.style.position = "fixed";
-          menu.style.left = "50%";
-          menu.style.top = "60px";
-          menu.style.transform = "translateX(-50%)";
-        }
-      });
-    });
-
-    // 드롭다운 외부 클릭 시 모두 닫기
-    window.addEventListener("click", function (e) {
-      if (!e.target.closest(".dropdown")) {
-        dropdowns.forEach(d => {
-          const menu = d.querySelector(".dropdown-menu");
-          menu.style.display = "none";
-          menu.style.opacity = "1";
-        });
-      }
-    });
-  });
 </script>
 </body>
 </html>
