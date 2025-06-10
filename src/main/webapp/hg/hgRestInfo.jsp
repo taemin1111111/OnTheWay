@@ -318,7 +318,7 @@ if (searchName != null && !searchName.trim().equals("")) {
 		     marker.setMap(null);
 
 		     kakao.maps.event.addListener(marker, 'click', () => {
-		       location.href = '/index.jsp?main=details/info.jsp&hg_id=' + ids[i];
+		       location.href = '<%=request.getContextPath()%>/index.jsp?main=details/info.jsp&hg_id=' + ids[i];
 		     });
 
 		     markers.push(marker);
