@@ -288,22 +288,21 @@ if (searchName != null && !searchName.trim().equals("")) {
 		   level: 12
 		 });
 
-		 // 클러스터러도 초기화만 함
-		 const clusterer = new kakao.maps.MarkerClusterer({
-		   map: map,
-		   averageCenter: true,
-		   minLevel: 12
-		 });
+		 // 클러스터러 제거 (완전히 사용하지 않음)
+		 // const clusterer = new kakao.maps.MarkerClusterer({
+		 //   map: map,
+		 //   averageCenter: true,
+		 //   minLevel: 10
+		 // });
 
 		 // 데이터는 미리 준비해둠
 		 const lats = [<%= String.join(",", list.stream().map(dto -> String.valueOf(dto.getLatitude())).toArray(String[]::new)) %>];
-		const lngs = [<%= String.join(",", list.stream().map(dto -> String.valueOf(dto.getLongitude())).toArray(String[]::new)) %>];
-		const names = [<%= String.join(",", list.stream().map(dto -> "\"" + dto.getName().replace("\"", "\\\"") + "\"").toArray(String[]::new)) %>];
-		const ids = [<%= String.join(",", list.stream().map(dto -> "\"" + dto.getId2() + "\"").toArray(String[]::new)) %>];
+		 const lngs = [<%= String.join(",", list.stream().map(dto -> String.valueOf(dto.getLongitude())).toArray(String[]::new)) %>];
+		 const names = [<%= String.join(",", list.stream().map(dto -> "\"" + dto.getName().replace("\"", "\\\"") + "\"").toArray(String[]::new)) %>];
+		 const ids = [<%= String.join(",", list.stream().map(dto -> "\"" + dto.getId2() + "\"").toArray(String[]::new)) %>];
 
 		 // 마커와 오버레이는 일정 시간 뒤 로딩
 		 setTimeout(() => {
-		   const markers = [];
 		   const bounds = new kakao.maps.LatLngBounds();
 
 		   for (let i = 0; i < lats.length; i++) {
@@ -314,20 +313,19 @@ if (searchName != null && !searchName.trim().equals("")) {
 		     const coords = new kakao.maps.LatLng(lat, lng);
 		     bounds.extend(coords);
 
-		     const marker = new kakao.maps.Marker({ position: coords });
-		     marker.setMap(null);
+		     const marker = new kakao.maps.Marker({
+		       map: map,            // ✨ 바로 지도에 마커 표시
+		       position: coords
+		     });
 
 		     kakao.maps.event.addListener(marker, 'click', () => {
 		       location.href = '/index.jsp?main=details/info.jsp&hg_id=' + ids[i];
 		     });
-
-		     markers.push(marker);
 		   }
 
-		   clusterer.addMarkers(markers);
 		   map.setBounds(bounds);
+		 }, 10); // 거의 바로 로딩
 
-		 }, 10); // 1초 후 마커 로딩
 		 </script>
 
 	</div>

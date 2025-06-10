@@ -76,6 +76,7 @@ public class HgDataDao {
                 hgData.setExtra_facilities(rs.getString("extra_facilities"));
                 hgData.setSignature_menu(rs.getString("signature_menu"));
                 hgData.setPhone_number(rs.getString("tel_no"));
+                hgData.setAvg_star(rs.getDouble("avg_star"));
             }
         } catch (SQLException e) {
             System.err.println("Error fetching hg_data by ID '" + hgId + "': " + e.getMessage());
@@ -149,6 +150,30 @@ public class HgDataDao {
         }
 
         return restName;
+    }
+    
+    
+    public void updateAvgStar(int hgId) throws SQLException {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        String sql = "UPDATE hg_data " +
+                     "SET avg_star = (SELECT ROUND(AVG(stars), 2) FROM review WHERE hg_id = ?) " +
+                     "WHERE id = ?";
+
+        try {
+            conn = db.getConnection();
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, hgId); // For subquery
+            pstmt.setInt(2, hgId); // For update condition
+
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Error updating avg_star: " + e.getMessage());
+            throw e;
+        } finally {
+            db.dbClose(null, pstmt, conn);
+        }
     }
     
 }
