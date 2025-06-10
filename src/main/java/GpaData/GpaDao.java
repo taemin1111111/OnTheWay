@@ -87,6 +87,9 @@ public class GpaDao {
         } finally {
             db.dbClose(rs, pstmt, conn);
         }
+        
+        
+      
 
         return avg;
     }

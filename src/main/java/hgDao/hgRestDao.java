@@ -38,7 +38,7 @@ public class hgRestDao {
 			
 				dto.setName(rs.getString("name"));
 				dto.setTel_no(rs.getString("tel_no"));
-				dto.setAddr(rs.getString("addr"));
+				dto.setAddress(rs.getString("address"));
 				dto.setTruck(rs.getInt("truck"));
 				dto.setMaintenance(rs.getInt("maintenance"));
 				dto.setLatitude(rs.getDouble("latitude"));
@@ -152,7 +152,7 @@ public class hgRestDao {
 				
 				dto.setName(rs.getString("name"));
 				dto.setTel_no(rs.getString("tel_no"));
-				dto.setAddr(rs.getString("addr"));
+				dto.setAddress(rs.getString("address"));
 				dto.setLatitude(rs.getDouble("latitude"));
 				dto.setLongitude(rs.getDouble("longitude"));
 				dto.setId2(rs.getInt("id"));
@@ -206,7 +206,7 @@ public class hgRestDao {
 				
 				
 				
-				dto.setAddr(rs.getString("addr"));
+				dto.setAddress(rs.getString("addr"));
 				dto.setName(rs.getString("name"));
 				
 				
@@ -243,7 +243,7 @@ public class hgRestDao {
 		PreparedStatement pstmt=null;
 		ResultSet rs=null;
 		
-		String sql = "SELECT hg.*, hg_data.latitude, hg_data.id, hg_data.longitude, hg_data.has_lpg_station, hg_data.has_ev_station, hg_data.has_pharmacy "
+		String sql = "SELECT hg.*, hg_data.latitude, hg_data.address, hg_data.id, hg_data.longitude, hg_data.has_lpg_station, hg_data.has_ev_station, hg_data.has_pharmacy "
 		           + "FROM hg "
 		           + "LEFT JOIN hg_data ON hg.tel_no = hg_data.tel_no "
 		           + "WHERE hg_data.id IS NOT NULL ";
@@ -311,6 +311,7 @@ public class hgRestDao {
 				dto.setLpg(rs.getString("has_lpg_station"));
 				dto.setEv(rs.getString("has_ev_station"));
 				dto.setPharm(rs.getString("has_pharmacy"));
+				dto.setAddress(rs.getString("address"));
 				
 				list.add(dto);
 				
