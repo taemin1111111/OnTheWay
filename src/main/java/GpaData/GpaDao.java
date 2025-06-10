@@ -157,14 +157,14 @@ public class GpaDao {
         PreparedStatement pstmt = null;
         ResultSet rs = null;
 
-        String sql = "SELECT name FROM hg WHERE id = ?";
+        String sql = "SELECT rest_name FROM hg_data WHERE id = ?";
 
         try {
             pstmt = conn.prepareStatement(sql);
             pstmt.setString(1, hg_id);
             rs = pstmt.executeQuery();
             if (rs.next()) {
-                name = rs.getString("name");
+                name = rs.getString("rest_name");
             }
         } catch (SQLException e) {
             e.printStackTrace();
