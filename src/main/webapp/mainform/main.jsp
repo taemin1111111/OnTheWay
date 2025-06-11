@@ -262,15 +262,21 @@ body {
 	font-family: var(--font-family-logo);
 	font-size: 60px;
 	font-weight: 800;
-	padding-bottom: 60px;
+	/* padding-bottom: 60px; -> 이 값을 줄여주세요 */
+	padding-bottom: 5px; /* 예를 들어, 5px로 줄이면 p 태그와 가까워집니다. */
 	margin: 0;
+	text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
 
 .hero-text p {
 	font-family: var(--font-family-logo);
-	font-size: 20px;
-	margin-top: 10px;
+	font-size: 15px; /* 원래 p 태그의 font-size는 20px이었습니다. */
+	padding-top: 5px; /* 예를 들어, 5px로 줄이면 h1 태그와 가까워집니다. */
+    margin-top: 0; /* 혹시 모를 margin-top도 0으로 설정 */
+    margin-bottom: 60px; /* 기존 padding-bottom과 유사하게 margin-bottom을 설정 (원래는 padding-bottom이 h1에 있었음) */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
+
 
 @keyframes zoomIn {
   0% {
@@ -356,6 +362,7 @@ body {
 		<img src="<%=root%>/imgway/highway.jpg" alt="고속도로 이미지">
 		<div class="hero-text">
 			<h1>OnTheWay</h1>
+			<p>HighWay Information</p>
 		</div>
 	</div>
 	
