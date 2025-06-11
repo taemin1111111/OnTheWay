@@ -76,16 +76,14 @@ body {
 	margin-bottom: 40px;
 }
 
-.main-title h1 {
-	font-size: 28px;
-	font-weight: 700;
-	color: var(--text-primary);
-	text-shadow: -1px -1px 0 #000;
-}
-
-.main-title p {
-	font-size: 16px;
-	color: var(--text-secondary);
+.hero-text h1 {
+	font-family: var(--font-family-logo);
+	font-size: 60px;
+	font-weight: 800;
+	padding-bottom: 60px;
+	margin: 0;
+	/* 여기에 그림자 속성 추가 */
+	text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* X축, Y축, 번짐 정도, 색상 및 투명도 */
 }
 
 .event-section, .notice-section {
@@ -262,12 +260,14 @@ body {
 
 .hero-text h1 {
 	font-family: var(--font-family-logo);
-	font-size: 48px;
+	font-size: 60px;
 	font-weight: 800;
+	padding-bottom: 60px;
 	margin: 0;
 }
 
 .hero-text p {
+	font-family: var(--font-family-logo);
 	font-size: 20px;
 	margin-top: 10px;
 }
@@ -356,7 +356,6 @@ body {
 		<img src="<%=root%>/imgway/highway.jpg" alt="고속도로 이미지">
 		<div class="hero-text">
 			<h1>OnTheWay</h1>
-			<p>전국 고속도로 정보</p>
 		</div>
 	</div>
 	

@@ -32,6 +32,9 @@
             margin-bottom: 50px;
             text-align: center;
         }
+        h2 i {
+        	color: #007BFF;
+        }
         .event-card {
             background: #fff;
             border: 1px solid #ddd;
