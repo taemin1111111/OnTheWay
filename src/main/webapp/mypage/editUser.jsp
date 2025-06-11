@@ -17,7 +17,7 @@ UserDao dao = new UserDao();
 UserDto user = dao.getUserSession(userId);
 
 if (user == null) {
-    response.sendRedirect(request.getContextPath() + "/mypage/mypage.jsp?error=notfound");
+    response.sendRedirect(request.getContextPath() + "/index.jsp?main=/mypage/mypage.jsp?error=notfound");
     return;
 }
 
@@ -25,7 +25,7 @@ if (user == null) {
 if (!user.getPassword().equals(oldPass)) {
 	String message = "비밀번호가 틀렸습니다."; // 전달할 메시지
 	String encodedMessage = URLEncoder.encode(message, "UTF-8"); // UTF-8로 인코딩
-	response.sendRedirect(request.getContextPath() + "/mypage/mypage.jsp?error=" + encodedMessage);
+	response.sendRedirect(request.getContextPath() + "/index.jsp?main=/mypage/mypage.jsp?error=" + encodedMessage);
     return;
 }
 
@@ -35,7 +35,7 @@ if (newPass != null && !newPass.isEmpty()) {
     if (!newPass.equals(newPassConfirm)) {
     	String message = "새로운 비밀번호가 일치하지 않습니다."; // 전달할 메시지
     	String encodedMessage = URLEncoder.encode(message, "UTF-8"); // UTF-8로 인코딩
-    	response.sendRedirect(request.getContextPath() + "/mypage/mypage.jsp?error=" + encodedMessage);
+    	response.sendRedirect(request.getContextPath() + "/index.jsp?main=/mypage/mypage.jsp?error=" + encodedMessage);
         return;
     }
     finalPassword = newPass;
@@ -50,5 +50,5 @@ dao.updateUser(user);
 System.out.println(dao.toString());	
 String message = "회원 정보가 성공적으로 수정되었습니다."; // 전달할 메시지
 String encodedMessage = URLEncoder.encode(message, "UTF-8"); // UTF-8로 인코딩
-response.sendRedirect(request.getContextPath() + "/mypage/mypage.jsp?success=" + encodedMessage);
+response.sendRedirect(request.getContextPath() + "/index.jsp?main=/mypage/mypage.jsp?success=" + encodedMessage);
 %>
