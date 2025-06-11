@@ -102,8 +102,8 @@
     }
     .close {
       position: absolute; /* 절대 위치 */
-      right: 20px; /* 우측 여백 */
-      top: 10px; /* 상단 여백 */
+      right: 5px; /* 우측 여백 */
+      top: 0; /* 상단 여백 */
       font-size: 24px; /* 글자 크기 */
       cursor: pointer; /* 커서 포인터로 변경 */
     }
