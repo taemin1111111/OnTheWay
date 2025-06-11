@@ -9,8 +9,8 @@
     List<EventDto> list = dao.getAllEvents();
 
     HgDataDao hgDao = new HgDataDao();
-    Object roleObj = session.getAttribute("role");
-    int role = (roleObj != null) ? Integer.parseInt(roleObj.toString()) : 0;
+    
+    Integer role = (Integer) session.getAttribute("role");
 %>
 
 <!DOCTYPE html>
@@ -72,16 +72,17 @@
 </head>
 <body>
 
-    <h2>이벤트 / 혜택 &nbsp;<i class="bi bi-calendar-event"></i></h2>
-    <% if (role == 1) { %>
-    <div class="mb-3 text-end pe-3">
-        <a href="<%=request.getContextPath()%>/index.jsp?main=event/eventAddForm.jsp" class="btn btn-success">
-            <i class="bi bi-pencil-square"></i> 글쓰기
-        </a>
-    </div>
-	<% } %>
+    <h2>&nbsp;&nbsp;&nbsp;이벤트 / 혜택&nbsp;<i class="bi bi-calendar-event"></i></h2>
     <hr />
 
+	<% if (role != null && role == 1) { %>
+	    <div class="container mb-3 text-end">
+	        <a href="index.jsp?main=event/eventAddForm.jsp" class="btn btn-success">
+	            <i class="bi bi-plus-circle"></i> 이벤트 작성하기
+	        </a>
+	    </div>
+	<% } %>
+	
     <div class="container mt-4">
         <div class="row">
             <%
