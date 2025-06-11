@@ -476,7 +476,12 @@ document.addEventListener("DOMContentLoaded", function () { showToast("이미 �
                     <p><%=dto.getContent()%></p>
                 </div>
                 <div class="review-card-footer">
-                    <% if (userid != null && userid.equals(dto.getUserid())) { %>
+	                <%
+					    Object roleObj = session.getAttribute("role");
+					    int role = (roleObj != null) ? Integer.parseInt(roleObj.toString()) : 0;
+					%>
+				                
+                    <% if ((userid != null && userid.equals(dto.getUserid())) || role == 1) { %>
                         <button class="delete-btn" onclick="confirmDelete('<%=dto.getNum()%>', '<%=URLEncoder.encode(hg_id, "UTF-8")%>', '<%=URLEncoder.encode(order, "UTF-8")%>')">
                             <i class="bi bi-trash3"></i>
                         </button>
