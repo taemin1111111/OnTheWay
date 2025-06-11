@@ -93,7 +93,7 @@ label {
   position: absolute;
   z-index: 1050;
   width: 100%;
-  max-width: 300px; /* 검색창 너비에 맞춤 */
+  max-width: 280px; /* 검색창 너비에 맞춤 */
   border-radius: var(--border-radius-sm);
   overflow: hidden;
   box-shadow: var(--shadow-medium);
