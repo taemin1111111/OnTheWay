@@ -27,9 +27,10 @@
             background-color: #f8f9fa;
         }
         h2 {
-            font-weight: 700;
-            margin-top: 35px;
-            margin-bottom: 25px;
+            font-weight: 800;
+            margin-top: 50px;
+            margin-bottom: 50px;
+            text-align: center;
         }
         .event-card {
             background: #fff;
@@ -72,9 +73,8 @@
 </head>
 <body>
 
-    <h2>&nbsp;&nbsp;&nbsp;이벤트 / 혜택&nbsp;<i class="bi bi-calendar-event"></i></h2>
-    <hr />
-
+    <h2>이벤트 / 혜택 &nbsp;<i class="bi bi-calendar-event"></i></h2>
+	<hr>
 	<% if (role != null && role == 1) { %>
 	    <div class="container mb-3 text-end">
 	        <a href="index.jsp?main=event/eventAddForm.jsp" class="btn btn-success">
