@@ -13,15 +13,10 @@
 
     // If user is not found or not logged in, redirect to login page
     if (user == null) {
-        // response.sendRedirect(root + "/login.jsp?error=session_expired"); // Or some other appropriate page
-        // For now, let's create a dummy user if not logged in, for display purposes in this example
-        // In a real app, you'd redirect or show an error.
         user = new UserDto();
-        user.setUsername("GuestUser"); // Placeholder
-        user.setEmail("guest@example.com"); // Placeholder
-        username = "GuestUser"; // for the header display
-        // out.println("<script>alert('세션이 만료되었거나 로그인 정보가 없습니다. 로그인 페이지로 이동합니다.'); location.href='" + root + "/login.jsp';</script>");
-        // return;
+        user.setUsername("GuestUser");
+        user.setEmail("guest@example.com");
+        username = "GuestUser"; 
     }
 
     String error = request.getParameter("error");
@@ -228,10 +223,11 @@
 
 
 <div class="container">
-  <div class="tab-menu">
-    <button id="tab-edit" class="tab-btn active" onclick="showSection('edit-profile')">회원정보수정</button>
-    <button id="tab-withdraw" class="tab-btn" onclick="showSection('withdraw')">회원탈퇴</button>
-  </div>
+<div class="tab-menu">
+    <%-- onclick에 호출할 함수를 handleTabClick으로 변경 --%>
+    <button id="tab-edit" class="tab-btn active" onclick="handleTabClick('edit-profile')">회원정보수정</button>
+    <button id="tab-withdraw" class="tab-btn" onclick="handleTabClick('withdraw')">회원탈퇴</button>
+</div>
 
   <% if (error != null && !error.isEmpty()) { %>
     <div class="alert alert-danger" role="alert">
@@ -251,8 +247,7 @@
       <form action="<%= root %>/mypage/editUser.jsp" method="post">
         <div class="form-group">
           <label for="nickname">닉네임 (아이디)</label>
-          <%-- Assuming username is the login ID and should not be changed --%>
-          <input type="text" id="nickname" name="nickname" value="<%= user.getUsername() %>" readonly />
+          <input type="text" id="nickname" name="nickname" value="<%= user.getId() %>" readonly />
         </div>
         <div class="form-group">
           <label for="email">이메일</label>
@@ -297,15 +292,21 @@
 </div>
 
 <script>
+  function handleTabClick(sectionId) {
+    document.querySelectorAll('.alert').forEach(alert => {
+      alert.style.display = 'none';
+    });
+
+    showSection(sectionId);
+  }
+
   function showSection(sectionId) {
-    // Hide all sections
     document.querySelectorAll('.form-section').forEach(section => {
       section.classList.remove('active-section');
     });
-    // Show the target section
+
     document.getElementById(sectionId + '-section').classList.add('active-section');
 
-    // Update active tab
     document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
     if (sectionId === 'edit-profile') {
         document.getElementById('tab-edit').classList.add('active');
@@ -314,7 +315,6 @@
     }
   }
 
-  // Initialize: show the first tab content by default
   document.addEventListener('DOMContentLoaded', function() {
     showSection('edit-profile'); 
   });

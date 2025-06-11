@@ -23,6 +23,8 @@
         response.sendRedirect(request.getContextPath()+"");
        
     } else {
-    	response.sendRedirect(request.getContextPath() + "/mypage/mypage.jsp?error=" + URLEncoder.encode("비밀번호가 틀렸습니다.", "UTF-8"));	
+    	String message = "비밀번호가 틀렸습니다."; // 전달할 메시지
+    	String encodedMessage = URLEncoder.encode(message, "UTF-8"); // UTF-8로 인코딩
+    	response.sendRedirect(request.getContextPath() + "/mypage/mypage.jsp?error=" + encodedMessage);
     }
 %>
