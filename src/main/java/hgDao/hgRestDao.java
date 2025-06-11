@@ -73,16 +73,23 @@ public class hgRestDao {
 		return list;
 	}
 	
-	public String getReview() {
+	public String getReview(double avg) {
 		
-		int rnd=0;
+		
+		
 		String star="";
 		
+		//int avg_star=(int) Math.round(avg);
+		int avg_star=(int)avg;
 		
-		rnd=(int)(Math.random()*3)+3;
 		
-		switch(rnd)
+		
+		switch(avg_star)
 		{
+		case 0:
+			star="☆☆☆☆☆";
+			break;
+			
 		case 1:
 			star="★☆☆☆☆";
 			break;

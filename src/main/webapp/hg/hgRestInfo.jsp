@@ -251,7 +251,7 @@ if (searchName != null && !searchName.trim().equals("")) {
 					System.out.println("==== dto 디버깅 ===="+i);
 				    System.out.println("ID: " + dto.getId2());
 				    System.out.println("이름: " + dto.getName());
-				    System.out.println("평점: " + dto.getAvg_star());
+				    System.out.println("평점: " + dao.getReview(dto.getAvg_star())+ dto.getAvg_star());
 				    System.out.println("위도: " + dto.getLatitude());
 				    System.out.println("경도: " + dto.getLongitude());
 
@@ -262,7 +262,7 @@ if (searchName != null && !searchName.trim().equals("")) {
 					<td><a class="hg_num"
 						href="<%=request.getContextPath()%>/index.jsp?main=details/info.jsp?hg_id=<%=dto.getId2()%>"><%=dto.getName()%></a></td> <!-- 이름 링크 -->
 					<td><%=dto.getTel_no()%></td> <!-- 전화번호 출력 -->
-					<td><%=dto.getAvg_star()%></td>
+					<td><%=dao.getReview(dto.getAvg_star())%>(<%=Math.round(dto.getAvg_star()*100.0)/100.0%>)</td>
 					<td><%=dto.getAddress() %></td>
 				</tr>
 				<%
