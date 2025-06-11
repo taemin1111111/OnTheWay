@@ -193,6 +193,8 @@ a.hg_num:hover {
 	.checkbox-group {
 		max-width: 100%; /* 체크박스 그룹 최대 너비 설정 */
 	}
+	
+	
 }
 </style>
 </head>
@@ -262,7 +264,12 @@ if (searchName != null && !searchName.trim().equals("")) {
 					<td><a class="hg_num"
 						href="<%=request.getContextPath()%>/index.jsp?main=details/info.jsp?hg_id=<%=dto.getId2()%>"><%=dto.getName()%></a></td> <!-- 이름 링크 -->
 					<td><%=dto.getTel_no()%></td> <!-- 전화번호 출력 -->
-					<td><%=dao.getReview(dto.getAvg_star())%>(<%=Math.round(dto.getAvg_star()*100.0)/100.0%>)</td>
+					<td class="stars" style="color:#F1F24B;">
+                    <% for(int a=1; a<=5; a++) { %>
+                        <i class="bi <%= (dto.getAvg_star() >= a) ? "bi-star-fill" : (dto.getAvg_star() >= a - 0.5 ? "bi-star-half" : "bi-star") %>"></i>
+                    <% } %>
+                    </td>
+                    <%-- <td><%=dao.getReview(dto.getAvg_star())%>(<%=Math.round(dto.getAvg_star()*100.0)/100.0%>)</td> --%>
 					<td><%=dto.getAddress() %></td>
 				</tr>
 				<%
