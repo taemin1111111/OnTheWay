@@ -48,7 +48,7 @@ public class EventDao {
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 
-		String sql = "SELECT * FROM event ORDER BY created_at DESC";
+		String sql = "SELECT * FROM event ORDER BY id DESC";
 
 		try {
 			conn = db.getConnection();
@@ -113,4 +113,22 @@ public class EventDao {
 		return dto;
 	}
 
+	// 이벤트 삭제
+	public void deleteEventById(String id) {
+	    Connection conn = null;
+	    PreparedStatement pstmt = null;
+
+	    try {
+	        conn = db.getConnection();
+	        String sql = "DELETE FROM event WHERE id = ?";
+	        pstmt = conn.prepareStatement(sql);
+	        pstmt.setString(1, id);
+	        pstmt.executeUpdate();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    } finally {
+	        db.dbClose(pstmt, conn);
+	    }
+	}
+	
 }

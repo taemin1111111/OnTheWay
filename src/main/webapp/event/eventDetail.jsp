@@ -7,6 +7,8 @@
 <%
     EventDto event = new EventDao().getEventById(request.getParameter("id"));
     String restName = new HgDataDao().getRestNameById(Integer.parseInt(event.getHgId()));
+
+    Integer role = (Integer) session.getAttribute("role");
 %>
 
 <!DOCTYPE html>
@@ -112,6 +114,14 @@
 	            <a href="index.jsp?main=details/info.jsp?hg_id=<%= event.getHgId() %>" class="btn btn-success">
 	                <i class="bi bi-signpost-2"></i> 휴게소 정보 보기
 	            </a>
+	            
+	            <% if (role != null && role == 1) { %>
+		            <a href="event/deleteEvent.jsp?id=<%= event.getId() %>"
+		               class="btn btn-danger ms-2"
+		               onclick="return confirm('정말로 이 이벤트를 삭제하시겠습니까?');">
+		                <i class="bi bi-trash3"></i> 이벤트 삭제
+		            </a>
+		        <% } %>
 		    </div>
 		</div>
     <% } else { %>

@@ -75,7 +75,7 @@
 <body>
 
 <div class="form-wrapper">
-  <h2>이벤트 등록</h2>
+  <h2>이벤트 작성</h2>
 
   <form id="eventForm" action="event/eventAddAction.jsp" method="post">
     <!-- 이벤트명 -->
@@ -116,12 +116,12 @@
     <!-- 이벤트 내용 -->
     <div class="mb-4">
       <label for="content">이벤트 내용</label>
-      <textarea id="content" name="content" placeholder="이벤트 내용을 입력하세요" required></textarea>
+      <textarea id="content" name="content" placeholder="이벤트 내용을 입력하세요"></textarea>
     </div>
 
     <!-- 버튼 (세로 정렬) -->
     <div class="text-center">
-      <button type="submit" id="submitBtn" class="btn btn-success mb-3">등록</button>
+      <button type="submit" id="submitBtn" class="btn btn-success mb-3">저장</button>
       <br />
 	  <button type="button" id="backBtn" class="btn btn-secondary" style="width: 280px">이전</button>
     </div>
