@@ -13,15 +13,10 @@
 
     // If user is not found or not logged in, redirect to login page
     if (user == null) {
-        // response.sendRedirect(root + "/login.jsp?error=session_expired"); // Or some other appropriate page
-        // For now, let's create a dummy user if not logged in, for display purposes in this example
-        // In a real app, you'd redirect or show an error.
         user = new UserDto();
-        user.setUsername("GuestUser"); // Placeholder
-        user.setEmail("guest@example.com"); // Placeholder
-        username = "GuestUser"; // for the header display
-        // out.println("<script>alert('세션이 만료되었거나 로그인 정보가 없습니다. 로그인 페이지로 이동합니다.'); location.href='" + root + "/login.jsp';</script>");
-        // return;
+        user.setUsername("GuestUser");
+        user.setEmail("guest@example.com");
+        username = "GuestUser";
     }
 
     String error = request.getParameter("error");
@@ -251,8 +246,7 @@
       <form action="<%= root %>/mypage/editUser.jsp" method="post">
         <div class="form-group">
           <label for="nickname">닉네임 (아이디)</label>
-          <%-- Assuming username is the login ID and should not be changed --%>
-          <input type="text" id="nickname" name="nickname" value="<%= user.getUsername() %>" readonly />
+          <input type="text" id="nickname" name="nickname" value="<%= user.getId() %>" readonly />
         </div>
         <div class="form-group">
           <label for="email">이메일</label>
