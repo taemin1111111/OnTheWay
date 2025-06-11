@@ -200,6 +200,18 @@ List<infoDto> list=dao.getList(startNum, perPage);
 <body>
 	<div style="text-align: center; margin-top: 3rem;" >
 		<h3>공지사항</h3>
+		<%
+    Object roleObj = session.getAttribute("role");
+    int role = (roleObj != null) ? Integer.parseInt(roleObj.toString()) : 0;
+%>
+
+<% if (role == 1) { %>
+    <div class="text-end" style="width: 80%; max-width: 1200px; margin: 0 auto 1rem;">
+        <a href="<%=request.getContextPath()%>/index.jsp?main=infoList/addform.jsp" class="btn btn-primary">
+            <i class="bi bi-pencil-square"></i> 글쓰기
+        </a>
+    </div>
+<% } %>
 		<br>
 		
 		<table id="infoTable" class="table table-bordered" style="width: 80%; max-width: 1200px; margin: 0 auto;">
