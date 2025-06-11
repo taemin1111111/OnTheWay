@@ -228,11 +228,15 @@ body {
 	margin-top: 50px;
 }
 
+/* --- 여기에 중요한 변경 사항이 있습니다 --- */
 .hero-section {
 	position: relative;
-	width: 1920px; /* 너비를 100%로 설정하여 화면 전체 차지 */
-	height: 500px;
+	width: 100%; /* 고정된 1920px 대신 100%로 변경 */
+	height: 500px; /* 높이는 유지 */
 	overflow: hidden;
+    display: flex; /* Flexbox를 사용하여 내부 요소 중앙 정렬 */
+    justify-content: center; /* 수평 중앙 정렬 */
+    align-items: center; /* 수직 중앙 정렬 */
 }
 
 .hero-section img {
@@ -242,14 +246,14 @@ body {
 	width: 100%;
 	height: 100%;
 	object-fit: cover;
-	 animation: zoomIn 5s ease-in-out infinite alternate;
+	animation: zoomIn 5s ease-in-out infinite alternate;
 	z-index: 1;
 }
 
 .hero-text {
-	position: absolute;
-	top: 20%;
-	width: 100%;
+	position: relative; /* absolute 대신 relative로 변경하거나, flexbox를 사용했으므로 top, width 제거 */
+    /* top: 20%; 제거 */
+    /* width: 100%; 제거 */
 	text-align: center;
 	z-index: 2;
 	color: white;
@@ -318,50 +322,33 @@ body {
   background-color: var(--button-primary-hover-bg);
   border-color: var(--button-primary-hover-bg);
 }
+.modal-header {
+	max-width: 100%;
+	height: auto;
+}
 
-/* 모바일 대응 */
+/* 추가: 반응형 디자인을 위한 미디어 쿼리 */
 @media (max-width: 768px) {
-    .container {
-        width: 95%; /* 모바일에서 컨테이너 너비 확대 */
-        padding: 15px 0;
-    }
-    .event-section, .notice-section {
-        padding: var(--gap-sm);
-        margin-top: 50px; /* 모바일에서 마진 조정 */
-    }
-    .event-list {
-        flex-direction: column; /* 이벤트 카드 세로 정렬 */
-        align-items: center; /* 가운데 정렬 */
-        gap: var(--gap-md); /* 세로 간격 조정 */
-    }
-    .event-card {
-        width: 95%; /* 모바일에서 폭 꽉 채우기 */
-        margin-bottom: 0; /* 개별 카드 하단 여백 제거 (gap으로 대체) */
-    }
-    .notice-section {
-        width: 100%; /* 모바일에서 전체 너비 차지 (컨테이너 패딩 적용) */
-        padding: var(--gap-sm);
-    }
-    .notice-table th, .notice-table td {
-        padding: 10px;
-        font-size: 13px; /* 글꼴 크기 약간 줄임 */
-    }
     .hero-text h1 {
-        font-size: 36px; /* 모바일에서 제목 크기 조정 */
+        font-size: 36px; /* 작은 화면에서 폰트 크기 조정 */
     }
     .hero-text p {
-        font-size: 20px; /* 모바일에서 부제목 크기 조정 */
+        font-size: 16px; /* 작은 화면에서 폰트 크기 조정 */
     }
-    .search-input {
-        max-width: 80vw; /* 모바일에서 검색창 너비 조정 */
-        width: 100%;
+    .event-card {
+        width: 48%; /* 작은 화면에서 카드 2개씩 표시 */
     }
-    .search-bar-container .d-flex {
-        flex-direction: column; /* 검색창과 버튼 세로 정렬 */
-        gap: 10px; /* 세로 간격 */
-        align-items: center;
+    .event-list {
+        justify-content: center; /* 카드 중앙 정렬 */
     }
 }
+
+@media (max-width: 480px) {
+    .event-card {
+        width: 98%; /* 아주 작은 화면에서 카드 1개씩 표시 */
+    }
+}
+
 </style>
 </head>
 <body>
@@ -482,5 +469,56 @@ body {
 			</div>
 		</div>
 	</div>
+	<div class="modal fade" id="eventModal" tabindex="-1" aria-labelledby="eventModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content">
+      <div class="modal-header" style="background-color: #003366;">
+        <h5 class="modal-title text-white" id="eventModalLabel">📢 이벤트 안내</h5>
+        <button type="button" class="btn-close bg-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center">
+        <img src="image2/top_01.jpg" alt="이벤트 배너" style="max-width: 100%; height: auto;">
+        <div class="form-check mt-3 d-flex justify-content-center">
+            <input class="form-check-input" type="checkbox" value="" id="dismissForWeekCheckbox">
+            <label class="form-check-label ms-2" for="dismissForWeekCheckbox">
+                일주일 동안 다시 보지 않기
+            </label>
+        </div>
+      </div>
+      <div class="modal-footer d-flex justify-content-end"> <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">닫기</button>
+      </div>
+    </div>
+  </div>
+</div>
 </body>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const modalElement = document.getElementById('eventModal');
+    const modal = new bootstrap.Modal(modalElement);
+    const dismissForWeekCheckbox = document.getElementById('dismissForWeekCheckbox');
+
+    // 날짜 계산 (오늘 + 7일)
+    function getExpiryDate(days) {
+      const date = new Date();
+      date.setDate(date.getDate() + days);
+      return date.getTime();
+    }
+
+    // 모달 표시 조건
+    const modalDismissedUntil = localStorage.getItem('eventModalDismissedUntil');
+    const now = new Date().getTime();
+
+    if (!modalDismissedUntil || now > parseInt(modalDismissedUntil)) {
+      modal.show();
+    }
+
+    // 모달이 닫히기 직전(hide.bs.modal)에 체크박스 상태 확인
+    modalElement.addEventListener('hide.bs.modal', function () {
+        if (dismissForWeekCheckbox.checked) {
+            const expiry = getExpiryDate(7);
+            localStorage.setItem('eventModalDismissedUntil', expiry);
+        }
+    });
+});
+</script>
 </html>

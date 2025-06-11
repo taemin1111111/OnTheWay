@@ -51,7 +51,7 @@ h3 {
 	font-weight: 700; /* 글자 두께 설정 */
 	font-size: 2.2rem; /* 글자 크기 설정 */
 	margin-bottom: 25px; /* 하단 여백 설정 */
-	color: #2c7a2c; /* 제목 색상 설정 */
+	color: #000000; /* 제목 색상 설정 */
 	text-align: center; /* 중앙 정렬 */
 	padding-top: 50px;
 }
