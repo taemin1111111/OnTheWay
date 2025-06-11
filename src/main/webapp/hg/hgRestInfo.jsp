@@ -196,6 +196,8 @@ a.hg_num:hover {
 	
 	
 }
+
+
 </style>
 </head>
 <%
@@ -290,7 +292,7 @@ if (searchName != null && !searchName.trim().equals("")) {
 		
 		
 		// 지도 먼저 로딩
-		 const map = new kakao.maps.Map(document.getElementById('map'), {
+		 const map = new kakao.maps.Map(document.getElementById('map'), { 
 		   center: new kakao.maps.LatLng(36.5, 127.5),
 		   level: 12
 		 });
@@ -310,31 +312,45 @@ if (searchName != null && !searchName.trim().equals("")) {
 
 		 // 마커와 오버레이는 일정 시간 뒤 로딩
 		 setTimeout(() => {
-		   const markers = [];
-		   const bounds = new kakao.maps.LatLngBounds();
-
-		   for (let i = 0; i < lats.length; i++) {
-		     const lat = parseFloat(lats[i]);
-		     const lng = parseFloat(lngs[i]);
-		     if (isNaN(lat) || isNaN(lng)) continue;
-
-		     const coords = new kakao.maps.LatLng(lat, lng);
-		     bounds.extend(coords);
-
-		     const marker = new kakao.maps.Marker({ position: coords });
-		     marker.setMap(null);
-
-		     kakao.maps.event.addListener(marker, 'click', () => {
-		       location.href = '<%=request.getContextPath()%>/index.jsp?main=details/info.jsp&hg_id=' + ids[i];
-		     });
-
-		     markers.push(marker);
-		   }
-
-		   clusterer.addMarkers(markers);
-		   map.setBounds(bounds);
-
-		 }, 10); // 1초 후 마커 로딩
+			  const markers = [];
+			  const bounds = new kakao.maps.LatLngBounds();
+			  const infowindow = new kakao.maps.InfoWindow({ zIndex: 1 }); // 인포윈도우 객체 생성
+			
+			  for (let i = 0; i < lats.length; i++) {
+			    const lat = parseFloat(lats[i]);
+			    const lng = parseFloat(lngs[i]);
+			    if (isNaN(lat) || isNaN(lng)) continue;
+			
+			    const coords = new kakao.maps.LatLng(lat, lng);
+			    bounds.extend(coords);
+			
+			    const marker = new kakao.maps.Marker({ position: coords });
+			
+			    // 마우스 오버 이벤트 - 이름 보여주기
+			    kakao.maps.event.addListener(marker, 'mouseover', function () {
+			    	infowindow.setContent(
+			    		    '<div style="padding:5px; font-size:10px; font-weight:bold; max-width:150px; white-space: pre-wrap; overflow-wrap: break-word; word-break: break-word;">' 
+			    		    + names[i] + '</div>'
+			    		  );
+			    	infowindow.open(map, marker);
+			    });
+			
+			    // 마우스 아웃 이벤트 - 인포윈도우 닫기
+			    kakao.maps.event.addListener(marker, 'mouseout', function () {
+			      infowindow.close();
+			    });
+			
+			    // 클릭 시 페이지 이동
+			    kakao.maps.event.addListener(marker, 'click', () => {
+			      location.href = '<%=request.getContextPath()%>/index.jsp?main=details/info.jsp&hg_id=' + ids[i];
+			    });
+			
+			    markers.push(marker);
+			  }
+			
+			  clusterer.addMarkers(markers);
+			  map.setBounds(bounds);
+			}, 10); // 1초 후 마커 로딩
 		 </script>
 
 	</div>

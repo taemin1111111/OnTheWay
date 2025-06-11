@@ -24,109 +24,134 @@
 <title>Insert title here</title>
 
 <style>
-#searchrest {
-  width: 180px;
-  height: 36px;
-  padding: 0 12px;
-  border: 2px solid #4a90e2; /* 테이블 헤더 색과 맞춤 */
-  border-radius: 8px;
-  font-size: 1rem;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  color: #495057;
-  box-shadow: 0 2px 6px rgba(74, 144, 226, 0.25);
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
-  float: right;
-  outline: none;
-}
-
-#searchrest::placeholder {
-  color: #adb5bd; /* 연한 회색 */
-}
-
-#searchrest:focus {
-  border-color: #2c6ed5;
-  box-shadow: 0 0 8px rgba(44, 110, 213, 0.6);
-}
   body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f5f7fa;
-    padding: 0;
-    margin: 0; 
+    background-color: #f8f9fa;
+    color: #343a40;
+    margin: 0;
+    padding: 2rem 0;
   }
 
   h3 {
     font-weight: 700;
-    font-size: 2.5rem;
+    font-size: 2.2rem;
     color: #212529;
-    text-align: center;
-    margin-bottom: 2.5rem;
-    letter-spacing: 0.05em;
+    margin-bottom: 2rem;
   }
 
-  table {
-    background-color: #ffffff;
+  #infoTable {
+    width: 80%;
+    max-width: 1200px;
+    margin: 0 auto;
     border-radius: 12px;
-    box-shadow: 0 8px 24px rgb(0 0 0 / 0.1);
     overflow: hidden;
-    transition: box-shadow 0.3s ease;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.1);
   }
 
-  table:hover {
-    box-shadow: 0 12px 36px rgb(0 0 0 / 0.15);
-  }
-
-  thead tr {
-    background-color: #4a90e2;
-    color: white;
+  #infoTable thead tr {
+    background-color: #007bff; /* 부트스트랩 기본 파랑 */
+    color: #fff;
     font-weight: 600;
-    font-size: 1.05rem;
+    font-size: 1.1rem;
   }
 
-  tbody tr {
-    transition: background-color 0.25s ease;
+  #infoTable tbody tr:hover {
+    background-color: #e9f2ff;
     cursor: pointer;
   }
 
-  tbody tr:hover {
-    background-color: #f0f4ff;
-  }
-
-  tbody tr td {
+  #infoTable tbody td {
     vertical-align: middle;
     font-size: 1rem;
     color: #495057;
   }
 
-  a {
-    color: #4a90e2;
-    text-decoration: none;
+  #infoTable a {
+    color: #007bff;
     font-weight: 600;
+    text-decoration: none;
   }
 
-  a:hover {
+  #infoTable a:hover {
     text-decoration: underline;
   }
 
-  /* 번호 컬럼 */
-  th:first-child, td:first-child {
-    width: 60px;
-    text-align: center;
+  /* 검색창 스타일 */
+  #searchrest {
+    width: 220px;
+    height: 36px;
+    padding: 0 12px;
+    border: 1.8px solid #007bff;
+    border-radius: 8px;
+    font-size: 1rem;
+    color: #495057;
+    outline: none;
+    transition: 0.3s ease all;
+    float: right;
   }
 
-  /* 작성일 */
-  td:nth-child(3), th:nth-child(3) {
-    width: 140px;
-    text-align: center;
-    color: #6c757d;
-    font-size: 0.9rem;
+  #searchrest::placeholder {
+    color: #adb5bd;
   }
 
-  /* 조회수 */
-  td:nth-child(4), th:nth-child(4) {
-    width: 80px;
-    text-align: center;
-    color: #6c757d;
+  #searchrest:focus {
+    border-color: #0056b3;
+    box-shadow: 0 0 6px rgba(0, 123, 255, 0.5);
+  }
+
+  /* 버튼 컨테이너 */
+  .btn-group {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+  }
+
+  /* 공통 버튼 스타일 */
+  .btn {
     font-size: 0.9rem;
+    padding: 6px 12px;
+    border-radius: 6px;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+
+  /* 삭제 버튼 */
+  .btn-danger {
+    background-color: #dc3545;
+    border: none;
+    color: #fff;
+  }
+  .btn-danger:hover {
+    background-color: #b02a37;
+    box-shadow: 0 4px 10px rgba(220, 53, 69, 0.6);
+  }
+
+  /* 수정 버튼 */
+  .btn-warning {
+    background-color: #ffc107;
+    border: none;
+    color: #212529;
+  }
+  .btn-warning:hover {
+    background-color: #e0a800;
+    box-shadow: 0 4px 10px rgba(255, 193, 7, 0.6);
+  }
+
+  /* 글쓰기 버튼 */
+  #writeBtn button {
+    background-color: #28a745;
+    border: none;
+    color: #fff;
+    padding: 10px 18px;
+    font-weight: 600;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.5);
+    transition: background-color 0.3s ease;
+  }
+
+  #writeBtn button:hover {
+    background-color: #1e7e34;
+    box-shadow: 0 6px 18px rgba(30, 126, 52, 0.7);
   }
 </style>
 
@@ -194,6 +219,10 @@ no=totalCount-(currentPage-1)*perPage;
 
 List<infoDto> list=dao.getList(startNum, perPage);
 
+String userId=(String)session.getAttribute("userId");
+
+
+
 %>
 
 
@@ -217,6 +246,12 @@ List<infoDto> list=dao.getList(startNum, perPage);
 				<th>제목</th>					
 				<th>작성일</th>
 				<th>조회수</th>
+				<%if("admin".equals(userId)){
+				%>
+					<th>작성글관리</th>	
+					
+				<%}%>
+				
 			</tr>
 			<tbody id="infoBody">
 			<%
@@ -256,6 +291,24 @@ List<infoDto> list=dao.getList(startNum, perPage);
 						
 						<td><%=sdf.format(dto.getWriteday()) %></td>
 						<td><%=dto.getReadcount() %></td>
+						<%if("admin".equals(userId)){
+						%>
+							<td>
+							  <div class="btn-group">
+							    <button class="btn btn-danger btn-sm" 
+							            onclick="if(confirm('정말 삭제하시겠습니까?')) location.href='infoList/delete.jsp?id=<%=dto.getId() %>';">
+							      삭제
+							    </button>
+							    <button class="btn btn-warning btn-sm" 
+							            onclick="location.href='infoList/updateform.jsp?id=<%=dto.getId() %>'">
+							      수정
+							    </button>
+							  </div>
+							</td>
+							
+						<%}%>
+						
+						
 					</tr>
 					
 					
@@ -268,6 +321,10 @@ List<infoDto> list=dao.getList(startNum, perPage);
 			
 			
 			%>
+			
+			
+			
+			
 			</tbody>	
 		</table>
 	
@@ -315,7 +372,26 @@ List<infoDto> list=dao.getList(startNum, perPage);
        			
        %>
      </ul>
+     
+     
      </div>
+    
+     </div>
+
+<% if ("admin".equals(userId)) { %>
+  <div style="width: 80%; max-width: 1200px; margin: 10px auto 30px auto; text-align: right;">
+    <button class="btn btn-success" onclick="location.href='infoList/addform.jsp'">글쓰기</button>
+  </div>
+<% } %>
+    
+     
+     
+     
+    
+     
+     
+     
+     
 <script type="text/javascript">
 
 $(document).ready(function() {
@@ -352,7 +428,6 @@ $(document).ready(function() {
 </script>
 
 	
-
 
 
 

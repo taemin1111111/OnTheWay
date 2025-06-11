@@ -188,6 +188,34 @@ public class infoDao {
 		}
 	}
 	
+	
+	public void updateInfo(infoDto dto, String id) { //데이터 추가
+		Connection conn=db.getConnection();
+		PreparedStatement pstmt=null;
+
+		String sql = "UPDATE infoboard SET hgId=?, title=?, content=?, photoname=?, readcount=?, writeday=NOW() WHERE id=?";
+
+		try {
+			pstmt=conn.prepareStatement(sql);
+
+			
+			pstmt.setString(1, dto.getHgId());
+			pstmt.setString(2, dto.getTitle());
+			pstmt.setString(3, dto.getContent());
+			pstmt.setString(4, dto.getPhotoName());
+			pstmt.setInt(5, dto.getReadcount());
+			pstmt.setString(6, id);
+			
+			pstmt.execute();
+			
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			db.dbClose(pstmt, conn);
+		}
+	}
+	
 	public int getTotalCount()
 	{
 		int n=0;
