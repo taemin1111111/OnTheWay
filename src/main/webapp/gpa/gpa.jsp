@@ -399,6 +399,7 @@ List<GpaDto> list = dao.getReviewsByHgIdPaging(hg_id, start, perPage, order);
 SimpleDateFormat sdf = new SimpleDateFormat("yyyy.MM.dd");
 
 String userid = (String) session.getAttribute("userId");
+
 %>
 
 <%-- 토스트 메시지 출력 (JS 로직보다 상단에 위치) --%>
@@ -427,8 +428,14 @@ document.addEventListener("DOMContentLoaded", function () { showToast("이미 �
     <header class="review-summary">
         <div class="summary-rating">
             <span class="rating-value"><i class="bi bi-star-fill"></i><%=String.format("%.1f", avgStars)%></span>
-            <div class="total-reviews"><%=hgName%>에 대한 <%=totalCount%>개의 소중한 후기</div>
-        </div>
+           <div class="total-reviews">
+    <a href="<%=request.getContextPath()%>/index.jsp?main=details/info.jsp&hg_id=<%=hg_id%>" class="text-decoration-none fw-bold text-primary">
+        <%=hgName%>
+    </a>
+    휴게소에 대한 <%=totalCount%>개의 소중한 후기
+</div>
+
+      
         <div class="sort-and-write">
             <button class="sort-btn" onclick="toggleOrder()">
                 <i class="bi bi-arrow-down-up"></i>
@@ -449,7 +456,7 @@ document.addEventListener("DOMContentLoaded", function () { showToast("이미 �
         <% if (list.isEmpty()) { %>
             <div class="col-12 text-center text-muted py-5">
                 <p class="fs-5"><i class="bi bi-exclamation-circle me-2"></i>아직 등록된 후기가 없습니다.</p>
-                <p>첫 후기를 작성하고 <%= hgName %>에 대한 경험을 공유해 보세요!</p>
+                <p>첫 후기를 작성하고 <%= hgName %>휴게소에 대한 경험을 공유해 보세요!</p>
             </div>
         <% } else { %>
             <% for (GpaDto dto : list) { %>
