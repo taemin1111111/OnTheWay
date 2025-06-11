@@ -368,17 +368,41 @@ public class GpaDao {
     public void deleteGpa(String num) {
         Connection conn = db.getConnection();
         PreparedStatement pstmt = null;
-
-        String sql = "DELETE FROM review WHERE num = ?";
+        ResultSet rs = null;
+        String hgId = null;
 
         try {
-            pstmt = conn.prepareStatement(sql);
+            // 먼저 삭제 대상 리뷰의 hg_id를 조회
+            String getHgIdSql = "SELECT hg_id FROM review WHERE num = ?";
+            pstmt = conn.prepareStatement(getHgIdSql);
             pstmt.setString(1, num);
-            pstmt.executeUpdate();
+            rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                hgId = rs.getString("hg_id");
+            }
+
+            // 리소스 정리
+            rs.close();
+            pstmt.close();
+
+            if (hgId != null) {
+                // 리뷰 삭제
+                String deleteSql = "DELETE FROM review WHERE num = ?";
+                pstmt = conn.prepareStatement(deleteSql);
+                pstmt.setString(1, num);
+                pstmt.executeUpdate();
+                pstmt.close();
+
+                // 평균 별점 갱신
+                HgDataDao hgDao = new HgDataDao();
+                hgDao.updateAvgStar(Integer.parseInt(hgId));
+            }
+
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
-            db.dbClose(pstmt, conn);
+            db.dbClose(rs, pstmt, conn);
         }
     }
     
