@@ -22,7 +22,7 @@ public class hgRestDao {
 		PreparedStatement pstmt=null;
 		ResultSet rs=null;
 		
-		String sql="SELECT hg.*, hg_data.latitude,hg_data.address, hg_data.id, hg_data.longitude, hg_data.has_lpg_station, hg_data.has_ev_station,hg_data.has_pharmacy\r\n"
+		String sql="SELECT hg.*, hg_data.latitude,hg_data.address, hg_data.id, hg_data.longitude, hg_data.has_lpg_station, hg_data.has_ev_station, hg_data.avg_star,hg_data.has_pharmacy\r\n"
 				+ "FROM hg\r\n"
 				+ "LEFT JOIN hg_data ON hg.tel_no = hg_data.tel_no\r\n"
 				+ "WHERE hg_data.id IS NOT NULL;";
@@ -47,6 +47,7 @@ public class hgRestDao {
 				dto.setLpg(rs.getString("has_lpg_station"));
 				dto.setEv(rs.getString("has_ev_station"));
 				dto.setPharm(rs.getString("has_pharmacy"));
+				dto.setAvg_star(rs.getDouble("avg_star"));
 				
 				list.add(dto);
 				
@@ -125,7 +126,7 @@ public class hgRestDao {
 		
 		//String sql="select * from hg.hg where name LIKE ?";
 		/*String sql="SELECT hg.*, hg_data.latitude, hg_data.longitude, hg_data.id, hg_data.has_lpg_station, hg_data.has_ev_station,hg_data.has_pharmacy FROM hg LEFT JOIN hg_data ON hg.tel_no = hg_data.tel_no where hg_data.id IS NOT NULL and name LIKE ?;";*/
-		String sql = "SELECT hg.*, hg_data.latitude, hg_data.address, hg_data.id, hg_data.longitude, hg_data.has_lpg_station, hg_data.has_ev_station, hg_data.has_pharmacy "
+		String sql = "SELECT hg.*, hg_data.latitude, hg_data.address, hg_data.id, hg_data.longitude, hg_data.has_lpg_station, hg_data.has_ev_station, hg_data.avg_star, hg_data.has_pharmacy "
 		           + "FROM hg "
 		           + "LEFT JOIN hg_data ON hg.tel_no = hg_data.tel_no "
 		           + "WHERE hg_data.id IS NOT NULL and name LIKE ? ";	
@@ -159,6 +160,7 @@ public class hgRestDao {
 				dto.setLpg(rs.getString("has_lpg_station"));
 				dto.setEv(rs.getString("has_ev_station"));
 				dto.setPharm(rs.getString("has_pharmacy"));
+				dto.setAvg_star(rs.getDouble("avg_star"));
 				
 				list.add(dto);
 				
@@ -243,7 +245,7 @@ public class hgRestDao {
 		PreparedStatement pstmt=null;
 		ResultSet rs=null;
 		
-		String sql = "SELECT hg.*, hg_data.latitude, hg_data.address, hg_data.id, hg_data.longitude, hg_data.has_lpg_station, hg_data.has_ev_station, hg_data.has_pharmacy "
+		String sql = "SELECT hg.*, hg_data.latitude, hg_data.address, hg_data.id, hg_data.longitude, hg_data.has_lpg_station, hg_data.has_ev_station, hg_data.avg_star, hg_data.has_pharmacy "
 		           + "FROM hg "
 		           + "LEFT JOIN hg_data ON hg.tel_no = hg_data.tel_no "
 		           + "WHERE hg_data.id IS NOT NULL ";
@@ -312,6 +314,7 @@ public class hgRestDao {
 				dto.setEv(rs.getString("has_ev_station"));
 				dto.setPharm(rs.getString("has_pharmacy"));
 				dto.setAddress(rs.getString("address"));
+				dto.setAvg_star(rs.getDouble("avg_star"));
 				
 				list.add(dto);
 				

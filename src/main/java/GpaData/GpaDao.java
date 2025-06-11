@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import hg.HgDataDao;
 
 import mysql.db.DbConnect;
 
@@ -25,6 +26,11 @@ public class GpaDao {
             pstmt.setDouble(3, dto.getStars());
             pstmt.setString(4, dto.getContent());
             pstmt.execute();
+
+            // HgDataDao 인스턴스 생성 후 avg_star 업데이트 호출
+            HgDataDao hgDao = new HgDataDao();
+            hgDao.updateAvgStar(Integer.parseInt(dto.getHg_id()));
+
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -375,5 +381,8 @@ public class GpaDao {
             db.dbClose(pstmt, conn);
         }
     }
+    
+    
+
 
 }

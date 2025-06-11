@@ -15,11 +15,17 @@ public class hgRestDto {
 	private String ev;
 	private String pharm;
 	private String address;
+	private double avg_star;
 	
 	
 	
 	
-	
+	public double getAvg_star() {
+		return avg_star;
+	}
+	public void setAvg_star(double avg_star) {
+		this.avg_star = avg_star;
+	}
 	public String getAddress() {
 		return address;
 	}

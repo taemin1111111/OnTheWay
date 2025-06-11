@@ -29,8 +29,17 @@ public class HgDataDto {
     private String extra_facilities;
     private String signature_menu;
     private String phone_number;
+    private double avg_star;
+    
+    public double getAvg_star() {
+		return avg_star;
+	}
 
-    // Default Constructor
+	public void setAvg_star(double avg_star) {
+		this.avg_star = avg_star;
+	}
+
+	// Default Constructor
     public HgDataDto() {
     }
 
