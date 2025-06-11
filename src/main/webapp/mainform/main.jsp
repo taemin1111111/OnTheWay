@@ -374,10 +374,11 @@ body {
 	</div>
 	
 	<div class="search-bar-container">
-	  <form action="<%=root%>/searchResults.jsp" method="get" class="d-flex justify-content-center align-items-center">
+	  <form action="<%=root%>/index.jsp" method="get" class="d-flex justify-content-center align-items-center">
+	  <input type="hidden" name="main" value="hg/hgRestInfo.jsp" />
 	    <input 
 	      type="text" 
-	      name="query" 
+	      name="searchName" 
 	      class="form-control search-input" 
 	      placeholder="검색어를 입력하세요" 
 	      aria-label="검색어" 
