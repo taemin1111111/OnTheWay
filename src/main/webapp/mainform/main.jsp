@@ -76,14 +76,16 @@ body {
 	margin-bottom: 40px;
 }
 
-.hero-text h1 {
-	font-family: var(--font-family-logo);
-	font-size: 60px;
-	font-weight: 800;
-	padding-bottom: 60px;
-	margin: 0;
-	/* 여기에 그림자 속성 추가 */
-	text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7); /* X축, Y축, 번짐 정도, 색상 및 투명도 */
+.main-title h1 {
+	font-size: 28px;
+	font-weight: 700;
+	color: var(--text-primary);
+	text-shadow: -1px -1px 0 #000;
+}
+
+.main-title p {
+	font-size: 16px;
+	color: var(--text-secondary);
 }
 
 .event-section, .notice-section {
@@ -244,14 +246,13 @@ body {
 	width: 100%;
 	height: 100%;
 	object-fit: cover;
-	animation: zoomIn 5s ease-in-out infinite alternate;
+	animation: zoomIn 15s ease-in-out infinite alternate;
 	z-index: 1;
 }
 
 .hero-text {
 	position: relative; /* absolute 대신 relative로 변경하거나, flexbox를 사용했으므로 top, width 제거 */
-    /* top: 20%; 제거 */
-    /* width: 100%; 제거 */
+    transform: translateY(-50px);
 	text-align: center;
 	z-index: 2;
 	color: white;
@@ -260,23 +261,16 @@ body {
 
 .hero-text h1 {
 	font-family: var(--font-family-logo);
-	font-size: 60px;
+	font-size: 55px;
 	font-weight: 800;
-	/* padding-bottom: 60px; -> 이 값을 줄여주세요 */
-	padding-bottom: 5px; /* 예를 들어, 5px로 줄이면 p 태그와 가까워집니다. */
 	margin: 0;
-	text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
 }
 
 .hero-text p {
 	font-family: var(--font-family-logo);
-	font-size: 15px; /* 원래 p 태그의 font-size는 20px이었습니다. */
-	padding-top: 5px; /* 예를 들어, 5px로 줄이면 h1 태그와 가까워집니다. */
-    margin-top: 0; /* 혹시 모를 margin-top도 0으로 설정 */
-    margin-bottom: 60px; /* 기존 padding-bottom과 유사하게 margin-bottom을 설정 (원래는 padding-bottom이 h1에 있었음) */
-    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+	font-size: 15px;
+	margin-top: 10px;
 }
-
 
 @keyframes zoomIn {
   0% {
@@ -359,10 +353,10 @@ body {
 </head>
 <body>
 	<div class="hero-section">
-		<img src="<%=root%>/imgway/highway.jpg" alt="고속도로 이미지">
+		<img src="<%=root%>/imgway/way1.jpg" alt="고속도로 이미지">
 		<div class="hero-text">
 			<h1>OnTheWay</h1>
-			<p>HighWay Information</p>
+			<p>HigWay Information</p>
 		</div>
 	</div>
 	
