@@ -246,14 +246,13 @@ body {
 	width: 100%;
 	height: 100%;
 	object-fit: cover;
-	animation: zoomIn 5s ease-in-out infinite alternate;
+	animation: zoomIn 15s ease-in-out infinite alternate;
 	z-index: 1;
 }
 
 .hero-text {
 	position: relative; /* absolute 대신 relative로 변경하거나, flexbox를 사용했으므로 top, width 제거 */
-    /* top: 20%; 제거 */
-    /* width: 100%; 제거 */
+    transform: translateY(-50px);
 	text-align: center;
 	z-index: 2;
 	color: white;
@@ -262,13 +261,14 @@ body {
 
 .hero-text h1 {
 	font-family: var(--font-family-logo);
-	font-size: 48px;
+	font-size: 55px;
 	font-weight: 800;
 	margin: 0;
 }
 
 .hero-text p {
-	font-size: 20px;
+	font-family: var(--font-family-logo);
+	font-size: 15px;
 	margin-top: 10px;
 }
 
@@ -353,10 +353,10 @@ body {
 </head>
 <body>
 	<div class="hero-section">
-		<img src="<%=root%>/imgway/highway.jpg" alt="고속도로 이미지">
+		<img src="<%=root%>/imgway/way1.jpg" alt="고속도로 이미지">
 		<div class="hero-text">
 			<h1>OnTheWay</h1>
-			<p>전국 고속도로 정보</p>
+			<p>HigWay Information</p>
 		</div>
 	</div>
 	

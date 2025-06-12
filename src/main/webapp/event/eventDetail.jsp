@@ -29,7 +29,11 @@
 			font-weight: 700;
 			margin-top: 35px;
 			margin-bottom: 25px;
+			text-align: center;
 		}
+		h2 i {
+        	color: #007BFF;
+        }
 		
 		.event-image {
 			width: 100%;

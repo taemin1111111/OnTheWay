@@ -20,7 +20,7 @@
 <title>Insert title here</title>
 <style>
   body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: Arial, sans-serif;
     background-color: #f5f7fa;
     padding: 0;
   }
