@@ -1,396 +1,390 @@
-<%@page import="GpaData.GpaDao"%>
-<%@page import="hg.HgDataDto"%>
 <%@page import="hg.HgDataDao"%>
+<%@page import="hg.HgDao"%>
+<%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.util.List"%>
-<%@page import="hgDao.hgRestDao"%>
-<%@page import="hgDto.hgRestDto"%>
+<%@page import="hgDao.infoDao"%>
+<%@page import="hgDto.infoDto"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<link
-	href="https://fonts.googleapis.com/css2?family=Black+And+White+Picture&family=Cute+Font&family=Gamja+Flower&family=Jua&family=Nanum+Brush+Script&family=Nanum+Gothic+Coding&family=Nanum+Myeongjo&family=Noto+Serif+KR:wght@200..900&family=Poor+Story&display=swap"
-	rel="stylesheet"> <!-- 다양한 Google Fonts 링크 -->
-<link
-	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-	rel="stylesheet"> <!-- Bootstrap CSS 링크 -->
-<script src="https://code.jquery.com/jquery-3.7.1.js"></script> <!-- jQuery 라이브러리 링크 -->
-<link rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"> <!-- Bootstrap Icons 링크 -->
-<script
-	src="https://dapi.kakao.com/v2/maps/sdk.js?appkey=5ac2ea2e11f7b380cdf52afbcc384b44&libraries=services"></script> <!-- 카카오 맵 SDK 링크 -->
+<link href="https://fonts.googleapis.com/css2?family=Dongle&family=Gaegu&family=Hi+Melody&family=Nanum+Myeongjo&family=Nanum+Pen+Script&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">  
+  <!-- Bootstrap Icons CDN -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.css" rel="stylesheet">
+  
+  <!-- Google Fonts (Optional, 모던폰트) -->
+  <link href="https://fonts.googleapis.com/css2?family=Segoe+UI&display=swap" rel="stylesheet">
+
 <title>Insert title here</title>
-<script type="text/javascript">
-$(function(){
-	// 휴게소 번호를 클릭하면 해당 상세 페이지로 이동
-	$("a.hg_num").click(function(){
-		var hg_num=$(this).attr("id"); // 클릭한 링크의 ID를 가져옴
-		location.href="<%=request.getContextPath()%>/index.jsp?main=details/info.jsp?hg_id="+hg_num; // 상세 페이지로 이동
-	})
-	<%--  //체크박스 상태 변경 시 Ajax 요청을 통해 데이터를 갱신하는 부분 (주석 처리됨)
-	$("input.a").change(function() {
-		
-		  console.log("체크박스 변경됨");
-	    // 체크박스 상태 읽기
-	    let lpg = $("input[name='lpg']").is(":checked") ? "Y" : "";
-	    let ev = $("input[name='ev']").is(":checked") ? "Y" : "";
-	    let pharm = $("input[name='pharm']").is(":checked") ? "Y" : "";
-	    let searchName = $("#sName").val();
-	    
-	    console.log(lpg);
-	    console.log(ev);
-	    console.log(pharm);
-	    console.log(searchName);
-	    
-		$.ajax({
-		    url: '<%=request.getContextPath()%>/hg/test2.jsp', //* 부분 데이터만 반환 */
-		    method: 'GET',
-		    data: {
-		        searchName: searchName,
-		        lpg: lpg === "Y" ? "Y" : "",
-		        ev: ev === "Y" ? "Y" : "",
-		        pharm: pharm === "Y" ? "Y" : ""
-		    },
-		    success: function(response) {
-		        // 테이블 부분만 바꿔주기
-		        document.querySelector('div#table-container').innerHTML = response;
-		        // 여기서 지도 마커 다시 찍는 함수 호출 필요
-		        // 예) updateMapMarkers();
-		    },
-		    error: function() {
-		        alert("데이터 로딩 실패");
-		    }
-		});
-	})  --%>
-})
-</script>
+
 <style>
-body {
-	font-family: 'Noto Sans KR', sans-serif; /* 기본 폰트 설정 */
-	background-color: #f9fafb; /* 배경색 설정 */
-	color: #212529; /* 기본 글자 색상 설정 */
-	margin: 0; /* 기본 여백 제거 */
-	padding: 0; /* 기본 패딩 제거 */
+#searchrest {
+  width: 180px;
+  height: 36px;
+  padding: 0 12px;
+  border: 2px solid #4a90e2; /* 테이블 헤더 색과 맞춤 */
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #495057;
+  box-shadow: 0 2px 6px rgba(74, 144, 226, 0.25);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  float: right;
+  outline: none;
 }
-.container {
-	max-width: 1200px; /* 최대 너비 설정 */
-	margin: 100px auto 50px auto; /* 상단 및 하단 여백 설정 */
-	padding: 0 20px; /* 패딩 설정 */
-	background: #fff; /* 배경색 흰색 */
-	border-radius: 12px; /* 모서리 둥글게 설정 */
-	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+
+#searchrest::placeholder {
+  color: #adb5bd; /* 연한 회색 */
 }
-h3 {
-	font-weight: 700; /* 글자 두께 설정 */
-	font-size: 2.2rem; /* 글자 크기 설정 */
-	margin-bottom: 25px; /* 하단 여백 설정 */
-	color: #2c7a2c; /* 제목 색상 설정 */
-	text-align: center; /* 중앙 정렬 */
-	padding-top: 50px;
+
+#searchrest:focus {
+  border-color: #2c6ed5;
+  box-shadow: 0 0 8px rgba(44, 110, 213, 0.6);
 }
-form {
-	display: flex; /* 플렉스 박스 사용 */
-	flex-direction: column; /* 세로 정렬 */
-	align-items: center; /* 중앙 정렬 */
-	gap: 15px; /* 요소 간 간격 설정 */
-	margin-bottom: 30px; /* 하단 여백 설정 */
-	max-width: 500px; /* 최대 너비 설정 */
-	margin-left: auto; /* 왼쪽 여백 자동 */
-	margin-right: auto; /* 오른쪽 여백 자동 */
-}
-form input[type="text"] {
-	width: 100%; /* 너비 100% 설정 */
-	padding: 12px 20px; /* 패딩 설정 */
-	border: 2px solid #28a745; /* 테두리 색상 설정 */
-	border-radius: 40px; /* 모서리 둥글게 설정 */
-	font-size: 1rem; /* 글자 크기 설정 */
-	transition: border-color 0.3s ease, box-shadow 0.3s ease; /* 전환 효과 설정 */
-	box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1); /* 내부 그림자 효과 */
-}
-form input[type="text"]:focus {
-	outline: none; /* 포커스 시 외곽선 제거 */
-	border-color: #1b4d1b; /* 포커스 시 테두리 색상 변경 */
-	box-shadow: 0 0 8px rgba(40, 167, 69, 0.6); /* 포커스 시 그림자 효과 */
-}
-form button {
-	width: 100%; /* 너비 100% 설정 */
-	max-width: 200px; /* 최대 너비 설정 */
-	background-color: #28a745; /* 배경색 설정 */
-	border: none; /* 테두리 제거 */
-	color: white; /* 글자 색상 흰색 */
-	padding: 12px 0; /* 패딩 설정 */
-	font-weight: 600; /* 글자 두께 설정 */
-	border-radius: 40px; /* 모서리 둥글게 설정 */
-	font-size: 1rem; /* 글자 크기 설정 */
-	cursor: pointer; /* 커서 포인터로 변경 */
-	box-shadow: 0 4px 10px rgba(40, 167, 69, 0.5); /* 그림자 효과 */
-	transition: background-color 0.3s ease, box-shadow 0.3s ease; /* 전환 효과 설정 */
-}
-form button:hover {
-	background-color: #1b4d1b; /* 호버 시 배경색 변경 */
-	box-shadow: 0 6px 14px rgba(27, 77, 27, 0.7); /* 호버 시 그림자 효과 */
-}
-/* 체크박스 그룹 전체 세로 정렬 */
-.checkbox-group {
-	display: flex; /* 플렉스 박스 사용 */
-	flex-direction: column; /* 세로 정렬 */
-	gap: 10px; /* 요소 간 간격 설정 */
-	width: 100%; /* 너비 100% 설정 */
-}
-/* 각 체크박스 + 라벨 묶음 (라벨 위 텍스트) */
-.checkbox-wrapper {
-	display: flex; /* 플렉스 박스 사용 */
-	flex-direction: column; /* 세로 정렬 */
-	align-items: flex-start; /* 왼쪽 정렬 */
-	font-weight: 600; /* 글자 두께 설정 */
-	font-size: 1rem; /* 글자 크기 설정 */
-	color: #333; /* 글자 색상 설정 */
-	cursor: pointer; /* 커서 포인터로 변경 */
-	user-select: none; /* 텍스트 선택 방지 */
-}
-.checkbox-wrapper input[type="checkbox"] {
-	accent-color: #28a745; /* 체크박스 색상 설정 */
-	width: 18px; /* 체크박스 너비 설정 */
-	height: 18px; /* 체크박스 높이 설정 */
-	margin-top: 4px; /* 상단 여백 설정 */
-	cursor: pointer; /* 커서 포인터로 변경 */
-}
-.checkbox-group-horizontal {
-	display: flex; /* 플렉스 박스 사용 */
-	gap: 20px; /* 체크박스 간 간격 설정 */
-	align-items: center; /* 세로 가운데 정렬 */
-	margin-top: 10px; /* 상단 여백 설정 */
-}
-#map {
-	width: 100%; /* 너비 100% 설정 */
-	max-width: 100%; /* 최대 너비 설정 */
-	height: 450px; /* 높이 설정 */
-	border-radius: 12px; /* 모서리 둥글게 설정 */
-	box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15); /* 그림자 효과 */
-	margin-bottom: 40px; /* 하단 여백 설정 */
-}
-.table {
-	width: 100%; /* 너비 100% 설정 */
-	border-radius: 12px; /* 모서리 둥글게 설정 */
-	overflow: hidden; /* 내용 넘침 방지 */
-	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
-	border-collapse: separate !important; /* 테두리 분리 */
-	border-spacing: 0 10px; /* 테이블 셀 간 간격 설정 */
-	background: white; /* 배경색 흰색 */
-}
-.table thead tr {
-	background-color: #28a745; /* 헤더 배경색 설정 */
-	color: white; /* 헤더 글자 색상 흰색 */
-	font-weight: 700; /* 헤더 글자 두께 설정 */
-	font-size: 1.1rem; /* 헤더 글자 크기 설정 */
-	border-radius: 12px; /* 모서리 둥글게 설정 */
-}
-.table thead th {
-	padding: 15px 20px; /* 패딩 설정 */
-	border: none !important; /* 테두리 제거 */
-}
-.table tbody tr {
-	background: #f8f9fa; /* 본문 배경색 설정 */
-	transition: background-color 0.3s ease; /* 전환 효과 설정 */
-	cursor: default; /* 기본 커서로 설정 */
-	border-radius: 12px; /* 모서리 둥글게 설정 */
-}
-.table tbody tr:hover {
-	background-color: #d4edda; /* 호버 시 배경색 변경 */
-}
-.table tbody td {
-	padding: 15px 20px; /* 패딩 설정 */
-	vertical-align: middle; /* 수직 정렬 설정 */
-	border: none !important; /* 테두리 제거 */
-	font-size: 1rem; /* 글자 크기 설정 */
-	color: #333; /* 글자 색상 설정 */
-}
-a.hg_num {
-	color: #2c7a2c; /* 링크 색상 설정 */
-	font-weight: 600; /* 글자 두께 설정 */
-	text-decoration: none; /* 밑줄 제거 */
-	transition: color 0.3s ease; /* 전환 효과 설정 */
-}
-a.hg_num:hover {
-	color: #1b4d1b; /* 호버 시 색상 변경 */
-	text-decoration: underline; /* 호버 시 밑줄 추가 */
-}
-@media (max-width: 768px) {
-	form {
-		width: 100%; /* 너비 100% 설정 */
-		max-width: 500px; /* 최대 너비 설정 */
-	}
-	form button {
-		width: 100%; /* 버튼 너비 100% 설정 */
-	}
-	.checkbox-group {
-		max-width: 100%; /* 체크박스 그룹 최대 너비 설정 */
-	}
-}
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f5f7fa;
+    padding: 0;
+    margin: 0; 
+  }
+
+  h3 {
+    font-weight: 700;
+    font-size: 2.5rem;
+    color: #212529;
+    text-align: center;
+    margin-bottom: 2.5rem;
+    letter-spacing: 0.05em;
+  }
+
+  table {
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgb(0 0 0 / 0.1);
+    overflow: hidden;
+    transition: box-shadow 0.3s ease;
+  }
+
+  table:hover {
+    box-shadow: 0 12px 36px rgb(0 0 0 / 0.15);
+  }
+
+  thead tr {
+    background-color: #4a90e2;
+    color: white;
+    font-weight: 600;
+    font-size: 1.05rem;
+  }
+
+  tbody tr {
+    transition: background-color 0.25s ease;
+    cursor: pointer;
+  }
+
+  tbody tr:hover {
+    background-color: #f0f4ff;
+  }
+
+  tbody tr td {
+    vertical-align: middle;
+    font-size: 1rem;
+    color: #495057;
+  }
+
+  a {
+    color: #4a90e2;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  a:hover {
+    text-decoration: underline;
+  }
+
+  /* 번호 컬럼 */
+  th:first-child, td:first-child {
+    width: 60px;
+    text-align: center;
+  }
+
+  /* 작성일 */
+  td:nth-child(3), th:nth-child(3) {
+    width: 140px;
+    text-align: center;
+    color: #6c757d;
+    font-size: 0.9rem;
+  }
+
+  /* 조회수 */
+  td:nth-child(4), th:nth-child(4) {
+    width: 80px;
+    text-align: center;
+    color: #6c757d;
+    font-size: 0.9rem;
+  }
 </style>
+
+<script type="text/javascript"></script>
+
+
+
+
+</script>
 </head>
 <%
-request.setCharacterEncoding("utf-8"); // 요청 인코딩 설정
-String searchName = request.getParameter("searchName"); // 검색어 가져오기
-hgRestDao dao = new hgRestDao(); // DAO 객체 생성
-String lpg = request.getParameter("lpg"); // LPG 체크박스 상태 가져오기
-String ev = request.getParameter("ev"); // 전기차 체크박스 상태 가져오기
-String pharm = request.getParameter("pharm"); // 약국 체크박스 상태 가져오기
-List<hgRestDto> list; // 휴게소 리스트 선언
-if (searchName != null && !searchName.trim().equals("")) {
-	list = dao.getData(searchName, lpg, ev, pharm); // 검색어가 있을 때 데이터 가져오기
-} else {
-	list = dao.getLpgList(lpg, ev, pharm); // 전체 조회
-}
-%>
-<body>
+request.setCharacterEncoding("utf-8");
+infoDao dao=new infoDao();
 
-	<div style="margin: 100px auto;" class="container mt-3" > <!-- 컨테이너 설정 -->
-		<h3>고속도로 휴게소</h3> <!-- 제목 -->
+
+
+SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+
+HgDataDao hgDao = new HgDataDao();
+
+//페이징처리
+//전체갯수
+int totalCount=dao.getTotalCount();
+int perPage=10; //한페이지에 보여질 글의 갯수
+int perBlock=5; //한블럭당 보여질 페이지의 갯수
+int startNum; //db에서 가져올 글의 시작번호(mysql:0 오라클:1번)
+int startPage; //각블럭당 보여질 시작페이지
+int endPage;//각블럭당 보여질 끝페이지
+int currentPage; //현재페이지
+int totalPage; //총페이지
+
+int no; //각페이지당 출력할 시작번호
+
+//현재페이지 읽기,단 null일경우는 1페이지로 준다
+if(request.getParameter("currentPage")==null)
+	  currentPage=1;
+else
+	  currentPage=Integer.parseInt(request.getParameter("currentPage"));
+
+
+//총페이지수를 구한다
+//총글의 갯수/한페이지당 보여질개수로 나눔(7/5=1)
+//나머지가 1이라도 있으면 무저건 1페이지추가(1+1=2페이지가 필요)
+totalPage=totalCount/perPage+(totalCount%perPage==0?0:1);
+
+//각블럭당 보여질 시작페이지
+//perBlock=5일경우 현재페이지가 1~5 시작1,끝5
+//만약 현재페이지가 13일경우는 시작11,끝15
+startPage=(currentPage-1)/perBlock*perBlock+1;
+endPage=startPage+perBlock-1;
+
+//총페이지가 23개일경우 마지막 블럭은 끝 25가 아니라 23이다
+if(endPage>totalPage)
+	  endPage=totalPage;
+
+//각페이지에서 보여질 시작번호
+//예: 1페이지-->0  2페이지-->5 3페이지-->10...
+startNum=(currentPage-1)*perPage;
+
+//각페이지당 출력할 시작번호
+//예를들어 총글갯수가 23   1페이지: 23  2페이지:18  3페이지: 13.....
+no=totalCount-(currentPage-1)*perPage;
+
+
+
+List<infoDto> list=dao.getList(startNum, perPage);
+
+String userId=(String)session.getAttribute("userId");
+
+
+
+%>
+
+
+<body>
+	<div style="text-align: center; margin-top: 3rem;" >
+		<h3>공지사항</h3>
 		<br>
-		<form method="get" action="<%=request.getContextPath()%>/index.jsp" id="ckbox">
-			<br>
-			<input type="hidden" name="main" value="hg/hgRestInfo.jsp"> <!-- 숨겨진 필드: 메인 페이지 설정 -->
-			<input type="text" name="searchName" placeholder="검색할 휴게소 이름을 입력하세요."
-				style="width: 500px;" id="sName"
-				value="<%=(searchName == null || searchName.trim().equals("")) ? "" : searchName%>"> <!-- 검색어 입력 필드 -->
-				<div class="checkbox-group-horizontal"> <!-- 체크박스 그룹 -->
-				<label><input type="checkbox" name="lpg" value="Y"
-					<%="Y".equals(lpg) ? "checked" : ""%> class="a"> LPG충전소</label> <!-- LPG 체크박스 -->
-				<label><input type="checkbox" name="ev" value="Y"
-					<%="Y".equals(ev) ? "checked" : ""%> class="a"> 전기차충전소</label> <!-- 전기차 체크박스 -->
-				<label><input type="checkbox" name="pharm" value="Y"
-					<%="Y".equals(pharm) ? "checked" : ""%> class="a"> 약국</label> <!-- 약국 체크박스 -->
-			</div>
-			<button type="submit" class="btn btn-success" id="search">검색</button> <!-- 검색 버튼 -->
-		</form>
-		<br>
-		<div id="map"></div> <!-- 지도 표시 영역 -->
-		<br>
-		<br>
-		<div style="overflow-y: auto; max-height: 400px; width: 1180px;" > <!-- 테이블 영역 -->
-			<table class="table table-bordered" style="width: 1200px;"> <!-- 테이블 설정 -->
-				<tr class="table-success" align="center"> <!-- 테이블 헤더 -->
-					<th style="width: 50; align: center;">번호</th>
-					<th style="width: 100; align: center;">이름</th>
-					<th style="width: 150; align: center;">전화번호</th>
-					<th style="width: 100; align: center;">평점</th>
-					<th style="width: 200; align: center;">주소</th>
-				</tr>
-				<%
-				int n = 1; // 번호 카운터
-				int i = 0; // 인덱스 카운터
-				for (hgRestDto dto : list) { // 리스트를 순회
-				GpaDao gdao=new GpaDao();
+		
+		<table id="infoTable" class="table table-bordered" style="width: 80%; max-width: 1200px; margin: 0 auto;">
+			<caption align="top"><b>
+			총<%=dao.getTotalCount() %>개의 게시글이 있습니다
+			
+			<input type="text" name="searchrest" id="searchrest" style="width:200px; height:30px; float:right;" placeholder="검색할 휴게소 입력">
+			
+			</b></caption>
+			
+			
+			
+			<tr>
+				<th>번호</th>			
+				<th>제목</th>					
+				<th>작성일</th>
+				<th>조회수</th>
+				<%if(userId.equals("admin")){
+				%>
+					<th>작성글관리</th>	
+					
+				<%}%>
 				
-				%>
+			</tr>
+			<tbody id="infoBody">
+			<%
+			if(list.size()==0)
+			{%>
 				<tr>
-					<td style="text-align: center"><%=n++%></td> <!-- 번호 출력 -->
-					<td><a class="hg_num"
-						href="<%=request.getContextPath()%>/index.jsp?main=details/info.jsp?hg_id=<%=dto.getId2()%>"><%=dto.getName()%></a></td> <!-- 이름 링크 -->
-					<td><%=dto.getTel_no()%></td> <!-- 전화번호 출력 -->
-					<td><%=gdao.getAverageStarsByHgId(String.valueOf(dto.getId2()))%></td>
-					<td><%=dto.getAddress() %></td>
+					<td colspan="3" align="center">
+						<b>등록된 게시글이 없습니다.</b>
+					</td>
 				</tr>
-				<%
-				i++; // 인덱스 증가
-				}
-				%>
-			</table>
-		</div>
-		<br>
-		<script>
-		
-		 document.querySelectorAll(".a").forEach(cb => {
-		       cb.addEventListener('change', () => {
-		           document.querySelector('#ckbox').submit();
-		       });
-		   });   
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		// JSP에서 전달된 검색어를 가져옴
-		var searchName = "<%=searchName != null ? searchName.trim() : ""%>";
-		var map = new kakao.maps.Map(document.getElementById('map'), { // 카카오 맵 초기화
-		    center: new kakao.maps.LatLng(36.5, 127.5), // 기본 중심 좌표
-		    level: 12 // 확대 수준
-		});
-		var geocoder = new kakao.maps.services.Geocoder(); // 주소 변환 서비스 초기화
-		// JSP에서 값 전달
-		var lats = [<%=String.join(",", list.stream().map(dto -> String.valueOf(dto.getLatitude())).toArray(String[]::new))%>]; // 위도 배열
-		var lngs = [<%=String.join(",", list.stream().map(dto -> String.valueOf(dto.getLongitude())).toArray(String[]::new))%>]; // 경도 배열
-		var names = [<%=String.join(",", list.stream().map(dto -> "\"" + dto.getName().replace("\"", "\\\"") + "\"").toArray(String[]::new))%>]; // 이름 배열
-		var ids = [<%=String.join(",", list.stream().map(dto -> "\"" + dto.getId2() + "\"").toArray(String[]::new))%>]; // ID 배열
-		for (let i = 0; i < lats.length; i++) { // 각 마커에 대해 반복
-		    let lat = parseFloat(lats[i]); // 위도
-		    let lng = parseFloat(lngs[i]); // 경도
-		    let name = names[i]; // 이름
-		    let id = ids[i]; // ID
-		    if (isNaN(lat) || isNaN(lng)) { // 좌표가 유효하지 않은 경우
-		        console.warn(`잘못된 좌표: index ${i}, lat=${lat}, lng=${lng}`);
-		        continue; // 다음 반복으로 이동
-		    }
-		    let coords = new kakao.maps.LatLng(lat, lng); // 좌표 객체 생성
-		    let marker = new kakao.maps.Marker({ // 마커 생성
-		        map: map, // 지도에 추가
-		        position: coords // 마커 위치
-		    });
-		    kakao.maps.event.addListener(marker, 'click', function() { // 마커 클릭 시 이벤트
-		        window.location.href = '<%=request.getContextPath()%>/index.jsp?main=details/info.jsp?hg_id=' + id; // 상세 페이지로 이동
-		    });
-		    // 주소 변환 후 테이블 채우기
-		    (function(index, marker, name, coords) { // 즉시 실행 함수
-		        geocoder.coord2Address(coords.getLng(), coords.getLat(), function(result, status) { // 좌표를 주소로 변환
-		            if (status === kakao.maps.services.Status.OK) { // 변환 성공 시
-		                let roadAddr = result[0].address.address_name; // 도로명 주소
-		                if (searchName.trim() !== "" || $(".a").is(":checked")) { // 검색어가 있거나 체크박스가 선택된 경우
-		                    let overlayDiv = document.createElement('div'); // 오버레이 생성
-		                    overlayDiv.style.background = 'white'; // 배경색 설정
-		                    overlayDiv.style.border = '1px solid #666'; // 테두리 설정
-		                    overlayDiv.style.padding = '4px 8px'; // 패딩 설정
-		                    overlayDiv.style.fontSize = '13px'; // 글자 크기 설정
-		                    overlayDiv.style.whiteSpace = 'nowrap'; // 줄 바꿈 방지
-		                    overlayDiv.style.borderRadius = '4px'; // 모서리 둥글게 설정
-		                    overlayDiv.style.boxShadow = '2px 2px 6px rgba(0,0,0,0.3)'; // 그림자 효과
-		                    overlayDiv.style.color = 'black'; // 글자 색상 설정
-		                    overlayDiv.textContent = name; // 오버레이에 이름 추가
-		                    let customOverlay = new kakao.maps.CustomOverlay({
-		                        content: overlayDiv, // 오버레이 내용
-		                        map: map, // 지도에 추가
-		                        position: coords, // 위치 설정
-		                        yAnchor: 1.5 // Y축 앵커 설정
-		                    });
-		                    overlayDiv.addEventListener('click', function() { // 오버레이 클릭 시 이벤트
-		                        window.location.href = '<%=request.getContextPath()%>/index.jsp?main=details/info.jsp?hg_id=' + id; // 상세 페이지로 이동
-		                    });
-		                }
-		                let cell = document.querySelector('td.addr-cell[data-index="' + index + '"]'); // 주소 셀 선택
-		                if (cell) {
-		                    cell.textContent = roadAddr; // 주소 셀에 주소 추가
-		                } else {
-		                    console.warn('주소 셀을 찾을 수 없음: index=' + index); // 주소 셀을 찾지 못한 경우 경고
-		                }
-		            } else {
-		                console.warn("주소 변환 실패:", coords); // 주소 변환 실패 경고
-		            }
-		        });
-		    })(i, marker, name, coords); // 즉시 실행 함수 호출
-		}
-	</script>
+			<%}
+			else{
+			
+				for(int i=0;i<list.size();i++){
+					infoDto dto = list.get(i);
+					
+					String restName = "";
+                    try {
+                        restName = hgDao.getRestNameById(Integer.parseInt(dto.getHgId()));
+                    } catch (Exception e) {
+                        restName = "알 수 없음";
+                        java.io.StringWriter sw = new java.io.StringWriter();
+                        java.io.PrintWriter pw = new java.io.PrintWriter(sw);
+                        e.printStackTrace(pw);
+                        out.println("예외 발생: " + sw.toString());
+                    }
+					
+					
+					
+					%>
+					
+					<tr>
+						<td><%= (currentPage - 1) * perPage + i + 1 %></td>
+						
+						<td><a href="<%=request.getContextPath()%>/index.jsp?main=infoList/detail.jsp&id=<%=dto.getId()%>"><%=dto.getTitle() %>[<%=restName %>]</a></td>
+												
+						
+						<td><%=sdf.format(dto.getWriteday()) %></td>
+						<td><%=dto.getReadcount() %></td>
+						<%if(userId.equals("admin")){
+						%>
+							<th>
+								<button class="btn btn-danger" style="width:70px; float:center;">삭제</button>
+								<button class="btn btn-success" style="width:70px; float:center;">수정</button>
+							
+							</th>	
+							
+						<%}%>
+						
+						
+					</tr>
+					
+					
+					
+					
+					
+				<%}
+			}
+			
+			
+			
+			%>
+			</tbody>	
+		</table>
+	
 	</div>
 	
+	<!--페이지 번호 출력  -->
+     <div class="d-flex justify-content-center mt-4">
+    <ul class="pagination">
+       <%
+          //이전
+          if(startPage>1)
+          {%>
+        	  <li class="page-item">
+        	    <a class="page-link" href="<%=request.getContextPath()%>/index.jsp?main=infoList/infoList.jsp&currentPage=<%=startPage-1%>"
+        	    style="color: black;">
+        	      이전
+        	    </a>
+        	  </li>
+          <%}
+          
+       		for(int pp=startPage;pp<=endPage;pp++)
+       		{
+       			if(pp==currentPage)
+       			{%>
+       				<li class="page-item active">
+       				  <a class="page-link" href="<%=request.getContextPath()%>/index.jsp?main=infoList/infoList.jsp&currentPage=<%=pp%>"><%=pp %></a>
+       				</li>
+       			<%}else{%>
+       				<li class="page-item">
+       				  <a class="page-link" href="<%=request.getContextPath()%>/index.jsp?main=infoList/infoList.jsp&currentPage=<%=pp%>"><%=pp %></a>
+       				</li>
+       			<%}
+       		}
+       		
+       		//다음
+       		if(endPage<totalPage)
+       		{%>
+       			<li class="page-item">
+        	    <a class="page-link" href="<%=request.getContextPath()%>/index.jsp?main=infoList/infoList.jsp&currentPage=<%=endPage+1%>"
+        	    style="color: black;">
+        	      다음
+        	    </a>
+        	  </li>
+       		<%}
+       			
+       %>
+     </ul>
+     
+    
+     
+     </div>
+     
+     
+     
+     
+<script type="text/javascript">
+
+$(document).ready(function() {
+    $('#searchrest').on('input', function() {
+      let searchVal = $(this).val();
+
+      $.ajax({
+        url: 'infoList/searchList.jsp',
+        type: 'GET',
+        data: { searchRest: searchVal },
+        success: function(data) {
+          // data는 <tr>... 형태의 html
+          $('#infoBody').html(data);
+        },
+        error: function() {
+          alert('검색 중 오류가 발생했습니다.');
+        }
+      });
+    });
+  });
+
+
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+	
+
+
+
+
+
+
 </body>
 </html>
-  

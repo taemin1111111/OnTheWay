@@ -193,7 +193,11 @@ a.hg_num:hover {
 	.checkbox-group {
 		max-width: 100%; /* 체크박스 그룹 최대 너비 설정 */
 	}
+	
+	
 }
+
+
 </style>
 </head>
 <%
@@ -251,7 +255,7 @@ if (searchName != null && !searchName.trim().equals("")) {
 					System.out.println("==== dto 디버깅 ===="+i);
 				    System.out.println("ID: " + dto.getId2());
 				    System.out.println("이름: " + dto.getName());
-				    System.out.println("평점: " + dto.getAvg_star());
+				    System.out.println("평점: " + dao.getReview(dto.getAvg_star())+ dto.getAvg_star());
 				    System.out.println("위도: " + dto.getLatitude());
 				    System.out.println("경도: " + dto.getLongitude());
 
@@ -262,7 +266,12 @@ if (searchName != null && !searchName.trim().equals("")) {
 					<td><a class="hg_num"
 						href="<%=request.getContextPath()%>/index.jsp?main=details/info.jsp?hg_id=<%=dto.getId2()%>"><%=dto.getName()%></a></td> <!-- 이름 링크 -->
 					<td><%=dto.getTel_no()%></td> <!-- 전화번호 출력 -->
-					<td><%=dto.getAvg_star()%></td>
+					<td class="stars" style="color:#F1F24B;">
+                    <% for(int a=1; a<=5; a++) { %>
+                        <i class="bi <%= (dto.getAvg_star() >= a) ? "bi-star-fill" : (dto.getAvg_star() >= a - 0.5 ? "bi-star-half" : "bi-star") %>"></i>
+                    <% } %>
+                    </td>
+                    <%-- <td><%=dao.getReview(dto.getAvg_star())%>(<%=Math.round(dto.getAvg_star()*100.0)/100.0%>)</td> --%>
 					<td><%=dto.getAddress() %></td>
 				</tr>
 				<%
@@ -283,49 +292,65 @@ if (searchName != null && !searchName.trim().equals("")) {
 		
 		
 		// 지도 먼저 로딩
-		 const map = new kakao.maps.Map(document.getElementById('map'), {
+		 const map = new kakao.maps.Map(document.getElementById('map'), { 
 		   center: new kakao.maps.LatLng(36.5, 127.5),
 		   level: 12
 		 });
 
-		 // 클러스터러 제거 (완전히 사용하지 않음)
-		 // const clusterer = new kakao.maps.MarkerClusterer({
-		 //   map: map,
-		 //   averageCenter: true,
-		 //   minLevel: 10
-		 // });
+		 // 클러스터러도 초기화만 함
+		 const clusterer = new kakao.maps.MarkerClusterer({
+		   map: map,
+		   averageCenter: true,
+		   minLevel: 12
+		 });
 
 		 // 데이터는 미리 준비해둠
 		 const lats = [<%= String.join(",", list.stream().map(dto -> String.valueOf(dto.getLatitude())).toArray(String[]::new)) %>];
-		 const lngs = [<%= String.join(",", list.stream().map(dto -> String.valueOf(dto.getLongitude())).toArray(String[]::new)) %>];
-		 const names = [<%= String.join(",", list.stream().map(dto -> "\"" + dto.getName().replace("\"", "\\\"") + "\"").toArray(String[]::new)) %>];
-		 const ids = [<%= String.join(",", list.stream().map(dto -> "\"" + dto.getId2() + "\"").toArray(String[]::new)) %>];
+		const lngs = [<%= String.join(",", list.stream().map(dto -> String.valueOf(dto.getLongitude())).toArray(String[]::new)) %>];
+		const names = [<%= String.join(",", list.stream().map(dto -> "\"" + dto.getName().replace("\"", "\\\"") + "\"").toArray(String[]::new)) %>];
+		const ids = [<%= String.join(",", list.stream().map(dto -> "\"" + dto.getId2() + "\"").toArray(String[]::new)) %>];
 
 		 // 마커와 오버레이는 일정 시간 뒤 로딩
 		 setTimeout(() => {
-		   const bounds = new kakao.maps.LatLngBounds();
-
-		   for (let i = 0; i < lats.length; i++) {
-		     const lat = parseFloat(lats[i]);
-		     const lng = parseFloat(lngs[i]);
-		     if (isNaN(lat) || isNaN(lng)) continue;
-
-		     const coords = new kakao.maps.LatLng(lat, lng);
-		     bounds.extend(coords);
-
-		     const marker = new kakao.maps.Marker({
-		       map: map,            // ✨ 바로 지도에 마커 표시
-		       position: coords
-		     });
-
-		     kakao.maps.event.addListener(marker, 'click', () => {
-		       location.href = '/index.jsp?main=details/info.jsp&hg_id=' + ids[i];
-		     });
-		   }
-
-		   map.setBounds(bounds);
-		 }, 10); // 거의 바로 로딩
-
+			  const markers = [];
+			  const bounds = new kakao.maps.LatLngBounds();
+			  const infowindow = new kakao.maps.InfoWindow({ zIndex: 1 }); // 인포윈도우 객체 생성
+			
+			  for (let i = 0; i < lats.length; i++) {
+			    const lat = parseFloat(lats[i]);
+			    const lng = parseFloat(lngs[i]);
+			    if (isNaN(lat) || isNaN(lng)) continue;
+			
+			    const coords = new kakao.maps.LatLng(lat, lng);
+			    bounds.extend(coords);
+			
+			    const marker = new kakao.maps.Marker({ position: coords });
+			
+			    // 마우스 오버 이벤트 - 이름 보여주기
+			    kakao.maps.event.addListener(marker, 'mouseover', function () {
+			    	infowindow.setContent(
+			    		    '<div style="padding:5px; font-size:10px; font-weight:bold; max-width:150px; white-space: pre-wrap; overflow-wrap: break-word; word-break: break-word;">' 
+			    		    + names[i] + '</div>'
+			    		  );
+			    	infowindow.open(map, marker);
+			    });
+			
+			    // 마우스 아웃 이벤트 - 인포윈도우 닫기
+			    kakao.maps.event.addListener(marker, 'mouseout', function () {
+			      infowindow.close();
+			    });
+			
+			    // 클릭 시 페이지 이동
+			    kakao.maps.event.addListener(marker, 'click', () => {
+			      location.href = '<%=request.getContextPath()%>/index.jsp?main=details/info.jsp&hg_id=' + ids[i];
+			    });
+			
+			    markers.push(marker);
+			  }
+			
+			  clusterer.addMarkers(markers);
+			  map.setBounds(bounds);
+			}, 10); // 1초 후 마커 로딩
 		 </script>
 
 	</div>
