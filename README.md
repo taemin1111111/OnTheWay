@@ -5,7 +5,7 @@
 
 ## 📝 1. 프로젝트 소개 (Project Introduction)
 <div align="center">
-  https://github.com/user-attachments/assets/dcc69c15-6ff4-4208-95dd-4d29adf58490
+  <img src="https://github.com/user-attachments/assets/37e04604-6d5a-402a-bc58-d08e4b166370" alt="OnTheWay" width="300" height="300">
 </div>
 
 
