@@ -1,5 +1,5 @@
 # 🛣️ OnTheWay Project
-<img src="">
+![Image](https://github.com/user-attachments/assets/a757b238-57b5-4fbd-bd31-ae7a85b11194)
 
 ## 📝 1. 프로젝트 소개 (Project Introduction)
 
