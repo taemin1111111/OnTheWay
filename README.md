@@ -1,9 +1,9 @@
 # 🛣️ OnTheWay Project
-<img sr
+<img src="![ontheway](https://github.com/user-attachments/assets/3b25280f-59e6-4641-aec3-98ecb6235781)">
 ## 📝 1. 프로젝트 소개 (Project Introduction)
 
 
-<img src="https://github.com/user-attachments/assets/86da3280-6954-42f1-a243-0f68b2fc3f00">
+https://github.com/user-attachments/assets/86da3280-6954-42f1-a243-0f68b2fc3f00
 
 
 OnTheWay는 운전자와 여행객을 위한 웹 애플리케이션으로, 이동 경로상에 있는 휴게소, 편의시설, 이벤트 정보 등을 제공하는 것을 목표로 합니다.
