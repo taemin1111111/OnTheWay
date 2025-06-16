@@ -1,6 +1,6 @@
 # 🛣️ OnTheWay Project
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/a757b238-57b5-4fbd-bd31-ae7a85b11194" alt="OnTheWay Project Image" width="500" height="300">
+  <img src="https://github.com/user-attachments/assets/a757b238-57b5-4fbd-bd31-ae7a85b11194" alt="OnTheWay Project Image" width="500" height="400">
 </div>
 
 ## 📝 1. 프로젝트 소개 (Project Introduction)
