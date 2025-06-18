@@ -11,11 +11,11 @@ OnTheWay는 운전자와 여행객의 편리한 이동을 돕기 위해 개발�
 
 
 ## 🛠️ 사용된 기술 (Tech Stack)<br>
-Frontend<br>
+### Frontend<br>
 ![HTML](https://img.shields.io/badge/HTML-239120?style=for-the-badge&logo=html5&logoColor=white) ![css](https://img.shields.io/badge/CSS-239120?&style=for-the-badge&logo=css3&logoColor=white) ![js](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=JavaScript&logoColor=white)<br>
-Backend<br>
+### Backend<br>
 ![java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)<br>
-Database<br>
+### Database<br>
 ![SQL](https://img.shields.io/badge/MySQL-00000F?style=for-the-badge&logo=mysql&logoColor=white)<br><br>
 
 
