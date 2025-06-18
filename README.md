@@ -1,4 +1,4 @@
-🛣️ OnTheWay Project
+![header](https://capsule-render.vercel.app/api?type=waving&color=#f8dcdc&height=300&section=header&text=OnTheWay%20Project&fontSize=90)
 <div align="center">
   <img src="https://github.com/user-attachments/assets/a757b238-57b5-4fbd-bd31-ae7a85b11194" alt="OnTheWay" width="300" height="300">
 </div><br><br><br><br>
@@ -9,6 +9,15 @@
   <img src="https://github.com/user-attachments/assets/e8ea8ea9-4bf1-4cfc-9c50-223b44ac5b21" alt="mainpage" width="800" height="350">
 </div>
 OnTheWay는 운전자와 여행객의 편리한 이동을 돕기 위해 개발된 웹 애플리케이션입니다. 이동 경로상의 휴게소, 편의시설, 입점 매장, 이벤트 정보 등을 통합적으로 제공하여 사용자들에게 최적화된 경로 계획 및 정보 탐색 경험을 선사합니다. 특히, 고속도로 휴게소 내의 브랜드 매장, 편의점, 푸드코트 등 상세 정보를 제공함으로써 사용자가 필요한 정보를 쉽고 빠르게 얻을 수 있도록 지원합니다.<br><br><br><br>
+
+
+🛠️ 사용된 기술 (Tech Stack)<br>
+Frontend<br>
+![HTML](https://img.shields.io/badge/HTML-239120?style=for-the-badge&logo=html5&logoColor=white) ![css](https://img.shields.io/badge/CSS-239120?&style=for-the-badge&logo=css3&logoColor=white) ![js](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=JavaScript&logoColor=white)<br>
+Backend<br>
+![java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)<br>
+Database<br>
+![SQL](https://img.shields.io/badge/MySQL-00000F?style=for-the-badge&logo=mysql&logoColor=white)<br>
 
 
 👤 사용자 관리 (User Management)
@@ -55,9 +64,3 @@ OnTheWay는 운전자와 여행객의 편리한 이동을 돕기 위해 개발�
 
 📦 주문 기능 (Ordering System)<br>
 주문 관리 시스템 초기 설계: 향후 휴게소 음식 미리 주문 기능 확장을 고려하여, 기본적인 주문 요청 처리 및 데이터 관리 로직을 설계하고 일부 기능을 구현했습니다.<br><br><br><br>
-
-
-🛠️ 3. 사용된 기술 (Tech Stack)<br><br>
-Frontend: HTML, CSS, JavaScript<br><br>
-Backend: Java (Servlets)<br><br>
-Database: MySQL
