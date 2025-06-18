@@ -16,7 +16,7 @@ OnTheWay는 운전자와 여행객의 편리한 이동을 돕기 위해 개발�
 
 👤 사용자 관리 (User Management)
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/825d33a2-8aa9-4d41-81b3-e737dedc7fa8e" alt="Userpage" width="800" height="350">
+  <img src="https://github.com/user-attachments/assets/825d33a2-8aa9-4d41-81b3-e737dedc7fa8e" alt="user" width="800" height="350">
 </div>
 
 로그인/회원가입 UI 및 기능 구현: 사용자가 손쉽게 계정을 생성하고 로그인할 수 있도록 직관적인 인터페이스를 설계하고 관련 기능을 개발했습니다.
