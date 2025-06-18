@@ -61,7 +61,7 @@ OnTheWay는 운전자와 여행객의 편리한 이동을 돕기 위해 개발�
 
 📦 주문 기능 (Ordering System)
 주문 관리 시스템 초기 설계: 향후 휴게소 음식 미리 주문 기능 확장을 고려하여, 기본적인 주문 요청 처리 및 데이터 관리 로직을 설계하고 일부 기능을 구현했습니다.
-
+\
 
 🛠️ 3. 사용된 기술 (Tech Stack)
 Frontend: HTML, CSS, JavaScript
