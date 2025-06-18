@@ -5,8 +5,8 @@
 
 ## 📝 1. 프로젝트 소개 (Project Introduction)
 
-<div>
-  <img src="https://github.com/user-attachments/assets/e8ea8ea9-4bf1-4cfc-9c50-223b44ac5b21" alt="mainpage" width="300" height="300">
+<div align="center">
+  <img src="https://github.com/user-attachments/assets/e8ea8ea9-4bf1-4cfc-9c50-223b44ac5b21" alt="mainpage" width="800" height="300">
 </div>
 
 
