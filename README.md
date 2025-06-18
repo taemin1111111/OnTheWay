@@ -5,7 +5,7 @@
 
 📝 1. 프로젝트 소개 (Project Introduction)
 <div align="center">
-  <div align="center">img src="https://github.com/user-attachments/assets/e8ea8ea9-4bf1-4cfc-9c50-223b44ac5b21" alt="mainpage" width="800" height="350">
+  <img src="https://github.com/user-attachments/assets/e8ea8ea9-4bf1-4cfc-9c50-223b44ac5b21" alt="mainpage" width="800" height="350">
 </div>
 
 OnTheWay는 운전자와 여행객의 편리한 이동을 돕기 위해 개발된 웹 애플리케이션입니다. 이동 경로상의 휴게소, 편의시설, 입점 매장, 이벤트 정보 등을 통합적으로 제공하여 사용자들에게 최적화된 경로 계획 및 정보 탐색 경험을 선사합니다. 특히, 고속도로 휴게소 내의 브랜드 매장, 편의점, 푸드코트 등 상세 정보를 제공함으로써 사용자가 필요한 정보를 쉽고 빠르게 얻을 수 있도록 지원합니다.
