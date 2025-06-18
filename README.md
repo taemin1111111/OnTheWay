@@ -41,10 +41,11 @@ OnTheWay는 운전자와 여행객의 편리한 이동을 돕기 위해 개발�
 
 
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/eca9e7e9-f64f-49ba-af52-49a7c6314adb" alt="tra" width="800" height="350">
+  <img src="https://github.com/user-attachments/assets/41ded08d-8021-404e-8679-e4db2574f1ce" alt="tra" width="800" height="350">
 </div>
 🚗 실시간 교통 정보 (Real-time Traffic)
 교통 상황 정보 표시 UI: 주요 도로의 실시간 교통 상황을 한눈에 파악할 수 있도록 시각적으로 구현했습니다. (API 연동)
+
 ⚙️ 제가 20% 기여한 백엔드 기능
 저는 프로젝트의 백엔드 개발에도 참여하여, 특히 사용자 요청을 처리하고 데이터를 효율적으로 관리하기 위한 백엔드 로직의 약 20%를 담당했습니다.
 
