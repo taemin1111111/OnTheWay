@@ -1,7 +1,6 @@
-![header](https://capsule-render.vercel.app/api?type=waving&color=#f8dcdc&height=300&section=header&text=OnTheWay%20Project&fontSize=90)
 <div align="center">
-  <img src="https://github.com/user-attachments/assets/a757b238-57b5-4fbd-bd31-ae7a85b11194" alt="OnTheWay" width="300" height="300">
-</div><br><br><br><br>
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=fac1c1&height=300&section=header&text=OnTheWay%20Project!&fontColor=ffffff&fontSize=90"
+</div><br><br>
 
 
 📝 프로젝트 소개 (Project Introduction)
@@ -17,7 +16,7 @@ Frontend<br>
 Backend<br>
 ![java](https://img.shields.io/badge/Java-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)<br>
 Database<br>
-![SQL](https://img.shields.io/badge/MySQL-00000F?style=for-the-badge&logo=mysql&logoColor=white)<br>
+![SQL](https://img.shields.io/badge/MySQL-00000F?style=for-the-badge&logo=mysql&logoColor=white)<br><br>
 
 
 👤 사용자 관리 (User Management)
