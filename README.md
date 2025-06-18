@@ -5,7 +5,10 @@
 
 ## 📝 1. 프로젝트 소개 (Project Introduction)
 
-https://github.com/user-attachments/assets/37e04604-6d5a-402a-bc58-d08e4b166370
+<div>
+  <img src="https://github.com/user-attachments/assets/e8ea8ea9-4bf1-4cfc-9c50-223b44ac5b21" alt="mainpage" width="300" height="300">
+</div>
+
 
 OnTheWay는 운전자와 여행객을 위한 웹 애플리케이션으로, 이동 경로상에 있는 휴게소, 편의시설, 이벤트 정보 등을 제공하는 것을 목표로 합니다.
 
